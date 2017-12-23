@@ -1,0 +1,17 @@
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\csfml-audio-2.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\csfml-graphics-2.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\csfml-system-2.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\csfml-window-2.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\openal32.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\csfml-network-2.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\libsndfile-1.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\Otter.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\Otter.pdb
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\sfmlnet-audio-2.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\sfmlnet-graphics-2.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\sfmlnet-system-2.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\bin\Debug\sfmlnet-window-2.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\obj\x86\Debug\Otter.csprojResolveAssemblyReference.cache
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\obj\x86\Debug\Otter.csproj.CoreCompileInputs.cache
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\obj\x86\Debug\Otter.dll
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\Otter\Otter\obj\x86\Debug\Otter.pdb
