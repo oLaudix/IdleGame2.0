@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="enums.cs" />
+    <Compile Include="Gear.cs" />
     <Compile Include="MainScene.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />

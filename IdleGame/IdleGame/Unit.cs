@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Otter;
 
 namespace IdleGame
 {
-    class Unit
+    class Unit : Entity
     {
+        public double upgradeCostStat;
         public double purchaseCost;
         public double currentDPS;
         public double nextUpgradeCost;
@@ -17,7 +19,7 @@ namespace IdleGame
         public string name;
         public int level;
 
-        public Unit(int heroID, string name, double costMultiplier, double purchaseCost)
+        public Unit(int heroID, string name, double purchaseCost)
         {
             this.heroID = heroID;
             this.name = name;
@@ -83,10 +85,10 @@ namespace IdleGame
             return num;
         }
 
-        public double GetUpgradeCostByLevel(int iLevel, double upgradeCostStat)
+        public double GetUpgradeCostByLevel(int iLevel)
         {
             double baseUpgradeCostByLevel = this.GetBaseUpgradeCostByLevel(iLevel);
-            double a = baseUpgradeCostByLevel * (1.0 - upgradeCostStat);
+            double a = baseUpgradeCostByLevel * (1.0 - this.upgradeCostStat);
             return (double)Math.Ceiling(a);
         }
     }
