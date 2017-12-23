@@ -9,7 +9,6 @@ namespace IdleGame
 {
     class Unit : Entity
     {
-        public double upgradeCostStat;
         public double purchaseCost;
         public double currentDPS;
         public double nextUpgradeCost;
@@ -43,7 +42,7 @@ namespace IdleGame
             //this.UpdateHeroStats(true);
         }
 
-        public double GetDPSByLevel(int iLevel, double heroPassiveStat)
+        public double GetDPSByLevel(int iLevel, double heroPassiveStat, double allDamageStat, double allDamageGearStat)
         {
             double num2;
             if (this.IsEvolved())
@@ -63,7 +62,7 @@ namespace IdleGame
             {
                 num3 = num2 * 0.1f * this.GetBaseUpgradeCostByLevel(iLevel - 1) * (double)(Math.Pow((double)1.075f, (double)iLevel) - 1.0) / (1.075f - 1f);
             }
-            return num3 * (1.0f + heroPassiveStat);
+            return num3 * (1.0f + heroPassiveStat) * (1.0f + allDamageStat) * (1.0f + allDamageGearStat);
         }
 
         private double GetBaseUpgradeCostByLevel(int iLevel)
@@ -85,10 +84,10 @@ namespace IdleGame
             return num;
         }
 
-        public double GetUpgradeCostByLevel(int iLevel)
+        public double GetUpgradeCostByLevel(int iLevel, double upgradeCostStat)
         {
             double baseUpgradeCostByLevel = this.GetBaseUpgradeCostByLevel(iLevel);
-            double a = baseUpgradeCostByLevel * (1.0 - this.upgradeCostStat);
+            double a = baseUpgradeCostByLevel * (1.0 - upgradeCostStat);
             return (double)Math.Ceiling(a);
         }
     }

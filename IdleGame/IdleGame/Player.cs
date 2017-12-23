@@ -16,12 +16,11 @@ namespace IdleGame
             ShootingToIdle,
             Shoot
         }
-        public Double purchaseCost;
         public int level;
-        public Double currentDamage;
-        public Double nextUpgradeCost;
-        public Double gold;
-        public Double honor;
+        public double gold;
+        public double honor;
+        public double critChance = 0.01;
+        public double critMagnitude = 10;
         int state = 0;
         Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/playerUnit.png", 140, 61);
         public MyPlayer(int x, int y)
@@ -41,14 +40,19 @@ namespace IdleGame
             this.Y = y;
         }
 
-        private double GetPlayerAttackDamageByLevel(int iLevel, double allDamageStat, double playerDamageStat, double playerDamageDPSStat, double gearDamageBonus)
+        public double GetPlayerAttackDamageByLevel(int iLevel, double allDamageStat, double playerDamageStat, double playerDamageDPSStat, double totalDPS, double gearDamageBonus, double critChance, double critM, Random random)
         {
             double num = (double)iLevel * Math.Pow(1.05, (double)iLevel);
-            double num3 = (num + playerDamageDPSStat) * (1.0 + playerDamageStat) * (1.0 + gearDamageBonus) * (1.0 + allDamageStat);
+            double num3 = (num + (playerDamageDPSStat * totalDPS)) * (1.0 + playerDamageStat) * (1.0 + gearDamageBonus) * (1.0 + allDamageStat);
             if (num3 <= 1.0)
             {
                 num3 = 1.0;
             }
+            double isCrit = random.NextDouble();
+            //Console.WriteLine((this.critChance + critChance) + " " + (isCrit));
+            if (this.critChance + critChance > isCrit)
+                num3 = num3 * (critM + this.critMagnitude);
+            //Console.WriteLine((this.critChance + critChance) + " " + (isCrit) + " " + num3);
             return num3;
         }
 

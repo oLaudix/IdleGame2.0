@@ -8,7 +8,6 @@ namespace IdleGame
 {
     class Gear
     {
-        public GearID GearID;
         public int level;
         public int maxLevel;
         public BonusType bonusType;

@@ -42,3 +42,8 @@ C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\obj\Debug\IdleGame.csp
 C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\obj\Debug\IdleGame.csproj.CoreCompileInputs.cache
 C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\obj\Debug\IdleGame.exe
 C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\obj\Debug\IdleGame.pdb
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Fonts\ca.ttf
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\HPBarBG.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\HPBarFG.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\crosshair.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Fonts\Reality Hyper Regular.ttf
