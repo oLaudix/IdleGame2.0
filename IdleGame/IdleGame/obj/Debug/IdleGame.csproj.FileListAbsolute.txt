@@ -27,7 +27,6 @@ C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\csfml-window
 C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\openal32.dll
 C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\csfml-network-2.dll
 C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\libsndfile-1.dll
-C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\background.png
 C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\playerUnit.png
 C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\IdleGame.exe.config
 C:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\IdleGame.exe
@@ -47,3 +46,10 @@ c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\H
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\HPBarFG.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\crosshair.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Fonts\Reality Hyper Regular.ttf
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\background_path.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\background_road.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\bottom_menu.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\background_road2.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\buy_button.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\dicokka_icon.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\buy_button_inactive.png

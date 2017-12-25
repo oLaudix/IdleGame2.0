@@ -9,18 +9,17 @@ namespace IdleGame
 {
     class MainScene : Scene
     {
-        Dictionary<BonusType, double> Bonuses = new Dictionary<BonusType, double>();
-        Image background = new Image("Assets/Img/background.png");
-        MyPlayer player = new MyPlayer(1000, 800);
+        public Dictionary<BonusType, double> Bonuses = new Dictionary<BonusType, double>();
+        Image background = new Image("Assets/Img/background_road2.png");
+        public MyPlayer player = new MyPlayer(1000, 600);
         List<UnitSkill> skillList = new List<UnitSkill>();
-        List<Unit> unitsList = new List<Unit>();
+        public List<Unit> unitsList = new List<Unit>();
         List<Gear> gearList = new List<Gear>();
         Random random = new Random();
         Stage stage;
         int currentStage = 0;
         Image HPBG = new Image("Assets/Img/HPBarBG.png");
         Image HPFG = new Image("Assets/Img/HPBarFG.png");
-        Image Crosshair = new Image("Assets/Img/crosshair.png");
         Entity stagee;
         Text staget;
         Entity stageNumbere;
@@ -31,9 +30,18 @@ namespace IdleGame
         Entity debuge;
         Text debugt;
 
+        Entity bottom_menu_e;
+        Image bottom_menu = new Image("Assets/Img/Gui/buy_button.png");
+
+        Image Crosshair = new Image("Assets/Img/crosshair.png");
+        Entity Crosshair_e = new Entity(0, 0);
+
         public double totalDPS = 0;
         public MainScene() : base()
         {
+            bottom_menu_e = new Entity(500, 1080-261);
+            bottom_menu_e.AddGraphic(bottom_menu);
+            //Add(bottom_menu_e);
             AddGraphic(background);
             Add(player);
             foreach (BonusType bonusType in Enum.GetValues(typeof(BonusType)))
@@ -47,14 +55,18 @@ namespace IdleGame
             StartStage();
 
             HUD();
-            unitsList[0].level = 1;
+            unitsList[0].level = 0;
         }
         public override void Render()
         {
-            RemoveGraphic(Crosshair);
-            AddGraphic(Crosshair, Input.MouseX, Input.MouseY);
-            Crosshair.OutlineThickness = 1;
             base.Render();
+        }
+
+        public override void Begin()
+        {
+            base.Begin();
+            GuiElement dicokka_icon = new GuiElement(500, 500, "Assets/Img/Gui/dicokka_icon.png");
+            //BuyButton button = new BuyButton(50, 50, menu);
         }
         public override void Update()
         {
@@ -83,11 +95,15 @@ namespace IdleGame
                 CreateTextEntity(ref debuge, ref debugt, 20, 20, 30);
                 AddGraphic(HPBG, (1920 - 800) / 2, 2);
                 AddGraphic(HPFG, (1920 - 800) / 2, 2);
-                AddGraphic(Crosshair, -100, -100);
+                //AddGraphic(Crosshair, -100, -100);
                 Crosshair.Scale = 0.1f;
                 Crosshair.CenterOrigin();
+                Crosshair_e.Layer = -1000;
                 HPBG.Scale = 1f;
                 HPFG.Scale = 1f;
+                Crosshair_e.AddGraphic(Crosshair);
+                Add(Crosshair_e);
+                //Crosshair_e.Graphic.CenterOrigin();
             }
             else
             {
@@ -99,6 +115,7 @@ namespace IdleGame
                 //debugt.String = "X: " + stagee.Graphic.Width + "\nY: " + stagee.Graphic.Height;
                 staget.String = "Stage";
                 HPFG.ClippingRegion = new Rectangle(0, 0, (int)Math.Ceiling((HPFG.Width * (stage.CurrentHP / stage.MaxHP))), HPFG.Height);
+                Crosshair_e.SetPosition(Input.MouseX, Input.MouseY);
                 //Crosshair.SetPosition(Input.MouseX , Input.MouseY);
                 //TotalDPSt.String = totalDPS.ToString("0.00");
             }
@@ -183,7 +200,7 @@ namespace IdleGame
                 this.stage.CurrentHP -= Unit.GetDPSByLevel(Unit.level, GetHeroAdditionlDamage(Unit.heroID), Bonuses[BonusType.AllDamage], GetBonusArtifactDamage())/60;
                 totaldeeps += Unit.GetDPSByLevel(Unit.level, GetHeroAdditionlDamage(Unit.heroID), Bonuses[BonusType.AllDamage], GetBonusArtifactDamage());
             }
-            if (Input.MouseButtonDown(MouseButton.Left))
+            if (Input.MouseButtonDown(MouseButton.Left) && Input.MouseY < 1080 - 261)
             {
                 //Console.WriteLine(player.GetPlayerAttackDamageByLevel(player.level, Bonuses[BonusType.AllDamage], Bonuses[BonusType.PlayerDamage], Bonuses[BonusType.PlayerDamageDPS], totaldeeps, GetBonusArtifactDamage(), Bonuses[BonusType.CriticalChance], Bonuses[BonusType.CriticalDamage], random)/60);
                 double hit = player.GetPlayerAttackDamageByLevel(player.level, Bonuses[BonusType.AllDamage], Bonuses[BonusType.PlayerDamage], Bonuses[BonusType.PlayerDamageDPS], totaldeeps, GetBonusArtifactDamage(), Bonuses[BonusType.CriticalChance], Bonuses[BonusType.CriticalDamage], random) * 15 / 60;
