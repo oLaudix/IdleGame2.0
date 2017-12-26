@@ -66,7 +66,6 @@ c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\G
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_infantry_eq.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_ap_ammo.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_field_hospitals.png
-c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_canned_food.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_ammo_supply.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_tank_armament.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_gatling.png
@@ -83,3 +82,15 @@ c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\G
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_rocket_guidance_system.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_supply_drops.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_gps.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_biggest_guns.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_biggest_tank.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_bil.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_bigger_crate.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_more_guns.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_bigger_rockets.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_rockets.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_can_buy.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gear\icon_chest.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\dicokka.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\biggest_tonk.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\fat_tonk.png

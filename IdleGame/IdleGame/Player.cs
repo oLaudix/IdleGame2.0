@@ -16,16 +16,20 @@ namespace IdleGame
             ShootingToIdle,
             Shoot
         }
+        MainScene scene = (MainScene)MainScene.Instance;
         public int level;
         public double gold;
         public double honor;
         public double critChance = 0.01;
         public double critMagnitude = 10;
+        public double currentDamage = 0;
+        public double upgradeCost = 0;
+        public double nextLevelDamageDiff = 0;
         int state = 0;
         Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/playerUnit.png", 140, 61);
         public MyPlayer(int x, int y)
         {
-            this.level = 1;
+            this.level = 0;
             //this.stage = 0;
             this.gold = 0;
             this.honor = 0;
@@ -40,26 +44,35 @@ namespace IdleGame
             this.Y = y;
         }
 
-        public double GetPlayerAttackDamageByLevel(int iLevel, double allDamageStat, double playerDamageStat, double playerDamageDPSStat, double totalDPS, double gearDamageBonus, double critChance, double critM, Random random)
+        public void UpdatePlayerStats()
+        {
+            this.currentDamage = GetPlayerAttackDamageByLevel(this.level);
+            this.upgradeCost = GetUpgradeCostByLevel(this.level);
+            this.nextLevelDamageDiff = GetPlayerAttackDamageByLevel(this.level + 1) - GetPlayerAttackDamageByLevel(this.level);
+        }
+
+        public void UpgradePlayer()
+        {
+            this.level++;
+            UpdatePlayerStats();
+        }
+
+        public double GetPlayerAttackDamageByLevel(int iLevel)
         {
             double num = (double)iLevel * Math.Pow(1.05, (double)iLevel);
-            double num3 = (num + (playerDamageDPSStat * totalDPS)) * (1.0 + playerDamageStat) * (1.0 + gearDamageBonus) * (1.0 + allDamageStat);
-            if (num3 <= 1.0)
-            {
-                num3 = 1.0;
-            }
-            double isCrit = random.NextDouble();
+            double num3 = (num + (scene.Bonuses[BonusType.PlayerDamageDPS] * scene.totalDPS)) * (1.0 + scene.Bonuses[BonusType.PlayerDamage]) * (1.0 + scene.GetBonusArtifactDamage()) * (1.0 + scene.Bonuses[BonusType.AllDamage]);
+            double isCrit = scene.random.NextDouble();
             //Console.WriteLine((this.critChance + critChance) + " " + (isCrit));
-            if (this.critChance + critChance > isCrit)
-                num3 = num3 * (critM * (1 + this.critMagnitude));
+            if (this.critChance + scene.Bonuses[BonusType.CriticalChance] > isCrit)
+                num3 = num3 * ((1 + scene.Bonuses[BonusType.CriticalDamage]) * this.critMagnitude);
             //Console.WriteLine((this.critChance + critChance) + " " + (isCrit) + " " + num3);
             return num3;
         }
 
-        public double GetUpgradeCostByLevel(int iLevel, double upgradeCostStat)
+        public double GetUpgradeCostByLevel(int iLevel)
         {
             double num = (double)Math.Min(25, 3 + iLevel) * Math.Pow(1.074, (double)iLevel);
-            double a = num * (1.0 - upgradeCostStat);
+            double a = num * (1.0 - scene.Bonuses[BonusType.UpgradeCost]);
             return Math.Ceiling(a);
         }
 
@@ -93,6 +106,47 @@ namespace IdleGame
                 state = 3;
             }*/
             base.Update();
+        }
+
+        public double GetHeroLevelPrestigeRelics()
+        {
+            int num = 0;
+            foreach (var unit in scene.unitsList)
+            {
+                num += unit.level;
+            }
+            double num2 = (double)num / (double)500;
+            num2 *= 1.0 + scene.Bonuses[BonusType.BonusRelic];
+            num2 = Math.Ceiling(num2);
+            return num2;
+        }
+
+        public double GetUnlockedStagePrestigeRelics()
+        {
+            double num = 0.0;
+            int unlockedStage = scene.stage.stage;
+            num += Math.Pow((double)(scene.stage.stage / 15), 1.7);
+            num *= 1.0 + scene.Bonuses[BonusType.BonusRelic];
+            return Math.Ceiling(num);
+        }
+        public double GetPrestigeRelicCount()
+        {
+            double num = (double)Math.Round((float)this.GetHeroLevelPrestigeRelics());
+            num += (double)Math.Round((float)this.GetUnlockedStagePrestigeRelics());
+            return 2.0 * num;
+        }
+        public void Prestige()
+        {
+            foreach (var unit in scene.unitsList)
+            {
+                unit.level = 0;
+            }
+            foreach (var skill in scene.skillList)
+                skill.isUnlocked = false;
+            this.gold = 0;
+            scene.stage.stage = 0;
+            this.honor += GetPrestigeRelicCount();
+            scene.StartStage();
         }
     }
 }

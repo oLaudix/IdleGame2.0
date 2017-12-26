@@ -24,9 +24,9 @@ namespace IdleGame
         public Text staget;
         public Entity stageNumbere;
         public Text stageNumbert;
-        public Entity TotalDPSe;
-        public Text TotalDPSt;
-
+        public double totaldeeps = 0;
+        public PlayerGui menu;
+        public int gearOwned = 0;
         Entity debuge;
         Text debugt;
 
@@ -60,19 +60,28 @@ namespace IdleGame
             StartStage();
             HUD();
             unitsList[0].level = 0;
-            Vector2 Pos = new Vector2(211, 854);
+            Vector2 Pos = new Vector2(47, 854);
             int counter = 1;
             foreach(var Unit in unitsList)
             {
                 new GuiElement(Pos.X, Pos.Y, Unit);
                 Pos.X += 82;
-                if (counter == 9 || counter == 20)
+                if (counter == 11 || counter == 22)
                 {
                     Pos.Y += 70;
                     Pos.X = 47;
                 }
                 counter++;
             }
+            player.UpgradePlayer();
+            menu = new PlayerGui(955, 1080 - 261, "Assets/Img/bottom_menu.png", player)
+            {
+                Layer = 1000
+            };
+            new Dicokka(1500, 500);
+            new BiggestTonk(1500, 600);
+            new FatTonk(1500, 700);
+
         }
         public override void Update()
         {
@@ -95,7 +104,6 @@ namespace IdleGame
         {
             if (stageNumbere == null)
             {
-                CreateTextEntity(ref TotalDPSe, ref TotalDPSt, 100, 125, 30);
                 CreateTextEntity(ref stagee, ref staget, 590, 19, 30);
                 CreateTextEntity(ref stageNumbere, ref stageNumbert, 1920 / 2, 28, 30);
                 CreateTextEntity(ref debuge, ref debugt, 20, 20, 30);
@@ -109,21 +117,15 @@ namespace IdleGame
                 HPFG.Scale = 1f;
                 Crosshair_e.AddGraphic(Crosshair);
                 Add(Crosshair_e);
-                //Crosshair_e.Graphic.CenterOrigin();
             }
             else
             {
                 stageNumbere.Graphic.CenterOrigin();
-                //stageHPnumerice.Graphic.CenterOrigin();
-                //stageHPt.String = stage.CurrentHP.ToString("0.00");
                 stageNumbert.String = stage.stage + "";
                 debugt.String = "X: " + Input.MouseX + "\nY: " + Input.MouseY;
-                //debugt.String = "X: " + stagee.Graphic.Width + "\nY: " + stagee.Graphic.Height;
                 staget.String = "Stage";
                 HPFG.ClippingRegion = new Rectangle(0, 0, (int)Math.Ceiling((HPFG.Width * (stage.CurrentHP / stage.MaxHP))), HPFG.Height);
                 Crosshair_e.SetPosition(Input.MouseX, Input.MouseY);
-                //Crosshair.SetPosition(Input.MouseX , Input.MouseY);
-                //TotalDPSt.String = totalDPS.ToString("0.00");
             }
         }
         public void FormatText(Text Text)
@@ -199,25 +201,23 @@ namespace IdleGame
         public void Attack()
         {
             //this.stage.CurrentHP -= (this.GetTotalDps() / timesPerSecond);
-            double totaldeeps = 0;
             totalDPS = 0;
             foreach (var Unit in unitsList)
             {
                 this.stage.CurrentHP -= Unit.GetDPSByLevel(Unit.level)/60;
-                totaldeeps += Unit.GetDPSByLevel(Unit.level);
+                totalDPS += Unit.GetDPSByLevel(Unit.level);
             }
             if (Input.MouseButtonDown(MouseButton.Left) && Input.MouseY < 1080 - 261)
             {
                 //Console.WriteLine(player.GetPlayerAttackDamageByLevel(player.level, Bonuses[BonusType.AllDamage], Bonuses[BonusType.PlayerDamage], Bonuses[BonusType.PlayerDamageDPS], totaldeeps, GetBonusArtifactDamage(), Bonuses[BonusType.CriticalChance], Bonuses[BonusType.CriticalDamage], random)/60);
-                double hit = player.GetPlayerAttackDamageByLevel(player.level, Bonuses[BonusType.AllDamage], Bonuses[BonusType.PlayerDamage], Bonuses[BonusType.PlayerDamageDPS], totaldeeps, GetBonusArtifactDamage(), Bonuses[BonusType.CriticalChance], Bonuses[BonusType.CriticalDamage], random) * 15 / 60;
+                double hit = player.GetPlayerAttackDamageByLevel(player.level) * 15 / 60;
                 this.stage.CurrentHP -= hit;
                 //totalDPS += player.GetPlayerAttackDamageByLevel(player.level, Bonuses[BonusType.AllDamage], Bonuses[BonusType.PlayerDamage], Bonuses[BonusType.PlayerDamageDPS], totaldeeps, GetBonusArtifactDamage(), Bonuses[BonusType.CriticalChance], Bonuses[BonusType.CriticalDamage], random) * 15;
                 Console.WriteLine(hit);
 
             }
-            totalDPS += totaldeeps;
+            //totalDPS += totaldeeps;
             //totalDPS
-            TotalDPSt.String = totalDPS.ToString("e2");
             if (this.stage.CurrentHP <= 0)
             {
                 if (this.stage.Wave < 10)
@@ -236,64 +236,66 @@ namespace IdleGame
 
         void CreateGear()
         {
-            this.gearList.Add(new Gear("Amulet of the Valrunes", 0, BonusType.MonsterGold, 0.1f, 0.5f, 0.25f));
-            this.gearList.Add(new Gear("Axe of Resolution", 0, BonusType.BerserkerRageDuration, 0.1f, 0.7f, 0.35f));
-            this.gearList.Add(new Gear("Barbarian's Mettle", 10, BonusType.BerserkerRageCooldown, 0.05f, 0.7f, 0.35f));
-            this.gearList.Add(new Gear("Brew of Absorbtion", 0, BonusType.AllDamage, 0.02f, 0.9f, 0.9f));
-            this.gearList.Add(new Gear("Chest of Contentment", 0, BonusType.GoldFromChests, 0.2f, 0.4f, 0.2f));
-            this.gearList.Add(new Gear("Crafter's Elixir", 0, BonusType.AllGold, 0.15f, 0.4f, 0.2f));
-            this.gearList.Add(new Gear("Crown Egg", 0, BonusType.ChestChance, 0.2f, 0.4f, 0.2f));
-            this.gearList.Add(new Gear("Death Seeker", 25, BonusType.CriticalChance, 0.02f, 0.3f, 0.15f));
-            this.gearList.Add(new Gear("Divine Chalice", 0, BonusType.ChanceFor10xGold, 0.005f, 0.3f, 0.15f));
-            this.gearList.Add(new Gear("Drunken Hammer", 0, BonusType.PlayerDamage, 0.04f, 0.6f, 0.30f));
-            this.gearList.Add(new Gear("Hero's Thrust", 0, BonusType.CriticalDamage, 0.2f, 0.3f, 0.15f));
-            this.gearList.Add(new Gear("Hunter's Ointment", 10, BonusType.WarCryCooldown, 0.05f, 1.2f, 0.6f));
-            this.gearList.Add(new Gear("Laborer's Pendant", 10, BonusType.HandOfMidasCooldown, 0.05f, 0.7f, 0.35f));
-            this.gearList.Add(new Gear("Ogre's Gauntlet", 0, BonusType.ShadowCloneDuration, 0.1f, 0.7f, 0.35f));
-            this.gearList.Add(new Gear("Overseer's Lotion", 10, BonusType.ShadowCloneCooldown, 0.05f, 0.7f, 0.35f));
-            this.gearList.Add(new Gear("Parchment of Importance", 0, BonusType.CriticalStrikeDuration, 0.1f, 0.7f, 0.35f));
-            this.gearList.Add(new Gear("Ring of Opulence", 0, BonusType.HandOfMidasDuration, 0.1f, 0.7f, 0.35f));
-            this.gearList.Add(new Gear("Ring of Wonderous Charm", 25, BonusType.UpgradeCost, 0.02f, 0.3f, 0.15f));
-            this.gearList.Add(new Gear("Sacred Scroll", 10, BonusType.CriticalStrikeCooldown, 0.05f, 0.7f, 0.35f));
-            this.gearList.Add(new Gear("Saintly Shield", 10, BonusType.HeavenlyStrikeCooldown, 0.05f, 0.7f, 0.35f));
-            this.gearList.Add(new Gear("Tincture of the Maker", 0, BonusType.AllDamage, 0.05f, 0.1f, 0.05f));
-            this.gearList.Add(new Gear("Undead Aura", 0, BonusType.BonusRelic, 0.05f, 0.3f, 0.15f));
-            this.gearList.Add(new Gear("Universal Fissure", 0, BonusType.WarCryDuration, 0.1f, 1.2f, 0.6f));
+            this.gearList.Add(new Gear("Amulet of the Valrunes", 0, BonusType.MonsterGold, 0.1f, 0.5f, 0.25f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Axe of Resolution", 0, BonusType.BerserkerRageDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Barbarian's Mettle", 10, BonusType.BerserkerRageCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Brew of Absorbtion", 0, BonusType.AllDamage, 0.02f, 0.9f, 0.9f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Chest of Contentment", 0, BonusType.ChestGold, 0.2f, 0.4f, 0.2f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Crafter's Elixir", 0, BonusType.AllGold, 0.15f, 0.4f, 0.2f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Crown Egg", 0, BonusType.ChestChance, 0.2f, 0.4f, 0.2f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Death Seeker", 25, BonusType.CriticalChance, 0.02f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Divine Chalice", 0, BonusType.ChanceFor10xGold, 0.005f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Drunken Hammer", 0, BonusType.PlayerDamage, 0.04f, 0.6f, 0.30f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Hero's Thrust", 0, BonusType.CriticalDamage, 0.2f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Hunter's Ointment", 10, BonusType.WarCryCooldown, 0.05f, 1.2f, 0.6f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Laborer's Pendant", 10, BonusType.HandOfMidasCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Ogre's Gauntlet", 0, BonusType.ShadowCloneDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Overseer's Lotion", 10, BonusType.ShadowCloneCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Parchment of Importance", 0, BonusType.CriticalStrikeDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Ring of Opulence", 0, BonusType.HandOfMidasDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Ring of Wonderous Charm", 25, BonusType.UpgradeCost, 0.02f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Sacred Scroll", 10, BonusType.CriticalStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Saintly Shield", 10, BonusType.HeavenlyStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Tincture of the Maker", 0, BonusType.AllDamage, 0.05f, 0.1f, 0.05f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Undead Aura", 0, BonusType.BonusRelic, 0.05f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Universal Fissure", 0, BonusType.WarCryDuration, 0.1f, 1.2f, 0.6f, "Assets/Img/Gear/icon_chest.png"));
         }
 
         void CreateUnits()
         {
-            unitsList.Add(new Unit(1, "Private Michael Parts", 50, "Assets/Img/Gui/icon_private.png"));
-            unitsList.Add(new Unit(2, "Contessa", 175, "Assets/Img/Gui/icon_marksman.png"));
-            unitsList.Add(new Unit(3, "Hornetta", 675, "Assets/Img/Gui/icon_minigun.png"));
-            unitsList.Add(new Unit(4, "Mila", 2850, "Assets/Img/Gui/icon_mortar.png"));
-            unitsList.Add(new Unit(5, "Terra", 13300, "Assets/Img/Gui/icon_turret.png"));
-            unitsList.Add(new Unit(6, "Inquisireaux", 68100, "Assets/Img/Gui/icon_dicokka.png"));
-            unitsList.Add(new Unit(7, "Charlotte ", 384000, "Assets/Img/Gui/icon_ironiso.png"));
-            unitsList.Add(new Unit(8, "Jordaan", 2800000, "Assets/Img/Gui/icon_hover.png"));
-            unitsList.Add(new Unit(9, "Jukka", 23800000, "Assets/Img/Gui/icon_heli.png"));
-            unitsList.Add(new Unit(10, "Milo", 143000000, "Assets/Img/Gui/icon_rocket.png"));
-            unitsList.Add(new Unit(11, "Infantry Anti-Tank", 943000000, "Assets/Img/Gui/icon_infantry_anti-tank.png"));
-            unitsList.Add(new Unit(12, "Improved Infantry Equipment", 84E+09, "Assets/Img/Gui/icon_infantry_eq.png"));
-            unitsList.Add(new Unit(13, "Armor-Piercing Bullets", 5.47E+10, "Assets/Img/Gui/icon_ap_ammo.png"));
-            unitsList.Add(new Unit(14, "Field Hospitals", 8.20E+11, "Assets/Img/Gui/icon_field_hospitals.png"));
-            unitsList.Add(new Unit(15, "Canned Food", 8.20E+12, "Assets/Img/Gui/icon_canned_food.png"));
-            unitsList.Add(new Unit(16, "Increased Ammunition Supply", 1.64E+14, "Assets/Img/Gui/icon_ammo_supply.png"));
-            unitsList.Add(new Unit(17, "Improved Tank Armament", 1.64E+15, "Assets/Img/Gui/icon_tank_armament.png"));
-            unitsList.Add(new Unit(18, "Improved Gatling Technology", 4.92E+16, "Assets/Img/Gui/icon_gatling.png"));
-            unitsList.Add(new Unit(19, "Improved Supply Lines", 2.46E+18, "Assets/Img/Gui/icon_supply_lines.png"));
-            unitsList.Add(new Unit(20, "Paratroopers", 7.38E+19, "Assets/Img/Gui/icon_paratroopers.png"));
-            unitsList.Add(new Unit(21, "Motorized Infantry", 2.44E+21, "Assets/Img/Gui/icon_motorized_infantry.png"));
-            unitsList.Add(new Unit(22, "Artillery Support", 2.44E+23, "Assets/Img/Gui/icon_artillery_support.png"));
-            unitsList.Add(new Unit(23, "Strategic Bombing", 4.87E+25, "Assets/Img/Gui/icon_bombing.png"));
-            unitsList.Add(new Unit(24, "Armored Personal Carriers", 1.95E+28, "Assets/Img/Gui/icon_ACP.png"));
-            unitsList.Add(new Unit(25, "Self-propelled Gun", 2.14E+31, "Assets/Img/Gui/icon_self_propelled_cannon.png"));
-            unitsList.Add(new Unit(26, "Improved Petroleum", 2.36E+36, "Assets/Img/Gui/icon_improved_petroleum.png"));
-            unitsList.Add(new Unit(27, "Supreme Commander", 2.59E+46, "Assets/Img/Gui/icon_supreme_commander.png"));
-            unitsList.Add(new Unit(28, "Improved Tank Thread", 2.85E+61, "Assets/Img/Gui/icon_improved_tank_thread.png"));
-            unitsList.Add(new Unit(29, "Supply Drops", 3.14E+81, "Assets/Img/Gui/icon_supply_drops.png"));
-            unitsList.Add(new Unit(30, "Missile Guidance System", 3.14E+96, "Assets/Img/Gui/icon_rocket_guidance_system.png"));
-            unitsList.Add(new Unit(31, "Global Positioning System", 3.76E+101, "Assets/Img/Gui/icon_gps.png"));
+            unitsList.Add(new Unit(1, "Cannon Fodder", 50, "Assets/Img/Gui/icon_private.png"));
+            unitsList.Add(new Unit(2, "Master Sergeant Shooter Person", 175, "Assets/Img/Gui/icon_marksman.png"));
+            unitsList.Add(new Unit(3, "Richard Jordan Gatling", 675, "Assets/Img/Gui/icon_minigun.png"));
+            unitsList.Add(new Unit(4, "Captain James Hook", 2850, "Assets/Img/Gui/icon_mortar.png"));
+            unitsList.Add(new Unit(5, "Captain Ethan Obvious", 13300, "Assets/Img/Gui/icon_turret.png"));
+            unitsList.Add(new Unit(6, "Small Tonk", 68100, "Assets/Img/Gui/icon_dicokka.png"));
+            unitsList.Add(new Unit(7, "Fat Tonk", 384000, "Assets/Img/Gui/icon_ACP.png"));
+            unitsList.Add(new Unit(8, "Big Tonk", 2800000, "Assets/Img/Gui/icon_ironiso.png"));
+            unitsList.Add(new Unit(9, "Biggest Tonk", 23800000, "Assets/Img/Gui/icon_biggest_tank.png"));
+            unitsList.Add(new Unit(10, "Sergeant Sergeant Master Sergeant", 143000000, "Assets/Img/Gui/icon_hover.png"));
+            unitsList.Add(new Unit(11, "Senior Airman Wi Tu Lo", 943000000, "Assets/Img/Gui/icon_heli.png"));
+            unitsList.Add(new Unit(12, "Team Rocket", 84E+09, "Assets/Img/Gui/icon_rocket.png"));
+            unitsList.Add(new Unit(13, "Bigger Guns!", 5.47E+10, "Assets/Img/Gui/icon_infantry_anti-tank.png"));
+            unitsList.Add(new Unit(14, "Better Stuff!", 8.20E+11, "Assets/Img/Gui/icon_infantry_eq.png"));
+            unitsList.Add(new Unit(15, "Everything penetrating bullets!", 8.20E+12, "Assets/Img/Gui/icon_ap_ammo.png"));
+            unitsList.Add(new Unit(16, "Drugs!!", 1.64E+14, "Assets/Img/Gui/icon_field_hospitals.png"));
+            unitsList.Add(new Unit(17, "Crates of bullets!", 1.64E+15, "Assets/Img/Gui/icon_ammo_supply.png"));
+            unitsList.Add(new Unit(18, "Biker Gangs", 4.92E+16, "Assets/Img/Gui/icon_motorized_infantry.png"));
+            unitsList.Add(new Unit(19, "Bigger Cannons!", 2.46E+18, "Assets/Img/Gui/icon_tank_armament.png"));
+            unitsList.Add(new Unit(20, "Crates of Stuff!", 7.38E+19, "Assets/Img/Gui/icon_supply_drops.png"));
+            unitsList.Add(new Unit(21, "Rockets!", 2.44E+21, "Assets/Img/Gui/icon_rockets.png"));
+            unitsList.Add(new Unit(22, "Even Bigger Cannons!!", 2.44E+23, "Assets/Img/Gui/icon_artillery_support.png"));
+            unitsList.Add(new Unit(23, "Huge Crates of Stuff!!", 4.87E+25, "Assets/Img/Gui/icon_bigger_crate.png"));
+            unitsList.Add(new Unit(24, "Bigger Rockets!!", 1.95E+28, "Assets/Img/Gui/icon_bigger_rockets.png"));
+            unitsList.Add(new Unit(25, "Biggest Cannons!!!", 2.14E+31, "Assets/Img/Gui/icon_biggest_guns.png"));
+            unitsList.Add(new Unit(26, "Truckloads of Stuff!!!", 2.36E+36, "Assets/Img/Gui/icon_supply_lines.png"));
+            unitsList.Add(new Unit(27, "Biggest Rockets!!!", 2.59E+46, "Assets/Img/Gui/icon_rocket_guidance_system.png"));
+            unitsList.Add(new Unit(28, "Killstreaks!", 2.85E+61, "Assets/Img/Gui/icon_paratroopers.png"));
+            unitsList.Add(new Unit(29, "Moar Barrels!", 3.14E+81, "Assets/Img/Gui/icon_gatling.png"));
+            unitsList.Add(new Unit(30, "Moar Cannons!!", 3.14E+96, "Assets/Img/Gui/icon_more_guns.png"));
+            unitsList.Add(new Unit(31, "Fat Man!", 3.76E+101, "Assets/Img/Gui/icon_bombing.png"));
+            unitsList.Add(new Unit(32, "Space Lasers!!", 4.14E+136, "Assets/Img/Gui/icon_gps.png"));
+            unitsList.Add(new Unit(33, "MEEEEEEE BIL", 4.56E+141, "Assets/Img/Gui/icon_bil.png"));
         }
 
         void CreateSkills()
@@ -306,7 +308,7 @@ namespace IdleGame
             skillList.Add(new UnitSkill(1, BonusType.AllDamage, 0.5f, 400));
             skillList.Add(new UnitSkill(1, BonusType.HeroDamage, 200.0f, 800));
 
-            skillList.Add(new UnitSkill(2, BonusType.PlayerDamage, 0.2f, 10));
+            skillList.Add(new UnitSkill(2, BonusType.PlayerDamage, 0.1f, 10));
             skillList.Add(new UnitSkill(2, BonusType.HeroDamage, 2.0f, 25));
             skillList.Add(new UnitSkill(2, BonusType.HeroDamage, 20.0f, 50));
             skillList.Add(new UnitSkill(2, BonusType.PlayerDamageDPS, 0.01f, 100));
@@ -545,6 +547,24 @@ namespace IdleGame
             skillList.Add(new UnitSkill(31, BonusType.ChestGold, 0.25f, 200));
             skillList.Add(new UnitSkill(31, BonusType.AllDamage, 0.1f, 400));
             skillList.Add(new UnitSkill(31, BonusType.AllGold, 0.15f, 800));
+
+            
+            skillList.Add(new UnitSkill(32, BonusType.HeroDamage, 0.4f, 10));
+            skillList.Add(new UnitSkill(32, BonusType.HeroDamage, 0.2f, 25));
+            skillList.Add(new UnitSkill(32, BonusType.AllGold, 0.25f, 50));
+            skillList.Add(new UnitSkill(32, BonusType.PlayerDamage, 0.6f, 100));
+            skillList.Add(new UnitSkill(32, BonusType.CriticalChance, 0.02f, 200));
+            skillList.Add(new UnitSkill(32, BonusType.AllDamage, 0.3f, 400));
+            skillList.Add(new UnitSkill(32, BonusType.AllDamage, 0.1f, 800));
+
+            skillList.Add(new UnitSkill(33, BonusType.HeroDamage, 20.0f, 10));
+            skillList.Add(new UnitSkill(33, BonusType.PlayerDamage, 0.2f, 25));
+            skillList.Add(new UnitSkill(33, BonusType.PlayerDamageDPS, 0.01f, 50));
+            skillList.Add(new UnitSkill(33, BonusType.AllGold, 0.2f, 100));
+            skillList.Add(new UnitSkill(33, BonusType.AllDamage, 0.2f, 200));
+            skillList.Add(new UnitSkill(33, BonusType.AllDamage, 0.3f, 400));
+            skillList.Add(new UnitSkill(33, BonusType.AllDamage, 0.4f, 800));
+
         }
     }
 }

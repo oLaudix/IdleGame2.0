@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlliesAnimations.cs" />
     <Compile Include="enums.cs" />
     <Compile Include="Gear.cs" />
     <Compile Include="GuiElements.cs" />
@@ -63,7 +64,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Sounds\" />
+    <Folder Include="Sounds\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Otter\Otter\Otter.csproj">
@@ -72,6 +73,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\icon_bigger_crate.png" />
     <Content Include="Assets\Img\background_path.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -87,6 +89,9 @@
     <Content Include="Assets\Img\crosshair.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Gear\icon_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\Gui\icon_ACP.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -99,10 +104,25 @@
     <Content Include="Assets\Img\Gui\icon_artillery_support.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Gui\icon_bigger_crate.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_bigger_rockets.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_biggest_guns.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_biggest_tank.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_bil.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\Gui\icon_bombing.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Img\Gui\icon_canned_food.png">
+    <Content Include="Assets\Img\Gui\icon_can_buy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Img\Gui\icon_dicokka.png">
@@ -144,6 +164,9 @@
     <Content Include="Assets\Img\Gui\icon_minigun.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Gui\icon_more_guns.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\Gui\icon_mortar.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -160,6 +183,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Img\Gui\icon_rocket.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_rockets.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Img\Gui\icon_rocket_guidance_system.png">
@@ -195,6 +221,16 @@
     <Content Include="Assets\Img\sniper.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Sprites\biggest_tonk.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Sprites\dicokka.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Sprites\fat_tonk.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dicokka.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
