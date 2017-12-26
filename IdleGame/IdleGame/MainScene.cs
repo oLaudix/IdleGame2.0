@@ -10,28 +10,25 @@ namespace IdleGame
     class MainScene : Scene
     {
         public Dictionary<BonusType, double> Bonuses = new Dictionary<BonusType, double>();
-        Image background = new Image("Assets/Img/background_road2.png");
-        public MyPlayer player = new MyPlayer(1000, 600);
-        List<UnitSkill> skillList = new List<UnitSkill>();
+        public Image background = new Image("Assets/Img/background_road2.png");
+        public MyPlayer player;
+        public List<UnitSkill> skillList = new List<UnitSkill>();
         public List<Unit> unitsList = new List<Unit>();
-        List<Gear> gearList = new List<Gear>();
-        Random random = new Random();
-        Stage stage;
+        public List<Gear> gearList = new List<Gear>();
+        public Random random = new Random();
+        public Stage stage;
         int currentStage = 0;
-        Image HPBG = new Image("Assets/Img/HPBarBG.png");
-        Image HPFG = new Image("Assets/Img/HPBarFG.png");
-        Entity stagee;
-        Text staget;
-        Entity stageNumbere;
-        Text stageNumbert;
-        Entity TotalDPSe;
-        Text TotalDPSt;
+        public Image HPBG = new Image("Assets/Img/HPBarBG.png");
+        public Image HPFG = new Image("Assets/Img/HPBarFG.png");
+        public Entity stagee;
+        public Text staget;
+        public Entity stageNumbere;
+        public Text stageNumbert;
+        public Entity TotalDPSe;
+        public Text TotalDPSt;
 
         Entity debuge;
         Text debugt;
-
-        Entity bottom_menu_e;
-        Image bottom_menu = new Image("Assets/Img/Gui/buy_button.png");
 
         Image Crosshair = new Image("Assets/Img/crosshair.png");
         Entity Crosshair_e = new Entity(0, 0);
@@ -39,23 +36,7 @@ namespace IdleGame
         public double totalDPS = 0;
         public MainScene() : base()
         {
-            bottom_menu_e = new Entity(500, 1080-261);
-            bottom_menu_e.AddGraphic(bottom_menu);
-            //Add(bottom_menu_e);
-            AddGraphic(background);
-            Add(player);
-            foreach (BonusType bonusType in Enum.GetValues(typeof(BonusType)))
-            {
-                Bonuses.Add(bonusType, 0);
-            }
-            CreateGear();
-            CreateUnits();
-            UpdateBonuses();
-            CreateSkills();
-            StartStage();
-
-            HUD();
-            unitsList[0].level = 0;
+            
         }
         public override void Render()
         {
@@ -65,8 +46,33 @@ namespace IdleGame
         public override void Begin()
         {
             base.Begin();
-            GuiElement dicokka_icon = new GuiElement(500, 500, "Assets/Img/Gui/dicokka_icon.png");
-            //BuyButton button = new BuyButton(50, 50, menu);
+            player = new MyPlayer(1000, 600);
+            Add(player);
+            AddGraphic(background);
+            foreach (BonusType bonusType in Enum.GetValues(typeof(BonusType)))
+            {
+                Bonuses.Add(bonusType, 0);
+            }
+            CreateGear();
+            CreateSkills();
+            CreateUnits();
+            UpdateBonuses();
+            StartStage();
+            HUD();
+            unitsList[0].level = 0;
+            Vector2 Pos = new Vector2(211, 854);
+            int counter = 1;
+            foreach(var Unit in unitsList)
+            {
+                new GuiElement(Pos.X, Pos.Y, Unit);
+                Pos.X += 82;
+                if (counter == 9 || counter == 20)
+                {
+                    Pos.Y += 70;
+                    Pos.X = 47;
+                }
+                counter++;
+            }
         }
         public override void Update()
         {
@@ -197,8 +203,8 @@ namespace IdleGame
             totalDPS = 0;
             foreach (var Unit in unitsList)
             {
-                this.stage.CurrentHP -= Unit.GetDPSByLevel(Unit.level, GetHeroAdditionlDamage(Unit.heroID), Bonuses[BonusType.AllDamage], GetBonusArtifactDamage())/60;
-                totaldeeps += Unit.GetDPSByLevel(Unit.level, GetHeroAdditionlDamage(Unit.heroID), Bonuses[BonusType.AllDamage], GetBonusArtifactDamage());
+                this.stage.CurrentHP -= Unit.GetDPSByLevel(Unit.level)/60;
+                totaldeeps += Unit.GetDPSByLevel(Unit.level);
             }
             if (Input.MouseButtonDown(MouseButton.Left) && Input.MouseY < 1080 - 261)
             {
@@ -257,307 +263,288 @@ namespace IdleGame
 
         void CreateUnits()
         {
-            unitsList.Add(new Unit(1, "Takeda", 50));
-            unitsList.Add(new Unit(2, "Contessa", 175));
-            unitsList.Add(new Unit(3, "Hornetta", 675));
-            unitsList.Add(new Unit(4, "Mila", 2850));
-            unitsList.Add(new Unit(5, "Terra", 13300));
-            unitsList.Add(new Unit(6, "Inquisireaux", 68100));
-            unitsList.Add(new Unit(7, "Charlotte ", 384000));
-            unitsList.Add(new Unit(8, "Jordaan", 2800000));
-            unitsList.Add(new Unit(9, "Jukka", 23800000));
-            unitsList.Add(new Unit(10, "Milo", 143000000));
-            unitsList.Add(new Unit(11, "Macelord ", 943000000));
-            unitsList.Add(new Unit(12, "Gertrude ", 84E+09f));
-            unitsList.Add(new Unit(13, "Twitterella  ", 5.47E+10f));
-            unitsList.Add(new Unit(14, "Master   ", 8.20E+11f));
-            unitsList.Add(new Unit(15, "Elpha   ", 8.20E+12f));
-            unitsList.Add(new Unit(16, "Poppy", 1.64E+14f));
-            unitsList.Add(new Unit(17, "Skulptor", 1.64E+15f));
-            unitsList.Add(new Unit(18, "Sterling", 4.92E+16f));
-            unitsList.Add(new Unit(19, "Orba", 2.46E+18f));
-            unitsList.Add(new Unit(20, "Remus", 7.38E+19f));
-            unitsList.Add(new Unit(21, "Mikey", 2.44E+21f));
-            unitsList.Add(new Unit(22, "Peter", 2.44E+23f));
-            unitsList.Add(new Unit(23, "Teeny ", 4.87E+25f));
-            unitsList.Add(new Unit(24, "Deznis", 1.95E+28f));
-            unitsList.Add(new Unit(25, "Hamlette ", 2.14E+31f));
-            unitsList.Add(new Unit(26, "Eistor", 2.36E+36f));
-            unitsList.Add(new Unit(27, "Flavius", 2.59E+46));
-            unitsList.Add(new Unit(28, "Chester", 2.85E+61));
-            unitsList.Add(new Unit(29, "Mohacas", 3.14E+81));
-            unitsList.Add(new Unit(30, "Jaqulin", 3.14E+96));
-            unitsList.Add(new Unit(31, "Pixie", 3.76E+101));
-            unitsList.Add(new Unit(32, "Jackalope", 4.14E+136));
-            unitsList.Add(new Unit(33, "Dark Lord", 4.56E+141));
+            unitsList.Add(new Unit(1, "Private Michael Parts", 50, "Assets/Img/Gui/icon_private.png"));
+            unitsList.Add(new Unit(2, "Contessa", 175, "Assets/Img/Gui/icon_marksman.png"));
+            unitsList.Add(new Unit(3, "Hornetta", 675, "Assets/Img/Gui/icon_minigun.png"));
+            unitsList.Add(new Unit(4, "Mila", 2850, "Assets/Img/Gui/icon_mortar.png"));
+            unitsList.Add(new Unit(5, "Terra", 13300, "Assets/Img/Gui/icon_turret.png"));
+            unitsList.Add(new Unit(6, "Inquisireaux", 68100, "Assets/Img/Gui/icon_dicokka.png"));
+            unitsList.Add(new Unit(7, "Charlotte ", 384000, "Assets/Img/Gui/icon_ironiso.png"));
+            unitsList.Add(new Unit(8, "Jordaan", 2800000, "Assets/Img/Gui/icon_hover.png"));
+            unitsList.Add(new Unit(9, "Jukka", 23800000, "Assets/Img/Gui/icon_heli.png"));
+            unitsList.Add(new Unit(10, "Milo", 143000000, "Assets/Img/Gui/icon_rocket.png"));
+            unitsList.Add(new Unit(11, "Infantry Anti-Tank", 943000000, "Assets/Img/Gui/icon_infantry_anti-tank.png"));
+            unitsList.Add(new Unit(12, "Improved Infantry Equipment", 84E+09, "Assets/Img/Gui/icon_infantry_eq.png"));
+            unitsList.Add(new Unit(13, "Armor-Piercing Bullets", 5.47E+10, "Assets/Img/Gui/icon_ap_ammo.png"));
+            unitsList.Add(new Unit(14, "Field Hospitals", 8.20E+11, "Assets/Img/Gui/icon_field_hospitals.png"));
+            unitsList.Add(new Unit(15, "Canned Food", 8.20E+12, "Assets/Img/Gui/icon_canned_food.png"));
+            unitsList.Add(new Unit(16, "Increased Ammunition Supply", 1.64E+14, "Assets/Img/Gui/icon_ammo_supply.png"));
+            unitsList.Add(new Unit(17, "Improved Tank Armament", 1.64E+15, "Assets/Img/Gui/icon_tank_armament.png"));
+            unitsList.Add(new Unit(18, "Improved Gatling Technology", 4.92E+16, "Assets/Img/Gui/icon_gatling.png"));
+            unitsList.Add(new Unit(19, "Improved Supply Lines", 2.46E+18, "Assets/Img/Gui/icon_supply_lines.png"));
+            unitsList.Add(new Unit(20, "Paratroopers", 7.38E+19, "Assets/Img/Gui/icon_paratroopers.png"));
+            unitsList.Add(new Unit(21, "Motorized Infantry", 2.44E+21, "Assets/Img/Gui/icon_motorized_infantry.png"));
+            unitsList.Add(new Unit(22, "Artillery Support", 2.44E+23, "Assets/Img/Gui/icon_artillery_support.png"));
+            unitsList.Add(new Unit(23, "Strategic Bombing", 4.87E+25, "Assets/Img/Gui/icon_bombing.png"));
+            unitsList.Add(new Unit(24, "Armored Personal Carriers", 1.95E+28, "Assets/Img/Gui/icon_ACP.png"));
+            unitsList.Add(new Unit(25, "Self-propelled Gun", 2.14E+31, "Assets/Img/Gui/icon_self_propelled_cannon.png"));
+            unitsList.Add(new Unit(26, "Improved Petroleum", 2.36E+36, "Assets/Img/Gui/icon_improved_petroleum.png"));
+            unitsList.Add(new Unit(27, "Supreme Commander", 2.59E+46, "Assets/Img/Gui/icon_supreme_commander.png"));
+            unitsList.Add(new Unit(28, "Improved Tank Thread", 2.85E+61, "Assets/Img/Gui/icon_improved_tank_thread.png"));
+            unitsList.Add(new Unit(29, "Supply Drops", 3.14E+81, "Assets/Img/Gui/icon_supply_drops.png"));
+            unitsList.Add(new Unit(30, "Missile Guidance System", 3.14E+96, "Assets/Img/Gui/icon_rocket_guidance_system.png"));
+            unitsList.Add(new Unit(31, "Global Positioning System", 3.76E+101, "Assets/Img/Gui/icon_gps.png"));
         }
 
         void CreateSkills()
         {
-            skillList.Add(new UnitSkill(unitsList[0].heroID, BonusType.HeroDamage, 1.0f, 10, unitsList[0].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[0].heroID, BonusType.HeroDamage, 2.0f, 25, unitsList[0].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[0].heroID, BonusType.AllDamage, 0.2f, 50, unitsList[0].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[0].heroID, BonusType.CriticalDamage, 0.2f, 100, unitsList[0].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[0].heroID, BonusType.HeroDamage, 20.0f, 200, unitsList[0].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[0].heroID, BonusType.AllDamage, 0.5f, 400, unitsList[0].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[0].heroID, BonusType.HeroDamage, 200.0f, 800, unitsList[0].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(1, BonusType.HeroDamage, 1.0f, 10));
+            skillList.Add(new UnitSkill(1, BonusType.HeroDamage, 2.0f, 25));
+            skillList.Add(new UnitSkill(1, BonusType.AllDamage, 0.2f, 50));
+            skillList.Add(new UnitSkill(1, BonusType.CriticalDamage, 0.2f, 100));
+            skillList.Add(new UnitSkill(1, BonusType.HeroDamage, 20.0f, 200));
+            skillList.Add(new UnitSkill(1, BonusType.AllDamage, 0.5f, 400));
+            skillList.Add(new UnitSkill(1, BonusType.HeroDamage, 200.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[1].heroID, BonusType.PlayerDamage, 0.2f, 10, unitsList[1].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[1].heroID, BonusType.HeroDamage, 2.0f, 25, unitsList[1].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[1].heroID, BonusType.HeroDamage, 20.0f, 50, unitsList[1].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[1].heroID, BonusType.PlayerDamageDPS, 0.01f, 100, unitsList[1].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[1].heroID, BonusType.AllDamage, 0.2f, 200, unitsList[1].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[1].heroID, BonusType.AllGold, 0.2f, 400, unitsList[1].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[1].heroID, BonusType.HeroDamage, 200.0f, 800, unitsList[1].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(2, BonusType.PlayerDamage, 0.2f, 10));
+            skillList.Add(new UnitSkill(2, BonusType.HeroDamage, 2.0f, 25));
+            skillList.Add(new UnitSkill(2, BonusType.HeroDamage, 20.0f, 50));
+            skillList.Add(new UnitSkill(2, BonusType.PlayerDamageDPS, 0.01f, 100));
+            skillList.Add(new UnitSkill(2, BonusType.AllDamage, 0.2f, 200));
+            skillList.Add(new UnitSkill(2, BonusType.AllGold, 0.2f, 400));
+            skillList.Add(new UnitSkill(2, BonusType.HeroDamage, 200.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[2].heroID, BonusType.HeroDamage, 3.0f, 10, unitsList[2].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[2].heroID, BonusType.AllGold, 0.2f, 25, unitsList[2].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[2].heroID, BonusType.AllDamage, 0.2f, 50, unitsList[2].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[2].heroID, BonusType.PlayerDamageDPS, 0.01f, 100, unitsList[2].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[2].heroID, BonusType.ChestGold, 0.4f, 200, unitsList[2].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[2].heroID, BonusType.CriticalChance, 0.02f, 400, unitsList[2].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[2].heroID, BonusType.AllDamage, 0.6f, 800, unitsList[2].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(3, BonusType.HeroDamage, 3.0f, 10));
+            skillList.Add(new UnitSkill(3, BonusType.AllGold, 0.2f, 25));
+            skillList.Add(new UnitSkill(3, BonusType.AllDamage, 0.2f, 50));
+            skillList.Add(new UnitSkill(3, BonusType.PlayerDamageDPS, 0.01f, 100));
+            skillList.Add(new UnitSkill(3, BonusType.ChestGold, 0.4f, 200));
+            skillList.Add(new UnitSkill(3, BonusType.CriticalChance, 0.02f, 400));
+            skillList.Add(new UnitSkill(3, BonusType.AllDamage, 0.6f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[3].heroID, BonusType.HeroDamage, 1.0f, 10, unitsList[3].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[3].heroID, BonusType.HeroDamage, 8.0f, 25, unitsList[3].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[3].heroID, BonusType.AllGold, 6.0f, 50, unitsList[3].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[3].heroID, BonusType.HeroDamage, 5.0f, 100, unitsList[3].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[3].heroID, BonusType.CriticalDamage, 0.5f, 200, unitsList[3].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[3].heroID, BonusType.AllDamage, 0.2f, 400, unitsList[3].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[3].heroID, BonusType.ChestGold, 0.2f, 800, unitsList[3].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(4, BonusType.HeroDamage, 1.0f, 10));
+            skillList.Add(new UnitSkill(4, BonusType.HeroDamage, 8.0f, 25));
+            skillList.Add(new UnitSkill(4, BonusType.AllGold, 6.0f, 50));
+            skillList.Add(new UnitSkill(4, BonusType.HeroDamage, 5.0f, 100));
+            skillList.Add(new UnitSkill(4, BonusType.CriticalDamage, 0.5f, 200));
+            skillList.Add(new UnitSkill(4, BonusType.AllDamage, 0.2f, 400));
+            skillList.Add(new UnitSkill(4, BonusType.ChestGold, 0.2f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[4].heroID, BonusType.HeroDamage, 3.0f, 10, unitsList[4].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[4].heroID, BonusType.AllGold, 0.1f, 25, unitsList[4].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[4].heroID, BonusType.PlayerDamageDPS, 0.01f, 50, unitsList[4].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[4].heroID, BonusType.AllGold, 0.15f, 100, unitsList[4].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[4].heroID, BonusType.ChestGold, 0.2f, 200, unitsList[4].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[4].heroID, BonusType.PlayerDamage, 0.05f, 400, unitsList[4].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[4].heroID, BonusType.HeroDamage, 100.0f, 800, unitsList[4].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(5, BonusType.HeroDamage, 3.0f, 10));
+            skillList.Add(new UnitSkill(5, BonusType.AllGold, 0.1f, 25));
+            skillList.Add(new UnitSkill(5, BonusType.PlayerDamageDPS, 0.01f, 50));
+            skillList.Add(new UnitSkill(5, BonusType.AllGold, 0.15f, 100));
+            skillList.Add(new UnitSkill(5, BonusType.ChestGold, 0.2f, 200));
+            skillList.Add(new UnitSkill(5, BonusType.PlayerDamage, 0.05f, 400));
+            skillList.Add(new UnitSkill(5, BonusType.HeroDamage, 100.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[5].heroID, BonusType.HeroDamage, 2.0f, 10, unitsList[5].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[5].heroID, BonusType.HeroDamage, 7.0f, 25, unitsList[5].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[5].heroID, BonusType.AllDamage, 0.1f, 50, unitsList[5].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[5].heroID, BonusType.AllDamage, 0.2f, 100, unitsList[5].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[5].heroID, BonusType.CriticalDamage, 0.05f, 200, unitsList[5].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[5].heroID, BonusType.CriticalChance, 0.02f, 400, unitsList[5].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[5].heroID, BonusType.HeroDamage, 100.0f, 800, unitsList[5].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(6, BonusType.HeroDamage, 2.0f, 10));
+            skillList.Add(new UnitSkill(6, BonusType.HeroDamage, 7.0f, 25));
+            skillList.Add(new UnitSkill(6, BonusType.AllDamage, 0.1f, 50));
+            skillList.Add(new UnitSkill(6, BonusType.AllDamage, 0.2f, 100));
+            skillList.Add(new UnitSkill(6, BonusType.CriticalDamage, 0.05f, 200));
+            skillList.Add(new UnitSkill(6, BonusType.CriticalChance, 0.02f, 400));
+            skillList.Add(new UnitSkill(6, BonusType.HeroDamage, 100.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[6].heroID, BonusType.HeroDamage, 2.0f, 10, unitsList[6].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[6].heroID, BonusType.AllDamage, 0.05f, 25, unitsList[6].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[6].heroID, BonusType.AllDamage, 0.07f, 50, unitsList[6].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[6].heroID, BonusType.HeroDamage, 0.6f, 100, unitsList[6].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[6].heroID, BonusType.PlayerDamage, 0.05f, 200, unitsList[6].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[6].heroID, BonusType.ChestGold, 0.2f, 400, unitsList[6].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[6].heroID, BonusType.AllDamage, 0.3f, 800, unitsList[6].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(7, BonusType.HeroDamage, 2.0f, 10));
+            skillList.Add(new UnitSkill(7, BonusType.AllDamage, 0.05f, 25));
+            skillList.Add(new UnitSkill(7, BonusType.AllDamage, 0.07f, 50));
+            skillList.Add(new UnitSkill(7, BonusType.HeroDamage, 0.6f, 100));
+            skillList.Add(new UnitSkill(7, BonusType.PlayerDamage, 0.05f, 200));
+            skillList.Add(new UnitSkill(7, BonusType.ChestGold, 0.2f, 400));
+            skillList.Add(new UnitSkill(7, BonusType.AllDamage, 0.3f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[7].heroID, BonusType.HeroDamage, 2.0f, 10, unitsList[7].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[7].heroID, BonusType.AllDamage, 0.1f, 25, unitsList[7].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[7].heroID, BonusType.PlayerDamageDPS, 0.01f, 50, unitsList[7].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[7].heroID, BonusType.AllGold, 0.15f, 100, unitsList[7].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[7].heroID, BonusType.ChestGold, 0.2f, 200, unitsList[7].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[7].heroID, BonusType.ChestGold, 19.0f, 400, unitsList[7].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[7].heroID, BonusType.AllDamage, 0.2f, 800, unitsList[7].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(8, BonusType.HeroDamage, 2.0f, 10));
+            skillList.Add(new UnitSkill(8, BonusType.AllDamage, 0.1f, 25));
+            skillList.Add(new UnitSkill(8, BonusType.PlayerDamageDPS, 0.01f, 50));
+            skillList.Add(new UnitSkill(8, BonusType.AllGold, 0.15f, 100));
+            skillList.Add(new UnitSkill(8, BonusType.ChestGold, 0.2f, 200));
+            skillList.Add(new UnitSkill(8, BonusType.HeroDamage, 19.0f, 400));
+            skillList.Add(new UnitSkill(8, BonusType.AllDamage, 0.2f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[8].heroID, BonusType.HeroDamage, 1.5f, 10, unitsList[8].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[8].heroID, BonusType.AllDamage, 0.05f, 25, unitsList[8].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[8].heroID, BonusType.AllDamage, 0.3f, 50, unitsList[8].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[8].heroID, BonusType.CriticalDamage, 0.05f, 100, unitsList[8].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[8].heroID, BonusType.HeroDamage, 50.0f, 200, unitsList[8].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[8].heroID, BonusType.AllDamage, 0.25f, 400, unitsList[8].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[8].heroID, BonusType.HeroDamage, 100.0f, 800, unitsList[8].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(9, BonusType.HeroDamage, 1.5f, 10));
+            skillList.Add(new UnitSkill(9, BonusType.AllDamage, 0.05f, 25));
+            skillList.Add(new UnitSkill(9, BonusType.AllDamage, 0.3f, 50));
+            skillList.Add(new UnitSkill(9, BonusType.CriticalDamage, 0.05f, 100));
+            skillList.Add(new UnitSkill(9, BonusType.HeroDamage, 50.0f, 200));
+            skillList.Add(new UnitSkill(9, BonusType.AllDamage, 0.25f, 400));
+            skillList.Add(new UnitSkill(9, BonusType.HeroDamage, 100.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[9].heroID, BonusType.HeroDamage, 1.5f, 10, unitsList[9].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[9].heroID, BonusType.CriticalChance, 0.01f, 25, unitsList[9].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[9].heroID, BonusType.AllDamage, 0.05f, 50, unitsList[9].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[9].heroID, BonusType.AllGold, 0.15f, 100, unitsList[9].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[9].heroID, BonusType.ChestGold, 0.2f, 200, unitsList[9].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[9].heroID, BonusType.ChestGold, 0.25f, 400, unitsList[9].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[9].heroID, BonusType.HeroDamage, 0.15f, 800, unitsList[9].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(10, BonusType.HeroDamage, 1.5f, 10));
+            skillList.Add(new UnitSkill(10, BonusType.CriticalChance, 0.01f, 25));
+            skillList.Add(new UnitSkill(10, BonusType.AllDamage, 0.05f, 50));
+            skillList.Add(new UnitSkill(10, BonusType.AllGold, 0.15f, 100));
+            skillList.Add(new UnitSkill(10, BonusType.ChestGold, 0.2f, 200));
+            skillList.Add(new UnitSkill(10, BonusType.ChestGold, 0.25f, 400));
+            skillList.Add(new UnitSkill(10, BonusType.AllDamage, 0.15f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[10].heroID, BonusType.HeroDamage, 2.0f, 10, unitsList[10].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[10].heroID, BonusType.HeroDamage, 7.5f, 25, unitsList[10].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[10].heroID, BonusType.PlayerDamage, 0.05f, 50, unitsList[10].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[10].heroID, BonusType.PlayerDamageDPS, 0.01f, 100, unitsList[10].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[10].heroID, BonusType.AllGold, 0.15f, 200, unitsList[10].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[10].heroID, BonusType.CriticalChance, 0.25f, 400, unitsList[10].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[10].heroID, BonusType.HeroDamage, 3.8f, 800, unitsList[10].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(11, BonusType.HeroDamage, 2.0f, 10));
+            skillList.Add(new UnitSkill(11, BonusType.HeroDamage, 7.5f, 25));
+            skillList.Add(new UnitSkill(11, BonusType.PlayerDamage, 0.05f, 50));
+            skillList.Add(new UnitSkill(11, BonusType.PlayerDamageDPS, 0.01f, 100));
+            skillList.Add(new UnitSkill(11, BonusType.AllGold, 0.15f, 200));
+            skillList.Add(new UnitSkill(11, BonusType.CriticalChance, 0.25f, 400));
+            skillList.Add(new UnitSkill(11, BonusType.HeroDamage, 3.8f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[11].heroID, BonusType.HeroDamage, 2.5f, 10, unitsList[11].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[11].heroID, BonusType.HeroDamage, 13.0f, 25, unitsList[11].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[11].heroID, BonusType.AllDamage, 0.05f, 50, unitsList[11].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[11].heroID, BonusType.CriticalDamage, 0.05f, 100, unitsList[11].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[11].heroID, BonusType.PlayerDamageDPS, 0.01f, 200, unitsList[11].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[11].heroID, BonusType.AllDamage, 0.1f, 400, unitsList[11].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[11].heroID, BonusType.AllGold, 0.2f, 800, unitsList[11].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(12, BonusType.HeroDamage, 2.5f, 10));
+            skillList.Add(new UnitSkill(12, BonusType.HeroDamage, 13.0f, 25));
+            skillList.Add(new UnitSkill(12, BonusType.AllDamage, 0.05f, 50));
+            skillList.Add(new UnitSkill(12, BonusType.CriticalDamage, 0.05f, 100));
+            skillList.Add(new UnitSkill(12, BonusType.PlayerDamageDPS, 0.01f, 200));
+            skillList.Add(new UnitSkill(12, BonusType.AllDamage, 0.1f, 400));
+            skillList.Add(new UnitSkill(12, BonusType.AllGold, 0.2f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[12].heroID, BonusType.HeroDamage, 1.5f, 10, unitsList[12].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[12].heroID, BonusType.HeroDamage, 8.5f, 25, unitsList[12].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[12].heroID, BonusType.PlayerDamage, 0.05f, 50, unitsList[12].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[12].heroID, BonusType.AllDamage, 0.2f, 100, unitsList[12].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[12].heroID, BonusType.AllDamage, 0.3f, 200, unitsList[12].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[12].heroID, BonusType.CriticalDamage, 0.05f, 400, unitsList[12].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[12].heroID, BonusType.HeroDamage, 15.0f, 800, unitsList[12].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(13, BonusType.HeroDamage, 1.5f, 10));
+            skillList.Add(new UnitSkill(13, BonusType.HeroDamage, 8.5f, 25));
+            skillList.Add(new UnitSkill(13, BonusType.PlayerDamage, 0.05f, 50));
+            skillList.Add(new UnitSkill(13, BonusType.AllDamage, 0.2f, 100));
+            skillList.Add(new UnitSkill(13, BonusType.AllDamage, 0.3f, 200));
+            skillList.Add(new UnitSkill(13, BonusType.CriticalDamage, 0.05f, 400));
+            skillList.Add(new UnitSkill(13, BonusType.HeroDamage, 15.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[13].heroID, BonusType.HeroDamage, 2.0f, 10, unitsList[13].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[13].heroID, BonusType.HeroDamage, 8.0f, 25, unitsList[13].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[13].heroID, BonusType.PlayerDamageDPS, 0.01f, 50, unitsList[13].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[13].heroID, BonusType.HeroDamage, 4.0f, 100, unitsList[13].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[13].heroID, BonusType.AllGold, 0.1f, 200, unitsList[13].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[13].heroID, BonusType.CriticalDamage, 0.1f, 400, unitsList[13].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[13].heroID, BonusType.AllGold, 0.1f, 800, unitsList[13].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(14, BonusType.HeroDamage, 2.0f, 10));
+            skillList.Add(new UnitSkill(14, BonusType.HeroDamage, 8.0f, 25));
+            skillList.Add(new UnitSkill(14, BonusType.PlayerDamageDPS, 0.01f, 50));
+            skillList.Add(new UnitSkill(14, BonusType.HeroDamage, 4.0f, 100));
+            skillList.Add(new UnitSkill(14, BonusType.AllGold, 0.1f, 200));
+            skillList.Add(new UnitSkill(14, BonusType.CriticalDamage, 0.1f, 400));
+            skillList.Add(new UnitSkill(14, BonusType.AllGold, 0.1f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[14].heroID, BonusType.HeroDamage, 3.0f, 10, unitsList[14].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[14].heroID, BonusType.AllDamage, 0.1f, 25, unitsList[14].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[14].heroID, BonusType.AllDamage, 0.05f, 50, unitsList[14].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[14].heroID, BonusType.CriticalChance, 0.02f, 100, unitsList[14].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[14].heroID, BonusType.CriticalDamage, 0.15f, 200, unitsList[14].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[14].heroID, BonusType.ChestGold, 0.2f, 400, unitsList[14].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[14].heroID, BonusType.HeroDamage, 100.0f, 800, unitsList[14].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(15, BonusType.HeroDamage, 3.0f, 10));
+            skillList.Add(new UnitSkill(15, BonusType.AllDamage, 0.1f, 25));
+            skillList.Add(new UnitSkill(15, BonusType.AllDamage, 0.05f, 50));
+            skillList.Add(new UnitSkill(15, BonusType.CriticalChance, 0.02f, 100));
+            skillList.Add(new UnitSkill(15, BonusType.CriticalDamage, 0.15f, 200));
+            skillList.Add(new UnitSkill(15, BonusType.ChestGold, 0.2f, 400));
+            skillList.Add(new UnitSkill(15, BonusType.HeroDamage, 100.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[15].heroID, BonusType.HeroDamage, 3.5f, 10, unitsList[15].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[15].heroID, BonusType.ChestGold, 0.25f, 25, unitsList[15].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[15].heroID, BonusType.AllGold, 0.20f, 50, unitsList[15].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[15].heroID, BonusType.AllDamage, 0.05f, 100, unitsList[15].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[15].heroID, BonusType.AllDamage, 0.07f, 200, unitsList[15].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[15].heroID, BonusType.AllDamage, 0.15f, 400, unitsList[15].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[15].heroID, BonusType.AllDamage, 0.2f, 800, unitsList[15].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(16, BonusType.HeroDamage, 3.5f, 10));
+            skillList.Add(new UnitSkill(16, BonusType.ChestGold, 0.25f, 25));
+            skillList.Add(new UnitSkill(16, BonusType.AllGold, 0.20f, 50));
+            skillList.Add(new UnitSkill(16, BonusType.AllDamage, 0.05f, 100));
+            skillList.Add(new UnitSkill(16, BonusType.AllDamage, 0.07f, 200));
+            skillList.Add(new UnitSkill(16, BonusType.AllDamage, 0.15f, 400));
+            skillList.Add(new UnitSkill(16, BonusType.AllDamage, 0.2f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[16].heroID, BonusType.HeroDamage, 1.5f, 10, unitsList[16].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[16].heroID, BonusType.HeroDamage, 9.0f, 25, unitsList[16].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[16].heroID, BonusType.AllGold, 0.1f, 50, unitsList[16].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[16].heroID, BonusType.AllGold, 0.1f, 100, unitsList[16].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[16].heroID, BonusType.PlayerDamage, 0.05f, 200, unitsList[16].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[16].heroID, BonusType.CriticalDamage, 0.1f, 400, unitsList[16].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[16].heroID, BonusType.AllGold, 0.25f, 800, unitsList[16].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(17, BonusType.HeroDamage, 1.5f, 10));
+            skillList.Add(new UnitSkill(17, BonusType.HeroDamage, 9.0f, 25));
+            skillList.Add(new UnitSkill(17, BonusType.AllGold, 0.1f, 50));
+            skillList.Add(new UnitSkill(17, BonusType.AllGold, 0.1f, 100));
+            skillList.Add(new UnitSkill(17, BonusType.PlayerDamage, 0.05f, 200));
+            skillList.Add(new UnitSkill(17, BonusType.CriticalDamage, 0.1f, 400));
+            skillList.Add(new UnitSkill(17, BonusType.AllGold, 0.25f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[17].heroID, BonusType.HeroDamage, 4.0f, 10, unitsList[17].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[17].heroID, BonusType.HeroDamage, 5.0f, 25, unitsList[17].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[17].heroID, BonusType.AllDamage, 0.05f, 50, unitsList[17].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[17].heroID, BonusType.HeroDamage, 4.5f, 100, unitsList[17].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[17].heroID, BonusType.PlayerDamage, 0.05f, 200, unitsList[17].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[17].heroID, BonusType.ChestGold, 0.2f, 400, unitsList[17].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[17].heroID, BonusType.AllDamage, 0.15f, 800, unitsList[17].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(18, BonusType.HeroDamage, 4.0f, 10));
+            skillList.Add(new UnitSkill(18, BonusType.HeroDamage, 5.0f, 25));
+            skillList.Add(new UnitSkill(18, BonusType.AllDamage, 0.05f, 50));
+            skillList.Add(new UnitSkill(18, BonusType.HeroDamage, 4.5f, 100));
+            skillList.Add(new UnitSkill(18, BonusType.PlayerDamage, 0.05f, 200));
+            skillList.Add(new UnitSkill(18, BonusType.ChestGold, 0.2f, 400));
+            skillList.Add(new UnitSkill(18, BonusType.AllDamage, 0.15f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[18].heroID, BonusType.HeroDamage, 2.0f, 10, unitsList[18].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[18].heroID, BonusType.HeroDamage, 10.0f, 25, unitsList[18].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[18].heroID, BonusType.PlayerDamageDPS, 0.01f, 50, unitsList[18].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[18].heroID, BonusType.PlayerDamage, 0.05f, 100, unitsList[18].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[18].heroID, BonusType.AllDamage, 0.1f, 200, unitsList[18].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[18].heroID, BonusType.AllGold, 0.1f, 400, unitsList[18].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[18].heroID, BonusType.AllDamage, 0.1f, 800, unitsList[18].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(19, BonusType.HeroDamage, 2.0f, 10));
+            skillList.Add(new UnitSkill(19, BonusType.HeroDamage, 10.0f, 25));
+            skillList.Add(new UnitSkill(19, BonusType.PlayerDamageDPS, 0.01f, 50));
+            skillList.Add(new UnitSkill(19, BonusType.PlayerDamage, 0.05f, 100));
+            skillList.Add(new UnitSkill(19, BonusType.AllDamage, 0.1f, 200));
+            skillList.Add(new UnitSkill(19, BonusType.AllGold, 0.1f, 400));
+            skillList.Add(new UnitSkill(19, BonusType.AllDamage, 0.1f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[19].heroID, BonusType.HeroDamage, 2.5f, 10, unitsList[19].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[19].heroID, BonusType.HeroDamage, 6.0f, 25, unitsList[19].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[19].heroID, BonusType.CriticalDamage, 0.2f, 50, unitsList[19].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[19].heroID, BonusType.HeroDamage, 4.5f, 100, unitsList[19].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[19].heroID, BonusType.PlayerDamageDPS, 0.01f, 200, unitsList[19].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[19].heroID, BonusType.PlayerDamage, 0.05f, 400, unitsList[19].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[19].heroID, BonusType.AllGold, 0.1f, 800, unitsList[19].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(20, BonusType.HeroDamage, 2.5f, 10));
+            skillList.Add(new UnitSkill(20, BonusType.HeroDamage, 6.0f, 25));
+            skillList.Add(new UnitSkill(20, BonusType.CriticalDamage, 0.2f, 50));
+            skillList.Add(new UnitSkill(20, BonusType.HeroDamage, 4.5f, 100));
+            skillList.Add(new UnitSkill(20, BonusType.PlayerDamageDPS, 0.01f, 200));
+            skillList.Add(new UnitSkill(20, BonusType.PlayerDamage, 0.05f, 400));
+            skillList.Add(new UnitSkill(20, BonusType.AllGold, 0.1f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[20].heroID, BonusType.HeroDamage, 2.0f, 10, unitsList[20].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[20].heroID, BonusType.PlayerDamage, 0.05f, 25, unitsList[20].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[20].heroID, BonusType.AllDamage, 0.1f, 50, unitsList[20].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[20].heroID, BonusType.CriticalChance, 0.02f, 100, unitsList[20].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[20].heroID, BonusType.AllDamage, 0.1f, 200, unitsList[20].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[20].heroID, BonusType.ChestGold, 0.2f, 400, unitsList[20].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[20].heroID, BonusType.HeroDamage, 100.0f, 800, unitsList[20].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(21, BonusType.HeroDamage, 2.0f, 10));
+            skillList.Add(new UnitSkill(21, BonusType.PlayerDamage, 0.05f, 25));
+            skillList.Add(new UnitSkill(21, BonusType.AllDamage, 0.1f, 50));
+            skillList.Add(new UnitSkill(21, BonusType.CriticalChance, 0.02f, 100));
+            skillList.Add(new UnitSkill(21, BonusType.AllDamage, 0.1f, 200));
+            skillList.Add(new UnitSkill(21, BonusType.ChestGold, 0.2f, 400));
+            skillList.Add(new UnitSkill(21, BonusType.HeroDamage, 100.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[21].heroID, BonusType.HeroDamage, 2.5f, 10, unitsList[21].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[21].heroID, BonusType.HeroDamage, 7.5f, 25, unitsList[21].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[21].heroID, BonusType.AllDamage, 0.1f, 50, unitsList[21].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[21].heroID, BonusType.HeroDamage, 5.0f, 100, unitsList[21].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[21].heroID, BonusType.AllDamage, 0.1f, 200, unitsList[21].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[21].heroID, BonusType.CriticalDamage, 0.3f, 400, unitsList[21].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[21].heroID, BonusType.AllDamage, 0.2f, 800, unitsList[21].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(22, BonusType.HeroDamage, 2.5f, 10));
+            skillList.Add(new UnitSkill(22, BonusType.HeroDamage, 7.5f, 25));
+            skillList.Add(new UnitSkill(22, BonusType.AllDamage, 0.1f, 50));
+            skillList.Add(new UnitSkill(22, BonusType.HeroDamage, 5.0f, 100));
+            skillList.Add(new UnitSkill(22, BonusType.AllDamage, 0.1f, 200));
+            skillList.Add(new UnitSkill(22, BonusType.CriticalDamage, 0.3f, 400));
+            skillList.Add(new UnitSkill(22, BonusType.AllDamage, 0.2f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[22].heroID, BonusType.HeroDamage, 3.0f, 10, unitsList[22].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[22].heroID, BonusType.HeroDamage, 8.0f, 25, unitsList[22].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[22].heroID, BonusType.PlayerDamageDPS, 0.01f, 50, unitsList[22].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[22].heroID, BonusType.CriticalDamage, 0.2f, 100, unitsList[22].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[22].heroID, BonusType.PlayerDamage, 0.05f, 200, unitsList[22].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[22].heroID, BonusType.CriticalChance, 0.02f, 400, unitsList[22].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[22].heroID, BonusType.HeroDamage, 100.0f, 800, unitsList[22].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(23, BonusType.HeroDamage, 3.0f, 10));
+            skillList.Add(new UnitSkill(23, BonusType.HeroDamage, 8.0f, 25));
+            skillList.Add(new UnitSkill(23, BonusType.PlayerDamageDPS, 0.01f, 50));
+            skillList.Add(new UnitSkill(23, BonusType.CriticalDamage, 0.2f, 100));
+            skillList.Add(new UnitSkill(23, BonusType.PlayerDamage, 0.05f, 200));
+            skillList.Add(new UnitSkill(23, BonusType.CriticalChance, 0.02f, 400));
+            skillList.Add(new UnitSkill(23, BonusType.HeroDamage, 100.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[23].heroID, BonusType.HeroDamage, 2.0f, 10, unitsList[23].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[23].heroID, BonusType.HeroDamage, 5.0f, 25, unitsList[23].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[23].heroID, BonusType.HeroDamage, 12.0f, 50, unitsList[23].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[23].heroID, BonusType.AllGold, 0.15f, 100, unitsList[23].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[23].heroID, BonusType.ChestGold, 0.2f, 200, unitsList[23].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[23].heroID, BonusType.HeroDamage, 9.0f, 400, unitsList[23].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[23].heroID, BonusType.AllDamage, 0.15f, 800, unitsList[23].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(24, BonusType.HeroDamage, 2.0f, 10));
+            skillList.Add(new UnitSkill(24, BonusType.HeroDamage, 5.0f, 25));
+            skillList.Add(new UnitSkill(24, BonusType.HeroDamage, 12.0f, 50));
+            skillList.Add(new UnitSkill(24, BonusType.AllGold, 0.15f, 100));
+            skillList.Add(new UnitSkill(24, BonusType.ChestGold, 0.2f, 200));
+            skillList.Add(new UnitSkill(24, BonusType.HeroDamage, 9.0f, 400));
+            skillList.Add(new UnitSkill(24, BonusType.AllDamage, 0.15f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[24].heroID, BonusType.PlayerDamage, 0.05f, 10, unitsList[24].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[24].heroID, BonusType.PlayerDamage, 0.05f, 25, unitsList[24].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[24].heroID, BonusType.PlayerDamageDPS, 0.01f, 50, unitsList[24].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[24].heroID, BonusType.AllDamage, 0.1f, 100, unitsList[24].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[24].heroID, BonusType.AllGold, 0.15f, 200, unitsList[24].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[24].heroID, BonusType.CriticalChance, 0.02f, 400, unitsList[24].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[24].heroID, BonusType.HeroDamage, 150.0f, 800, unitsList[24].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(25, BonusType.PlayerDamage, 0.05f, 10));
+            skillList.Add(new UnitSkill(25, BonusType.PlayerDamage, 0.05f, 25));
+            skillList.Add(new UnitSkill(25, BonusType.PlayerDamageDPS, 0.01f, 50));
+            skillList.Add(new UnitSkill(25, BonusType.AllDamage, 0.1f, 100));
+            skillList.Add(new UnitSkill(25, BonusType.AllGold, 0.15f, 200));
+            skillList.Add(new UnitSkill(25, BonusType.CriticalChance, 0.02f, 400));
+            skillList.Add(new UnitSkill(25, BonusType.HeroDamage, 150.0f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[25].heroID, BonusType.HeroDamage, 3.5f, 10, unitsList[25].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[25].heroID, BonusType.HeroDamage, 6.5f, 25, unitsList[25].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[25].heroID, BonusType.PlayerDamageDPS, 0.01f, 50, unitsList[25].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[25].heroID, BonusType.AllDamage, 0.05f, 100, unitsList[25].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[25].heroID, BonusType.AllDamage, 0.1f, 200, unitsList[25].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[25].heroID, BonusType.AllDamage, 0.05f, 400, unitsList[25].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[25].heroID, BonusType.AllGold, 0.15f, 800, unitsList[25].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(26, BonusType.HeroDamage, 3.5f, 10));
+            skillList.Add(new UnitSkill(26, BonusType.HeroDamage, 6.5f, 25));
+            skillList.Add(new UnitSkill(26, BonusType.PlayerDamageDPS, 0.01f, 50));
+            skillList.Add(new UnitSkill(26, BonusType.AllDamage, 0.05f, 100));
+            skillList.Add(new UnitSkill(26, BonusType.AllDamage, 0.1f, 200));
+            skillList.Add(new UnitSkill(26, BonusType.AllDamage, 0.05f, 400));
+            skillList.Add(new UnitSkill(26, BonusType.AllGold, 0.15f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[26].heroID, BonusType.HeroDamage, 3.0f, 10, unitsList[26].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[26].heroID, BonusType.HeroDamage, 7.0f, 25, unitsList[26].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[26].heroID, BonusType.AllDamage, 0.1f, 50, unitsList[26].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[26].heroID, BonusType.AllDamage, 0.05f, 100, unitsList[26].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[26].heroID, BonusType.CriticalChance, 0.02f, 200, unitsList[26].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[26].heroID, BonusType.CriticalDamage, 0.3f, 400, unitsList[26].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[26].heroID, BonusType.ChestGold, 0.2f, 800, unitsList[26].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(27, BonusType.HeroDamage, 3.0f, 10));
+            skillList.Add(new UnitSkill(27, BonusType.HeroDamage, 7.0f, 25));
+            skillList.Add(new UnitSkill(27, BonusType.AllDamage, 0.1f, 50));
+            skillList.Add(new UnitSkill(27, BonusType.AllDamage, 0.05f, 100));
+            skillList.Add(new UnitSkill(27, BonusType.CriticalChance, 0.02f, 200));
+            skillList.Add(new UnitSkill(27, BonusType.CriticalDamage, 0.3f, 400));
+            skillList.Add(new UnitSkill(27, BonusType.ChestGold, 0.2f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[27].heroID, BonusType.HeroDamage, 3.5f, 10, unitsList[27].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[27].heroID, BonusType.AllDamage, 0.1f, 25, unitsList[27].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[27].heroID, BonusType.HeroDamage, 4.0f, 50, unitsList[27].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[27].heroID, BonusType.HeroDamage, 6.0f, 100, unitsList[27].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[27].heroID, BonusType.CriticalDamage, 0.2f, 200, unitsList[27].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[27].heroID, BonusType.CriticalChance, 0.03f, 400, unitsList[27].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[27].heroID, BonusType.AllDamage, 0.15f, 800, unitsList[27].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(28, BonusType.HeroDamage, 3.5f, 10));
+            skillList.Add(new UnitSkill(28, BonusType.AllDamage, 0.1f, 25));
+            skillList.Add(new UnitSkill(28, BonusType.HeroDamage, 4.0f, 50));
+            skillList.Add(new UnitSkill(28, BonusType.HeroDamage, 6.0f, 100));
+            skillList.Add(new UnitSkill(28, BonusType.CriticalDamage, 0.2f, 200));
+            skillList.Add(new UnitSkill(28, BonusType.CriticalChance, 0.03f, 400));
+            skillList.Add(new UnitSkill(28, BonusType.AllDamage, 0.15f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[28].heroID, BonusType.HeroDamage, 3.3f, 10, unitsList[28].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[28].heroID, BonusType.HeroDamage, 5.5f, 25, unitsList[28].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[28].heroID, BonusType.AllGold, 0.1f, 50, unitsList[28].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[28].heroID, BonusType.PlayerDamage, 0.1f, 100, unitsList[28].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[28].heroID, BonusType.AllGold, 0.2f, 200, unitsList[28].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[28].heroID, BonusType.AllDamage, 0.1f, 400, unitsList[28].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[28].heroID, BonusType.AllGold, 0.3f, 800, unitsList[28].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(29, BonusType.HeroDamage, 3.3f, 10));
+            skillList.Add(new UnitSkill(29, BonusType.HeroDamage, 5.5f, 25));
+            skillList.Add(new UnitSkill(29, BonusType.AllGold, 0.1f, 50));
+            skillList.Add(new UnitSkill(29, BonusType.PlayerDamage, 0.1f, 100));
+            skillList.Add(new UnitSkill(29, BonusType.AllGold, 0.2f, 200));
+            skillList.Add(new UnitSkill(29, BonusType.AllDamage, 0.1f, 400));
+            skillList.Add(new UnitSkill(29, BonusType.AllGold, 0.3f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[29].heroID, BonusType.HeroDamage, 10.0f, 10, unitsList[29].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[29].heroID, BonusType.PlayerDamage, 0.2f, 25, unitsList[29].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[29].heroID, BonusType.PlayerDamageDPS, 0.05f, 50, unitsList[29].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[29].heroID, BonusType.AllGold, 0.2f, 100, unitsList[29].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[29].heroID, BonusType.AllDamage, 0.1f, 200, unitsList[29].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[29].heroID, BonusType.AllDamage, 0.2f, 400, unitsList[29].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[29].heroID, BonusType.AllDamage, 0.3f, 800, unitsList[29].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
+            skillList.Add(new UnitSkill(30, BonusType.HeroDamage, 10.0f, 10));
+            skillList.Add(new UnitSkill(30, BonusType.PlayerDamage, 0.2f, 25));
+            skillList.Add(new UnitSkill(30, BonusType.PlayerDamageDPS, 0.05f, 50));
+            skillList.Add(new UnitSkill(30, BonusType.AllGold, 0.2f, 100));
+            skillList.Add(new UnitSkill(30, BonusType.AllDamage, 0.1f, 200));
+            skillList.Add(new UnitSkill(30, BonusType.AllDamage, 0.2f, 400));
+            skillList.Add(new UnitSkill(30, BonusType.AllDamage, 0.3f, 800));
 
-            skillList.Add(new UnitSkill(unitsList[30].heroID, BonusType.HeroDamage, 9.0f, 10, unitsList[30].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[30].heroID, BonusType.HeroDamage, 20.0f, 25, unitsList[30].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[30].heroID, BonusType.CriticalChance, 0.01f, 50, unitsList[30].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[30].heroID, BonusType.PlayerDamage, 0.6f, 100, unitsList[30].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[30].heroID, BonusType.ChestGold, 0.25f, 200, unitsList[30].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[30].heroID, BonusType.AllDamage, 0.1f, 400, unitsList[30].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[30].heroID, BonusType.AllGold, 0.15f, 800, unitsList[30].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
-
-            skillList.Add(new UnitSkill(unitsList[31].heroID, BonusType.HeroDamage, 0.4f, 10, unitsList[31].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[31].heroID, BonusType.HeroDamage, 0.2f, 25, unitsList[31].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[31].heroID, BonusType.AllGold, 0.25f, 50, unitsList[31].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[31].heroID, BonusType.PlayerDamage, 0.6f, 100, unitsList[31].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[31].heroID, BonusType.CriticalChance, 0.02f, 200, unitsList[31].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[31].heroID, BonusType.AllDamage, 0.3f, 400, unitsList[31].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[31].heroID, BonusType.AllDamage, 0.1f, 800, unitsList[31].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
-
-            skillList.Add(new UnitSkill(unitsList[32].heroID, BonusType.HeroDamage, 20.0f, 10, unitsList[32].GetUpgradeCostByLevel(10, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[32].heroID, BonusType.PlayerDamage, 0.2f, 25, unitsList[32].GetUpgradeCostByLevel(25, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[32].heroID, BonusType.PlayerDamageDPS, 0.01f, 50, unitsList[32].GetUpgradeCostByLevel(50, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[32].heroID, BonusType.AllGold, 0.2f, 100, unitsList[32].GetUpgradeCostByLevel(100, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[32].heroID, BonusType.AllDamage, 0.2f, 200, unitsList[32].GetUpgradeCostByLevel(200, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[32].heroID, BonusType.AllDamage, 0.3f, 400, unitsList[32].GetUpgradeCostByLevel(400, Bonuses[BonusType.UpgradeCost]) * 10));
-            skillList.Add(new UnitSkill(unitsList[32].heroID, BonusType.AllDamage, 0.4f, 800, unitsList[32].GetUpgradeCostByLevel(800, Bonuses[BonusType.UpgradeCost]) * 10));
-
+            skillList.Add(new UnitSkill(31, BonusType.HeroDamage, 9.0f, 10));
+            skillList.Add(new UnitSkill(31, BonusType.HeroDamage, 20.0f, 25));
+            skillList.Add(new UnitSkill(31, BonusType.CriticalChance, 0.01f, 50));
+            skillList.Add(new UnitSkill(31, BonusType.PlayerDamage, 0.6f, 100));
+            skillList.Add(new UnitSkill(31, BonusType.ChestGold, 0.25f, 200));
+            skillList.Add(new UnitSkill(31, BonusType.AllDamage, 0.1f, 400));
+            skillList.Add(new UnitSkill(31, BonusType.AllGold, 0.15f, 800));
         }
     }
 }

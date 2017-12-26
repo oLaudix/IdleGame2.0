@@ -13,22 +13,41 @@ namespace IdleGame
         public double currentDPS;
         public double nextUpgradeCost;
         public double nextLevelDPSDiff;
-        public double nextToBeBoughtSkillCost;
+        public UnitSkill nextSkillToUnlock;
+        public List<UnitSkill> unitSkills;
+        public string icon;
         public int heroID;
         public string name;
         public int level;
+        MainScene scene = (MainScene)MainScene.Instance;
 
-        public Unit(int heroID, string name, double purchaseCost)
+        public Unit(int heroID, string name, double purchaseCost, string icon)
         {
+            unitSkills = new List<UnitSkill>();
             this.heroID = heroID;
             this.name = name;
             this.purchaseCost = purchaseCost;
             this.level = 0;
+            this.icon = icon;
+            GetUnitSkills();
+            this.nextSkillToUnlock = GetNextSkill();
+            UpdateHeroStats();
         }
 
         public bool IsEvolved()
         {
             return this.level >= 1001;
+        }
+
+        void GetUnitSkills()
+        {
+            foreach (var Skill in scene.skillList)
+            {
+                if (Skill.ownerID == this.heroID)
+                {
+                    unitSkills.Add(Skill);
+                }
+            }
         }
 
         public void UpgradeHero(int iLevels = 1)
@@ -39,10 +58,43 @@ namespace IdleGame
             }
             this.level += iLevels;
             //this.UpdateNextToBeBoughtSkill();
-            //this.UpdateHeroStats(true);
+            this.UpdateHeroStats();
         }
 
-        public double GetDPSByLevel(int iLevel, double heroPassiveStat, double allDamageStat, double allDamageGearStat)
+        public void UpdateHeroStats()
+        {
+            if (this.level == nextSkillToUnlock.requiredLevel)
+            {
+                nextSkillToUnlock.isUnlocked = true;
+                nextSkillToUnlock = GetNextSkill();
+            }
+            this.currentDPS = GetDPSByLevel(this.level);
+            this.nextUpgradeCost = GetUpgradeCostByLevel(this.level);
+            if (this.level + 1 == nextSkillToUnlock.requiredLevel)
+            {
+                double tmpDPS = GetDPSByLevel(this.level);
+                nextSkillToUnlock.isUnlocked = true;
+                this.nextLevelDPSDiff = GetDPSByLevel(this.level + 1) - tmpDPS;
+                nextSkillToUnlock.isUnlocked = false;
+            }
+            else
+                this.nextLevelDPSDiff = GetDPSByLevel(this.level + 1) - GetDPSByLevel(this.level);
+        }
+
+        public UnitSkill GetNextSkill()
+        {
+            UnitSkill skill = new UnitSkill(100, BonusType.AllDamage, 0, 0);
+            foreach (var Skill in scene.skillList)
+            {
+                if (Skill.ownerID == this.heroID && !Skill.isUnlocked)
+                {
+                    return Skill;
+                }
+            }
+            return skill;
+        }
+
+        public double GetDPSByLevel(int iLevel)
         {
             double num2;
             if (this.IsEvolved())
@@ -62,7 +114,8 @@ namespace IdleGame
             {
                 num3 = num2 * 0.1f * this.GetBaseUpgradeCostByLevel(iLevel - 1) * (double)(Math.Pow((double)1.075f, (double)iLevel) - 1.0) / (1.075f - 1f);
             }
-            return num3 * (1.0f + heroPassiveStat) * (1.0f + allDamageStat) * (1.0f + allDamageGearStat);
+            
+            return num3 * (1.0f + scene.GetHeroAdditionlDamage(this.heroID)) * (1.0f + scene.Bonuses[BonusType.AllDamage]) * (1.0f + scene.GetBonusArtifactDamage());
         }
 
         private double GetBaseUpgradeCostByLevel(int iLevel)
@@ -84,10 +137,10 @@ namespace IdleGame
             return num;
         }
 
-        public double GetUpgradeCostByLevel(int iLevel, double upgradeCostStat)
+        public double GetUpgradeCostByLevel(int iLevel)
         {
             double baseUpgradeCostByLevel = this.GetBaseUpgradeCostByLevel(iLevel);
-            double a = baseUpgradeCostByLevel * (1.0 - upgradeCostStat);
+            double a = baseUpgradeCostByLevel * (1.0 - scene.Bonuses[BonusType.UpgradeCost]);
             return (double)Math.Ceiling(a);
         }
     }

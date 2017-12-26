@@ -51,7 +51,7 @@ namespace IdleGame
             double isCrit = random.NextDouble();
             //Console.WriteLine((this.critChance + critChance) + " " + (isCrit));
             if (this.critChance + critChance > isCrit)
-                num3 = num3 * (critM + this.critMagnitude);
+                num3 = num3 * (critM * (1 + this.critMagnitude));
             //Console.WriteLine((this.critChance + critChance) + " " + (isCrit) + " " + num3);
             return num3;
         }
@@ -65,7 +65,14 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (spritemap.CurrentFrame == 19 && state == 1)
+            if (Input.MouseY < 1080 - 261)
+            {
+                if (Input.MouseButtonDown(MouseButton.Left) && spritemap.CurrentAnim == Animation.Idle)
+                    spritemap.Play(Animation.Shoot);
+            }
+            if (Input.MouseButtonReleased(MouseButton.Left) || (Input.MouseY > 1080 - 261 && spritemap.CurrentAnim == Animation.Shoot))
+                spritemap.Play(Animation.Idle);
+            /*if (spritemap.CurrentFrame == 19 && state == 1)
             {
                 spritemap.Play(Animation.Shoot);
                 state = 2;
@@ -84,7 +91,7 @@ namespace IdleGame
             {
                 spritemap.Play(Animation.ShootingToIdle);
                 state = 3;
-            }
+            }*/
             base.Update();
         }
     }

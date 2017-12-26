@@ -10,12 +10,14 @@ namespace IdleGame
     class GuiElement : Entity
     {
         Image image;
-        public GuiElement(float x, float y, string source) : base(x, y)
+        public Unit unit;
+        public GuiElement(float x, float y, Unit unit) : base(x, y)
         {
-            image = new Image(source);
+            image = new Image(unit.icon);
+            this.unit = unit;
             AddGraphic(image);
             MainScene.Instance.Add(this);
-            HiddenGui menu = new HiddenGui(965, 800 - 261, "Assets/Img/bottom_menu.png", this);
+            GuiMenu menu = new GuiMenu(955, 1080 - 261, "Assets/Img/bottom_menu.png", this);
         }
 
         public bool MouseHover()
@@ -33,19 +35,72 @@ namespace IdleGame
         }
     }
 
-    class HiddenGui : Entity
+    class GuiMenu : Entity
     {
+        Text unitName;
+        Text unitInfo;
+        Text skills;
+        Text skill1;
+        Text skill2;
+        Text skill3;
+        Text skill4;
+        Text skill5;
+        Text skill6;
+        Text skill7;
+        List<Text> skillsInfo;
         bool permanent = false;
         Image image;
-        GuiElement element;
-        public HiddenGui(float x, float y, string source, GuiElement entity) : base(x, y)
+        Image icon;
+        public GuiElement element;
+        MainScene scene = (MainScene)MainScene.Instance;
+        public string font = "Assets/Fonts/trench100free.ttf";
+        public GuiMenu(float x, float y, string source, GuiElement entity) : base(x, y)
         {
+            skillsInfo = new List<Text>();
             image = new Image(source);
             AddGraphic(image);
+            icon = new Image(entity.unit.icon);
+            icon.SetPosition(50, 30);
+            AddGraphic(icon);
             element = entity;
             Visible = false;
             MainScene.Instance.Add(this);
-            BuyButton button = new BuyButton(this.X + 50, this.Y + 50, this);
+            CreateText(ref unitName, entity.unit.name, 40, new Vector2(960 / 2, 0));
+            CreateText(ref unitInfo, "", 30, new Vector2(50, 100));
+            CreateText(ref skills, "Skills:", 20, new Vector2(650/2, 60));
+            CreateText(ref skill1, entity.unit.unitSkills[0].description, 20, new Vector2(skills.X, skills.Y + (skills.FontSize * 1)));
+            CreateText(ref skill2, entity.unit.unitSkills[1].description, 20, new Vector2(skills.X, skills.Y + (skills.FontSize * 2)));
+            CreateText(ref skill3, entity.unit.unitSkills[2].description, 20, new Vector2(skills.X, skills.Y + (skills.FontSize * 3)));
+            CreateText(ref skill4, entity.unit.unitSkills[3].description, 20, new Vector2(skills.X, skills.Y + (skills.FontSize * 4)));
+            CreateText(ref skill5, entity.unit.unitSkills[4].description, 20, new Vector2(skills.X, skills.Y + (skills.FontSize * 5)));
+            CreateText(ref skill6, entity.unit.unitSkills[5].description, 20, new Vector2(skills.X, skills.Y + (skills.FontSize * 6)));
+            CreateText(ref skill7, entity.unit.unitSkills[6].description, 20, new Vector2(skills.X, skills.Y + (skills.FontSize * 7)));
+            skillsInfo.Add(skill1);
+            skillsInfo.Add(skill2);
+            skillsInfo.Add(skill3);
+            skillsInfo.Add(skill4);
+            skillsInfo.Add(skill5);
+            skillsInfo.Add(skill6);
+            skillsInfo.Add(skill7);
+            unitName.CenterTextOriginX();
+            unitInfo.CenterTextOriginX();
+        }
+
+        public string FormatNumber(double number)
+        {
+            int exponent = 0;
+            if (number < 1000)
+                return Math.Round(number, 2).ToString("0.00");
+            while (true)
+            {
+                if (number < 10)
+                    return Math.Round(number, 2).ToString("0.00") + "e" + exponent;
+                else
+                {
+                    number = number / 10;
+                    exponent++;
+                }
+            }
         }
         public bool MouseHover()
         {
@@ -63,6 +118,19 @@ namespace IdleGame
 
         public override void Update()
         {
+            unitInfo.String = 
+                "Level: " + element.unit.level + "\n" +
+                "Cost: " + FormatNumber(element.unit.nextUpgradeCost) + "\n" +
+                "Damage: " + FormatNumber(element.unit.currentDPS) + "\n" +
+                "+Damage: " + FormatNumber(element.unit.nextLevelDPSDiff);
+            for (var a = 0; a < 7; a++)
+            {
+                if (element.unit.unitSkills[a].isUnlocked)
+                    skillsInfo[a].Color = Color.Yellow;
+                else
+                    skillsInfo[a].Color = Color.Gray;
+            }
+
             if (!permanent)
             {
                 if (element.MouseHover())
@@ -72,67 +140,35 @@ namespace IdleGame
             }
             if (Input.MouseButtonPressed(MouseButton.Left) && element.MouseHover())
             {
+                //permanent = true;
+                element.unit.UpgradeHero();
+            }
+            if (Input.MouseButtonPressed(MouseButton.Middle) && element.MouseHover())
+            {
                 permanent = true;
             }
-            if (!element.MouseHover() && !MouseHover() && Input.MouseButtonPressed(MouseButton.Left))
+            if (!element.MouseHover() && !MouseHover() && Input.MouseButtonPressed(MouseButton.Middle))
                 permanent = false;
             base.Update();
         }
 
-    }
-
-    class BuyButton : Entity
-    {
-        HiddenGui parent;
-        MainScene scene = (MainScene)MainScene.Instance;
-        Image active = new Image("Assets/Img/Gui/buy_button.png");
-        Image inactive = new Image("Assets/Img/Gui/buy_button_inactive.png");
-        public BuyButton(float x, float y, HiddenGui entity) : base(x, y)
+        public void FormatText(Text Text)
         {
-            parent = entity;
-            AddGraphic(active);
-            AddGraphic(inactive);
-            //inactive.Visible = false;
-            MainScene.Instance.Add(this);
-        }
-        public bool MouseHover()
-        {
-            if (X < Input.MouseX && X + active.Width > Input.MouseX)
-            {
-                if (Y < Input.MouseY && Y + active.Height > Input.MouseY)
-                {
-                    return true;
-                }
-                return false;
-            }
-            else
-                return false;
+            Text.OutlineThickness = 2;
+            Text.TextStyle = TextStyle.Bold;
+            Text.Color = Color.Yellow;
+            Text.OutlineColor = Color.Black;
+            //Text.CenterTextOriginX();
         }
 
-        private void OnClick()
+        public void CreateText(ref Text t, string text, int size, Vector2 Pos)
         {
-            if (Visible && MouseHover() && Input.MouseButtonPressed(MouseButton.Left))
-            {
-                scene.unitsList[0].level++;
-            }
+            t = new Text(text, this.font, size);
+            this.AddGraphic(t);
+            //t.CenterOrigin();
+            FormatText(t);
+            t.SetPosition(Pos.X, Pos.Y);
         }
-        public override void Update()
-        {
 
-            if (scene.unitsList[0].GetUpgradeCostByLevel(scene.unitsList[0].level, scene.Bonuses[BonusType.UpgradeCost]) > scene.player.gold)
-            {
-                active.Visible = false;
-                inactive.Visible = true;
-            }
-            else
-            {
-                active.Visible = true;
-                inactive.Visible = false;
-            }
-            scene.player.gold = 999999999;
-            Visible = parent.Visible;
-            OnClick();
-            base.Update();
-        }
     }
 }
