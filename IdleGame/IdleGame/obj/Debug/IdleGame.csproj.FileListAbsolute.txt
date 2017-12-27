@@ -170,3 +170,5 @@ c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets
 c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\turret.png
 c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Fonts\Reality Hyper Regular.ttf
 c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Fonts\trench100free.ttf
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\enemy_riflemon.png
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\enemy_shield.png

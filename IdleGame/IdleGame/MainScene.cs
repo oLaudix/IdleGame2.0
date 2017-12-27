@@ -37,11 +37,16 @@ namespace IdleGame
         {
             
         }
-        public override void Render()
+        public string GetAnimationString(int a, int b)
         {
-            base.Render();
+            string text = "";
+            for (int z = a; z<b; z++)
+            {
+                text += z + ", ";
+            }
+            text += b;
+            return text;
         }
-
         public override void Begin()
         {
             enemyList = new List<Entity>();
@@ -106,15 +111,21 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (GetCount<Enemy_Soldier>() < 5)
+            if (GetCount<Enemy_Soldier>() < 0)
             {
                 new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
-                LayerEnemies();
             }
-            if (GetCount<Enemy_Bazooka>() < 5)
+            if (GetCount<Enemy_Bazooka>() < 0)
             {
                 new Enemy_Bazooka(random.Next(-60, -40), random.Next(511, 730));
-                LayerEnemies();
+            }
+            if (GetCount<Enemy_Riflemon>() < 0)
+            {
+                new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 730));
+            }
+            if (GetCount<Enemy_Shield>() < 5)
+            {
+                new Enemy_Shield(random.Next(-60, -40), random.Next(511, 730));
             }
             isHit = false;
             HUD();

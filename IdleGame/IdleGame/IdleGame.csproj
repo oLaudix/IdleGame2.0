@@ -238,6 +238,12 @@
     <Content Include="Assets\Img\Sprites\enemy_bazooka.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Sprites\enemy_riflemon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Sprites\enemy_shield.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\Sprites\enemy_soldier.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
