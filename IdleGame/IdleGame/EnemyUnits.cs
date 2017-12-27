@@ -397,4 +397,89 @@ namespace IdleGame
             base.Update();
         }
     }
+
+    class Enemy_Cokka : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        double MaxHP;
+        double CurrentHP;
+        bool isDead = false;
+        public enum Animation
+        {
+            Death,
+            Shoot,
+            WeaponOut,
+            Run
+        }
+        int runtime;
+        public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_cokka.png", 133, 76);
+        public Enemy_Cokka(float x, float y) : base(x, y)
+        {
+            Layer = -500;
+            this.MaxHP = scene.stage.MaxHP;
+            this.CurrentHP = this.MaxHP * 5;
+            SetHitbox(72, 57, ColliderTags.EnemyUnit);
+            Hitbox.SetPosition(12, 20);
+            spritemap.Add(Animation.Shoot, scene.GetAnimationString(0, 16), 4).NoRepeat();
+            spritemap.Add(Animation.Death, scene.GetAnimationString(17, 25), 4).NoRepeat();
+            spritemap.Add(Animation.WeaponOut, scene.GetAnimationString(32, 38), 4).NoRepeat();
+            spritemap.Add(Animation.Run, scene.GetAnimationString(26, 31), 4);
+            spritemap.Play(Animation.Run);
+            AddGraphic(spritemap);
+            scene.Add(this);
+            runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
+            Console.WriteLine("");
+
+        }
+
+        public override void Render()
+        {
+            base.Render();
+            Hitbox.Render();
+        }
+
+        public override void Update()
+        {
+            if (CurrentHP > 0)
+            {
+                runtime--;
+                if (spritemap.CurrentAnim == Animation.Run)
+                {
+                    X++;
+                    if (runtime == 0)
+                    {
+                        spritemap.Play(Animation.WeaponOut);
+                        runtime = (int)spritemap.Anim(Animation.WeaponOut).TotalDuration * 1;
+                    }
+                }
+                else if ((spritemap.CurrentAnim == Animation.WeaponOut || spritemap.CurrentAnim == Animation.Shoot) && runtime == 0)
+                {
+                    spritemap.Play(Animation.Shoot);
+                    runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 5;
+                }
+                if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left))
+                {
+                    double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
+                    if (!scene.isHit)
+                        this.scene.stage.CurrentHP -= hit;
+                    CurrentHP -= hit;
+                    scene.isHit = true;
+                }
+            }
+            else
+            {
+                if (!isDead)
+                {
+                    Hitbox.Width = 0;
+                    Hitbox.Height = 0;
+                    isDead = true;
+                    runtime = 60 * 2;
+                    spritemap.Play(Animation.Death);
+                    this.LifeSpan = this.Timer + runtime;
+                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                }
+            }
+            base.Update();
+        }
+    }
 }

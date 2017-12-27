@@ -123,9 +123,13 @@ namespace IdleGame
             {
                 new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 730));
             }
-            if (GetCount<Enemy_Shield>() < 5)
+            if (GetCount<Enemy_Shield>() < 0)
             {
                 new Enemy_Shield(random.Next(-60, -40), random.Next(511, 730));
+            }
+            if (GetCount<Enemy_Cokka>() < 1)
+            {
+                new Enemy_Cokka(random.Next(-60, -40), random.Next(511, 730));
             }
             isHit = false;
             HUD();
