@@ -27,6 +27,7 @@ namespace IdleGame
         public double totaldeeps = 0;
         public PlayerGui menu;
         public int gearOwned = 0;
+        public bool isHit = false;
         Entity debuge;
         Text debugt;
 
@@ -81,13 +82,45 @@ namespace IdleGame
             new Dicokka(1500, 500);
             new BiggestTonk(1500, 600);
             new FatTonk(1500, 700);
+            new Heli(1500, 400);
+            new BigTonk(1700, 500);
+            new Minigun(1700, 600);
+            new Mortar(1700, 700);
+            new Rocket(1300, 500);
+            new Hover(1300, 400);
+            new Sniper(1300, 600);
+            new Turret(1300, 700);
+            new Soldier(1200, 600);
+
+            
+            
 
         }
+
+        public int GetCountES<T>() where T : Enemy_Soldier
+        {
+            var count = 0;
+            foreach (var e in MainScene.Instance.GetEntitiesAll())
+            {
+                if (e is T)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         public override void Update()
         {
-            Attack();
+            if (GetCount<Enemy_Soldier>() < 10)
+            {
+                new Enemy_Soldier(random.Next(-50, -10), random.Next(511, 730));
+            }
+            isHit = false;
             HUD();
             base.Update();
+            Attack();
+            //Console.WriteLine(isHit);
         }
 
         public void CreateTextEntity(ref Entity e, ref Text t, int x, int y, int size)
@@ -207,13 +240,13 @@ namespace IdleGame
                 this.stage.CurrentHP -= Unit.GetDPSByLevel(Unit.level)/60;
                 totalDPS += Unit.GetDPSByLevel(Unit.level);
             }
-            if (Input.MouseButtonDown(MouseButton.Left) && Input.MouseY < 1080 - 261)
+            if (Input.MouseButtonDown(MouseButton.Left) && Input.MouseY < 1080 - 261 && isHit)
             {
                 //Console.WriteLine(player.GetPlayerAttackDamageByLevel(player.level, Bonuses[BonusType.AllDamage], Bonuses[BonusType.PlayerDamage], Bonuses[BonusType.PlayerDamageDPS], totaldeeps, GetBonusArtifactDamage(), Bonuses[BonusType.CriticalChance], Bonuses[BonusType.CriticalDamage], random)/60);
-                double hit = player.GetPlayerAttackDamageByLevel(player.level) * 15 / 60;
-                this.stage.CurrentHP -= hit;
+                //double hit = player.GetPlayerAttackDamageByLevel(player.level) * 15 / 60;
+                //this.stage.CurrentHP -= hit;
                 //totalDPS += player.GetPlayerAttackDamageByLevel(player.level, Bonuses[BonusType.AllDamage], Bonuses[BonusType.PlayerDamage], Bonuses[BonusType.PlayerDamageDPS], totaldeeps, GetBonusArtifactDamage(), Bonuses[BonusType.CriticalChance], Bonuses[BonusType.CriticalDamage], random) * 15;
-                Console.WriteLine(hit);
+                //Console.WriteLine(hit);
 
             }
             //totalDPS += totaldeeps;

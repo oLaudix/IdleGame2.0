@@ -94,3 +94,13 @@ c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\G
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\dicokka.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\biggest_tonk.png
 c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\fat_tonk.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\heli.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\bigtonk.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\minigun.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\mortar.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\rocket.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\hover.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\sniper.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\turret.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\soldier.png
+c:\Users\M\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\enemy_soldier.png

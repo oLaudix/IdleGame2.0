@@ -105,4 +105,257 @@ namespace IdleGame
             base.Update();
         }
     }
+
+    class Heli : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        int cooldown;
+        bool up;
+        public enum Animation
+        {
+            Idle,
+            Shoot
+        }
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/heli.png", 88, 91);
+        public Heli(float x, float y) : base(x, y)
+        {
+            spritemap.Add(Animation.Idle, "0", 4);
+            spritemap.Add(Animation.Shoot, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15", 2);
+            spritemap.CenterOrigin();
+            spritemap.Play(Animation.Shoot);
+            AddGraphic(spritemap);
+            cooldown = 40;
+            scene.Add(this);
+        }
+        public override void Update()
+        {
+            cooldown--;
+            if (cooldown < 0 && cooldown % 10 == 0)
+            {
+                this.Y--;
+            }
+            else if (cooldown >= 0 && cooldown % 10 == 0)
+            {
+                this.Y++;
+            }
+            if (cooldown == -40)
+            {
+                cooldown = 40;
+            }
+            base.Update();
+        }
+    }
+
+    class BigTonk : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        int cooldown;
+        public enum Animation
+        {
+            Idle,
+            Shoot
+        }
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/bigtonk.png", 148, 78);
+        public BigTonk(float x, float y) : base(x, y)
+        {
+            spritemap.Add(Animation.Idle, "0", 4);
+            spritemap.Add(Animation.Shoot, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17", 4).NoRepeat();
+            spritemap.CenterOrigin();
+            spritemap.Play(Animation.Idle);
+            AddGraphic(spritemap);
+            cooldown = scene.random.Next(60 * 1, 60 * 2);
+            scene.Add(this);
+        }
+        public override void Update()
+        {
+            cooldown--;
+            //Console.WriteLine
+            if (cooldown == 0)
+            {
+                spritemap.Play(Animation.Shoot);
+                cooldown = scene.random.Next(60 * 2, 60 * 3);
+            }
+            base.Update();
+        }
+    }
+
+    class Minigun : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        public enum Animation
+        {
+            Idle,
+            Shoot
+        }
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/minigun.png", 110, 45);
+        public Minigun(float x, float y) : base(x, y)
+        {
+            spritemap.Add(Animation.Idle, "0", 4);
+            spritemap.Add(Animation.Shoot, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11", 4);
+            spritemap.CenterOrigin();
+            spritemap.Play(Animation.Shoot);
+            AddGraphic(spritemap);
+            scene.Add(this);
+        }
+    }
+
+    class Mortar : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        int cooldown;
+        public enum Animation
+        {
+            Idle,
+            Shoot
+        }
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/mortar.png", 53, 54);
+        public Mortar(float x, float y) : base(x, y)
+        {
+            spritemap.Add(Animation.Idle, "0", 4);
+            spritemap.Add(Animation.Shoot, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0", 4).NoRepeat();
+            spritemap.CenterOrigin();
+            spritemap.Play(Animation.Idle);
+            AddGraphic(spritemap);
+            cooldown = scene.random.Next(60 * 1, 60 * 2);
+            scene.Add(this);
+        }
+        public override void Update()
+        {
+            cooldown--;
+            //Console.WriteLine
+            if (cooldown == 0)
+            {
+                spritemap.Play(Animation.Shoot);
+                cooldown = scene.random.Next(60 * 2, 60 * 3);
+            }
+            base.Update();
+        }
+    }
+
+    class Rocket : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        int cooldown;
+        public enum Animation
+        {
+            Idle,
+            Shoot
+        }
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/rocket.png", 124, 110);
+        public Rocket(float x, float y) : base(x, y)
+        {
+            spritemap.Add(Animation.Idle, "0", 4);
+            spritemap.Add(Animation.Shoot, "0,1,2,3,4,5,6,7, 8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10, 11,12,13,14,15,16,11,12,13,14,15,16,11,12,13,14,15,16,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26, 27,28,29,30,31,32,33,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,", 4).NoRepeat();
+            spritemap.CenterOrigin();
+            spritemap.Play(Animation.Idle);
+            AddGraphic(spritemap);
+            cooldown = scene.random.Next(60 * 4, 60 * 5);
+            scene.Add(this);
+        }
+        public override void Update()
+        {
+            cooldown--;
+            //Console.WriteLine
+            if (cooldown == 0)
+            {
+                spritemap.Play(Animation.Shoot);
+                cooldown = scene.random.Next(60 * 7, 60 * 8);
+            }
+            base.Update();
+        }
+    }
+
+    class Hover : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        public enum Animation
+        {
+            Idle,
+            Shoot
+        }
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/hover.png", 104, 70);
+        public Hover(float x, float y) : base(x, y)
+        {
+            spritemap.Add(Animation.Idle, "0", 4);
+            spritemap.Add(Animation.Shoot, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35", 2);
+            spritemap.CenterOrigin();
+            spritemap.Play(Animation.Shoot);
+            AddGraphic(spritemap);
+            scene.Add(this);
+        }
+    }
+
+    class Sniper : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        int cooldown;
+        public enum Animation
+        {
+            Idle,
+            Shoot
+        }
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/sniper.png", 66, 27);
+        public Sniper(float x, float y) : base(x, y)
+        {
+            spritemap.Add(Animation.Idle, "0", 4);
+            spritemap.Add(Animation.Shoot, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22", 4).NoRepeat();
+            spritemap.CenterOrigin();
+            spritemap.Play(Animation.Idle);
+            AddGraphic(spritemap);
+            cooldown = scene.random.Next(60 * 2, 60 * 3);
+            scene.Add(this);
+        }
+        public override void Update()
+        {
+            cooldown--;
+            //Console.WriteLine
+            if (cooldown == 0)
+            {
+                spritemap.Play(Animation.Shoot);
+                cooldown = scene.random.Next(60 * 4, 60 * 5);
+            }
+            base.Update();
+        }
+    }
+
+    class Turret : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        public enum Animation
+        {
+            Idle,
+            Shoot
+        }
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/turret.png", 90, 42);
+        public Turret(float x, float y) : base(x, y)
+        {
+            spritemap.Add(Animation.Idle, "0", 4);
+            spritemap.Add(Animation.Shoot, "0, 1, 2, 3", 4);
+            spritemap.CenterOrigin();
+            spritemap.Play(Animation.Shoot);
+            AddGraphic(spritemap);
+            scene.Add(this);
+        }
+    }
+
+    class Soldier : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        public enum Animation
+        {
+            Idle,
+            Shoot
+        }
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/soldier.png", 88, 68);
+        public Soldier(float x, float y) : base(x, y)
+        {
+            spritemap.Add(Animation.Idle, "0", 4);
+            spritemap.Add(Animation.Shoot, "0, 1, 2, 3", 4);
+            spritemap.CenterOrigin();
+            spritemap.Play(Animation.Shoot);
+            AddGraphic(spritemap);
+            spritemap.FlippedX = true;
+            scene.Add(this);
+        }
+    }
 }

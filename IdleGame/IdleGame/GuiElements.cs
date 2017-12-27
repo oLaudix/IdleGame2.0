@@ -125,8 +125,8 @@ namespace IdleGame
             unitInfo.String = 
                 "Level: " + element.unit.level + "\n" +
                 "Cost: " + FormatNumber(element.unit.nextUpgradeCost) + "\n" +
-                "Damage: " + FormatNumber(element.unit.currentDPS) + "\n" +
-                "+Damage: " + FormatNumber(element.unit.nextLevelDPSDiff);
+                "Power: " + FormatNumber(element.unit.currentDPS) + "\n" +
+                "+Power: " + FormatNumber(element.unit.nextLevelDPSDiff);
             for (var a = 0; a < 7; a++)
             {
                 if (element.unit.unitSkills[a].isUnlocked)
@@ -368,7 +368,7 @@ namespace IdleGame
         {
             gearInfo.String =
                 "Cost: " + gearPiece.LevelUpCost() +
-                "\nBonus to All Damage: " + Math.Round(gearPiece.GetDamageBonus() * 100) + "%" +
+                "\nBonus to all power: " + Math.Round(gearPiece.GetDamageBonus() * 100) + "%" +
                 "\n" + gearPiece.GetDescritopion();
             if (parentGui.MouseHover(parent))
                 Visible = true;
