@@ -28,11 +28,9 @@ namespace IdleGame
         public PlayerGui menu;
         public int gearOwned = 0;
         public bool isHit = false;
+        public List<Entity> enemyList;
         Entity debuge;
         Text debugt;
-
-        Image Crosshair = new Image("Assets/Img/crosshair.png");
-        Entity Crosshair_e = new Entity(0, 0);
 
         public double totalDPS = 0;
         public MainScene() : base()
@@ -46,7 +44,9 @@ namespace IdleGame
 
         public override void Begin()
         {
+            enemyList = new List<Entity>();
             base.Begin();
+            new Crosshair();
             player = new MyPlayer(1000, 600);
             Add(player);
             AddGraphic(background);
@@ -91,30 +91,25 @@ namespace IdleGame
             new Sniper(1300, 600);
             new Turret(1300, 700);
             new Soldier(1200, 600);
-
-            
-            
-
         }
 
-        public int GetCountES<T>() where T : Enemy_Soldier
+        public void LayerEnemies()
         {
-            var count = 0;
-            foreach (var e in MainScene.Instance.GetEntitiesAll())
+            int order = -500;
+            List<Enemy_Soldier> SortedList = GetEntities<Enemy_Soldier>().OrderBy(o => o.spritemap.TextureBottom).ToList();
+            foreach(var unit in SortedList)
             {
-                if (e is T)
-                {
-                    count++;
-                }
+                order--;
+                unit.Layer = order;
             }
-            return count;
         }
 
         public override void Update()
         {
-            if (GetCount<Enemy_Soldier>() < 10)
+            if (GetCount<Enemy_Soldier>() < 5)
             {
-                new Enemy_Soldier(random.Next(-50, -10), random.Next(511, 730));
+                Enemy_Soldier tmp = new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
+                //LayerEnemies();
             }
             isHit = false;
             HUD();
@@ -142,23 +137,16 @@ namespace IdleGame
                 CreateTextEntity(ref debuge, ref debugt, 20, 20, 30);
                 AddGraphic(HPBG, (1920 - 800) / 2, 2);
                 AddGraphic(HPFG, (1920 - 800) / 2, 2);
-                //AddGraphic(Crosshair, -100, -100);
-                Crosshair.Scale = 0.1f;
-                Crosshair.CenterOrigin();
-                Crosshair_e.Layer = -1000;
                 HPBG.Scale = 1f;
                 HPFG.Scale = 1f;
-                Crosshair_e.AddGraphic(Crosshair);
-                Add(Crosshair_e);
             }
             else
             {
                 stageNumbere.Graphic.CenterOrigin();
                 stageNumbert.String = stage.stage + "";
-                debugt.String = "X: " + Input.MouseX + "\nY: " + Input.MouseY;
+                debugt.String = "X: " + Input.MouseX + "\nY: " + Input.MouseY + "\n" + Game.RenderTime;
                 staget.String = "Stage";
                 HPFG.ClippingRegion = new Rectangle(0, 0, (int)Math.Ceiling((HPFG.Width * (stage.CurrentHP / stage.MaxHP))), HPFG.Height);
-                Crosshair_e.SetPosition(Input.MouseX, Input.MouseY);
             }
         }
         public void FormatText(Text Text)

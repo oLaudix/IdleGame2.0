@@ -267,7 +267,6 @@ namespace IdleGame
             {
                 if (imagee.Y + Y < Input.MouseY && imagee.Y + Y + imagee.Height > Input.MouseY)
                 {
-                    Console.WriteLine(imagee.X);
                     return true;
                 }
                 return false;

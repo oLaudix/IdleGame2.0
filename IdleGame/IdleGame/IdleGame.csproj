@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlliesAnimations.cs" />
+    <Compile Include="Crosshair.cs" />
     <Compile Include="EnemyUnits.cs" />
     <Compile Include="enums.cs" />
     <Compile Include="Gear.cs" />
@@ -88,6 +89,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Img\crosshair.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\crosshair2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Img\Gear\icon_chest.png">

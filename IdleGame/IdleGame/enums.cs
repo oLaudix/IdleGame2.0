@@ -35,4 +35,11 @@ namespace IdleGame
         BonusRelic,
         WarCryDuration
     }
+
+    enum ColliderTags
+    {
+        Player,
+        Crosshair,
+        EnemyUnit,
+    }
 }

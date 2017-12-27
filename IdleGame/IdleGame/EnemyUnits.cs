@@ -7,6 +7,10 @@ using Otter;
 
 namespace IdleGame
 {
+    class Base_Enemy : Entity
+    {
+
+    }
     class Enemy_Soldier : Entity
     {
         MainScene scene = (MainScene)MainScene.Instance;
@@ -26,13 +30,15 @@ namespace IdleGame
             WeaponOut,
             Run
         }
-
         int runtime;
-        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_soldier.png", 88, 68);
+        public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_soldier.png", 88, 68);
         public Enemy_Soldier(float x, float y) : base(x, y)
         {
+            Layer = -500;
             this.MaxHP = scene.stage.MaxHP;
-            this.CurrentHP = this.MaxHP;
+            this.CurrentHP = this.MaxHP/4;
+            SetHitbox(33, 40, ColliderTags.EnemyUnit);
+            Hitbox.SetPosition(28, 27);
             spritemap.Add(Animation.Death1, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21", 4).NoRepeat();
             spritemap.Add(Animation.Death2, "22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 31", 4).NoRepeat();
             spritemap.Add(Animation.Death3, "33, 34, 35, 36, 37, 38, 39, 40, 41", 4).NoRepeat();
@@ -43,32 +49,25 @@ namespace IdleGame
             spritemap.Add(Animation.Shoot, "116, 117, 118, 119", 4);
             spritemap.Add(Animation.WeaponOut, "96, 97, 98, 99, 100, 101, 102, 103", 3).NoRepeat();
             spritemap.Add(Animation.Run, "104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115", 4);
-            //spritemap.CenterOrigin();
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
-            //Console.WriteLine(spritemap.Anim(Animation.Run).TotalDuration);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
+            Console.WriteLine("");
+
         }
 
-        public bool MouseHover()
+        public override void Render()
         {
-            if (X < Input.MouseX && X + spritemap.Width > Input.MouseX)
-            {
-                if (Y < Input.MouseY && Y + spritemap.Height > Input.MouseY)
-                {
-                    //Console.WriteLine(CurrentHP);
-                    return true;
-                }
-                return false;
-            }
-            else
-                return false;
+            base.Render();
+            // Render the Collider.
+            //
+            //Console.WriteLine(spritemap.ClippingRegion);
+            Hitbox.Render();
         }
 
         public override void Update()
         {
-            
             if (spritemap.CurrentAnim == Animation.Run && CurrentHP > 0)
             {
                 runtime--;
@@ -88,7 +87,7 @@ namespace IdleGame
                     //runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * scene.random.Next(5, 10);
                 }
             }
-            if (MouseHover() && Input.MouseButtonDown(MouseButton.Left) && CurrentHP > 0)
+            if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left) && CurrentHP > 0)
             {
                 double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
                 if (!scene.isHit)
@@ -101,26 +100,16 @@ namespace IdleGame
             {
                 if (!isDead)
                 {
+                    Hitbox.Width = 0;
+                    Hitbox.Height = 0;
                     isDead = true;
-                    Animation test = (Animation)scene.random.Next(0, 6);
-                    runtime = (int)spritemap.Anim(test).TotalDuration * 40;
+                    Animation test = (Animation)scene.random.Next(0, 7);
+                    runtime = 60 * 2;
                     spritemap.Play(test);
                     this.LifeSpan = this.Timer + runtime;
-                    new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
                 }
             }
-            /*if (spritemap.CurrentAnim == Animation.Shoot)
-            {
-                runtime--;
-                if (runtime == 0)
-                {
-                    Animation test = (Animation)scene.random.Next(0, 6);
-                    runtime = (int)spritemap.Anim(test).TotalDuration * 40;
-                    spritemap.Play(test);
-                    this.LifeSpan = this.Timer + runtime;
-                    new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
-                }
-            }*/
             base.Update();
         }
     }
