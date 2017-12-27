@@ -108,8 +108,13 @@ namespace IdleGame
         {
             if (GetCount<Enemy_Soldier>() < 5)
             {
-                Enemy_Soldier tmp = new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
-                //LayerEnemies();
+                new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
+            }
+            if (GetCount<Enemy_Bazooka>() < 5)
+            {
+                new Enemy_Bazooka(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
             }
             isHit = false;
             HUD();
