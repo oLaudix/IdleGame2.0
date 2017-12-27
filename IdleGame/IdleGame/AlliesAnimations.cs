@@ -110,7 +110,6 @@ namespace IdleGame
     {
         MainScene scene = (MainScene)MainScene.Instance;
         int cooldown;
-        bool up;
         public enum Animation
         {
             Idle,

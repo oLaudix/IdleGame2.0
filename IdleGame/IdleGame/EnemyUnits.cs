@@ -482,4 +482,87 @@ namespace IdleGame
             base.Update();
         }
     }
+
+    class Enemy_Mummy : Entity
+    {
+        MainScene scene = (MainScene)MainScene.Instance;
+        double MaxHP;
+        double CurrentHP;
+        bool isDead = false;
+        public enum Animation
+        {
+            Death,
+            Shoot,
+            Run
+        }
+        int runtime;
+        public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_mummy.png", 94, 62);
+        public Enemy_Mummy(float x, float y) : base(x, y)
+        {
+            Layer = -500;
+            this.MaxHP = scene.stage.MaxHP;
+            this.CurrentHP = this.MaxHP;
+            SetHitbox(35, 46, ColliderTags.EnemyUnit);
+            Hitbox.SetPosition(9, 17);
+            spritemap.Add(Animation.Shoot, scene.GetAnimationString(0, 21), 3).NoRepeat();
+            spritemap.Add(Animation.Death, scene.GetAnimationString(22, 67), 3).NoRepeat();
+            spritemap.Add(Animation.Run, scene.GetAnimationString(68, 85), 3);
+            spritemap.Play(Animation.Run);
+            AddGraphic(spritemap);
+            scene.Add(this);
+            runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
+            Console.WriteLine("");
+
+        }
+
+        public override void Render()
+        {
+            base.Render();
+            Hitbox.Render();
+        }
+
+        public override void Update()
+        {
+            if (CurrentHP > 0)
+            {
+                runtime--;
+                if (spritemap.CurrentAnim == Animation.Run)
+                {
+                    X++;
+                    if (runtime == 0)
+                    {
+                        spritemap.Play(Animation.Shoot);
+                        runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
+                    }
+                }
+                else if (spritemap.CurrentAnim == Animation.Shoot && runtime == 0)
+                {
+                    spritemap.Play(Animation.Shoot);
+                    runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
+                }
+                if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left))
+                {
+                    double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
+                    if (!scene.isHit)
+                        this.scene.stage.CurrentHP -= hit;
+                    CurrentHP -= hit;
+                    scene.isHit = true;
+                }
+            }
+            else
+            {
+                if (!isDead)
+                {
+                    Hitbox.Width = 0;
+                    Hitbox.Height = 0;
+                    isDead = true;
+                    runtime = (int)spritemap.Anim(Animation.Death).TotalDuration * 2;
+                    spritemap.Play(Animation.Death);
+                    this.LifeSpan = this.Timer + runtime;
+                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                }
+            }
+            base.Update();
+        }
+    }
 }

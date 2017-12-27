@@ -241,6 +241,9 @@
     <Content Include="Assets\Img\Sprites\enemy_cokka.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Sprites\enemy_mummy.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\Sprites\enemy_riflemon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

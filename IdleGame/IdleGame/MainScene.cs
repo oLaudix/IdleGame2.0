@@ -127,9 +127,13 @@ namespace IdleGame
             {
                 new Enemy_Shield(random.Next(-60, -40), random.Next(511, 730));
             }
-            if (GetCount<Enemy_Cokka>() < 1)
+            if (GetCount<Enemy_Cokka>() < 0)
             {
                 new Enemy_Cokka(random.Next(-60, -40), random.Next(511, 730));
+            }
+            if (GetCount<Enemy_Mummy>() < 1)
+            {
+                new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 730));
             }
             isHit = false;
             HUD();
