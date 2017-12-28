@@ -15,7 +15,7 @@ namespace IdleGame
             var game = new Game("Spritemap Animation", 1920, 1080);
             game.SetWindowAutoFullscreen(true);
             var scene = new MainScene();
-            game.MouseVisible = false;
+            game.MouseVisible = true ;
             game.Start(scene);
         }
     }

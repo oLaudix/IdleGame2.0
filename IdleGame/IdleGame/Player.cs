@@ -55,6 +55,7 @@ namespace IdleGame
         {
             this.level++;
             UpdatePlayerStats();
+            scene.needUpdate = true;
         }
 
         public double GetPlayerAttackDamageByLevel(int iLevel)
@@ -62,11 +63,27 @@ namespace IdleGame
             double num = (double)iLevel * Math.Pow(1.05, (double)iLevel);
             double num3 = (num + (scene.Bonuses[BonusType.PlayerDamageDPS] * scene.totalDPS)) * (1.0 + scene.Bonuses[BonusType.PlayerDamage]) * (1.0 + scene.GetBonusArtifactDamage()) * (1.0 + scene.Bonuses[BonusType.AllDamage]);
             double isCrit = scene.random.NextDouble();
+            //Console.WriteLine(scene.GetBonusArtifactDamage());
             //Console.WriteLine((this.critChance + critChance) + " " + (isCrit));
             if (this.critChance + scene.Bonuses[BonusType.CriticalChance] > isCrit)
                 num3 = num3 * ((1 + scene.Bonuses[BonusType.CriticalDamage]) * this.critMagnitude);
             //Console.WriteLine((this.critChance + critChance) + " " + (isCrit) + " " + num3);
             return num3;
+        }
+
+        public int GetNumLevelsToUnlockByGivenGoldAmount()
+        {
+            int counter = 0;
+            int tmplevel = this.level;
+            double tmpgold = this.gold;
+            while (tmpgold > GetUpgradeCostByLevel(tmplevel))
+            {
+                tmpgold -= GetUpgradeCostByLevel(tmplevel);
+                counter++;
+                tmplevel++;
+                //Console.WriteLine(GetUpgradeCostByLevel(tmplevel));
+            }
+            return counter;
         }
 
         public double GetUpgradeCostByLevel(int iLevel)

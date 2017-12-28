@@ -31,7 +31,22 @@ namespace IdleGame
             this.icon = icon;
             GetUnitSkills();
             this.nextSkillToUnlock = GetNextSkill();
-            UpdateHeroStats();
+            UpdateUnitStats();
+        }
+
+        public int GetNumLevelsToUnlockByGivenGoldAmount()
+        {
+            int counter = 0;
+            int tmplevel = this.level;
+            double tmpgold = scene.player.gold;
+            while (tmpgold > GetUpgradeCostByLevel(tmplevel))
+            {
+                tmpgold -= GetUpgradeCostByLevel(tmplevel);
+                counter++;
+                tmplevel++;
+                //Console.WriteLine(GetUpgradeCostByLevel(tmplevel));
+            }
+            return counter;
         }
 
         public bool IsEvolved()
@@ -58,10 +73,11 @@ namespace IdleGame
             }
             this.level += iLevels;
             //this.UpdateNextToBeBoughtSkill();
-            this.UpdateHeroStats();
+            this.UpdateUnitStats();
+            scene.needUpdate = true;
         }
 
-        public void UpdateHeroStats()
+        public void UpdateUnitStats()
         {
             if (this.level == nextSkillToUnlock.requiredLevel)
             {

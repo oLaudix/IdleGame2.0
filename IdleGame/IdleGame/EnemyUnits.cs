@@ -7,11 +7,47 @@ using Otter;
 
 namespace IdleGame
 {
-    class Enemy_Soldier : Entity
+    class Enemy_Units : Entity
+    {
+        public List<Sound> soldier_death_list = new List<Sound>();
+        MainScene scene = (MainScene)MainScene.Instance;
+        public double MaxHP;
+        public double CurrentHP;
+        public Enemy_Units(float x, float y) : base(x, y)
+        {
+            soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_fire.ogg"){Loop = false});
+            soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_1.ogg"){ Loop = false });
+            soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_2.ogg"){ Loop = false });
+            soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_3.ogg"){ Loop = false });
+        }
+
+        public override void Update()
+        {
+            GetPlayerDamage();
+            base.Update();
+        }
+
+        public void GetDamage(double dmg)
+        {
+            this.scene.stage.CurrentHP -= dmg;
+            CurrentHP -= dmg;
+        }
+
+        public void GetPlayerDamage()
+        {
+            if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left))
+            {
+                double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
+                if (!scene.isHit)
+                    this.scene.stage.CurrentHP -= hit;
+                CurrentHP -= hit;
+                scene.isHit = true;
+            }
+        }
+    }
+    class Enemy_Soldier : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
-        double MaxHP;
-        double CurrentHP;
         bool isDead = false;
         public enum Animation
         {
@@ -48,9 +84,8 @@ namespace IdleGame
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
+            scene.enemyList.Add(this);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
-            Console.WriteLine("");
-
         }
 
         public override void Render()
@@ -79,23 +114,20 @@ namespace IdleGame
                     spritemap.Play(Animation.Shoot);
                 }
             }
-            if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left) && CurrentHP > 0)
-            {
-                double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
-                if (!scene.isHit)
-                    this.scene.stage.CurrentHP -= hit;
-                CurrentHP -= hit;
-                scene.isHit = true;
-            }
             if (CurrentHP <= 0)
             {
                 if (!isDead)
                 {
+                    scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
                     isDead = true;
                     Animation test = (Animation)scene.random.Next(0, 7);
                     runtime = 60 * 2;
+                    if ((int)test == 0)
+                        soldier_death_list[0].Play();
+                    else
+                        soldier_death_list[scene.random.Next(1, 4)].Play();
                     spritemap.Play(test);
                     this.LifeSpan = this.Timer + runtime;
                     //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
@@ -105,11 +137,9 @@ namespace IdleGame
         }
     }
 
-    class Enemy_Bazooka : Entity
+    class Enemy_Bazooka : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
-        double MaxHP;
-        double CurrentHP;
         bool isDead = false;
         public enum Animation
         {
@@ -146,8 +176,8 @@ namespace IdleGame
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
+            scene.enemyList.Add(this);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
-            Console.WriteLine("");
 
         }
 
@@ -189,11 +219,16 @@ namespace IdleGame
             {
                 if (!isDead)
                 {
+                    scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
                     isDead = true;
                     Animation test = (Animation)scene.random.Next(0, 7);
                     runtime = 60 * 2;
+                    if ((int)test == 0)
+                        soldier_death_list[0].Play();
+                    else
+                        soldier_death_list[scene.random.Next(1, 4)].Play();
                     spritemap.Play(test);
                     this.LifeSpan = this.Timer + runtime;
                     //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
@@ -203,11 +238,9 @@ namespace IdleGame
         }
     }
 
-    class Enemy_Riflemon : Entity
+    class Enemy_Riflemon : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
-        double MaxHP;
-        double CurrentHP;
         bool isDead = false;
         public enum Animation
         {
@@ -243,8 +276,8 @@ namespace IdleGame
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
+            scene.enemyList.Add(this);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
-            Console.WriteLine("");
 
         }
 
@@ -273,24 +306,21 @@ namespace IdleGame
                     spritemap.Play(Animation.Shoot);
                     runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
                 }
-                if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left))
-                {
-                    double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
-                    if (!scene.isHit)
-                        this.scene.stage.CurrentHP -= hit;
-                    CurrentHP -= hit;
-                    scene.isHit = true;
-                }
             }
             else
             {
                 if (!isDead)
                 {
+                    scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
                     isDead = true;
                     Animation test = (Animation)scene.random.Next(0, 7);
                     runtime = 60 * 2;
+                    if ((int)test == 0)
+                        soldier_death_list[0].Play();
+                    else
+                        soldier_death_list[scene.random.Next(1, 4)].Play();
                     spritemap.Play(test);
                     this.LifeSpan = this.Timer + runtime;
                     //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
@@ -300,11 +330,9 @@ namespace IdleGame
         }
     }
 
-    class Enemy_Shield : Entity
+    class Enemy_Shield : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
-        double MaxHP;
-        double CurrentHP;
         bool isDead = false;
         public enum Animation
         {
@@ -341,8 +369,8 @@ namespace IdleGame
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
+            scene.enemyList.Add(this);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
-            Console.WriteLine("");
 
         }
 
@@ -371,24 +399,21 @@ namespace IdleGame
                     spritemap.Play(Animation.Shoot);
                     runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
                 }
-                if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left))
-                {
-                    double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
-                    if (!scene.isHit)
-                        this.scene.stage.CurrentHP -= hit;
-                    CurrentHP -= hit;
-                    scene.isHit = true;
-                }
             }
             else
             {
                 if (!isDead)
                 {
+                    scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
                     isDead = true;
                     Animation test = (Animation)scene.random.Next(0, 7);
                     runtime = 60 * 2;
+                    if ((int)test == 0)
+                        soldier_death_list[0].Play();
+                    else
+                        soldier_death_list[scene.random.Next(1, 4)].Play();
                     spritemap.Play(test);
                     this.LifeSpan = this.Timer + runtime;
                     //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
@@ -398,11 +423,13 @@ namespace IdleGame
         }
     }
 
-    class Enemy_Cokka : Entity
+    class Enemy_Cokka : Enemy_Units
     {
+        public Sound cokka_shoot = new Sound("Assets/Sounds/cokka_shoot.ogg")
+        {
+            Loop = false
+        };
         MainScene scene = (MainScene)MainScene.Instance;
-        double MaxHP;
-        double CurrentHP;
         bool isDead = false;
         public enum Animation
         {
@@ -427,8 +454,8 @@ namespace IdleGame
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
+            scene.enemyList.Add(this);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
-            Console.WriteLine("");
 
         }
 
@@ -455,21 +482,15 @@ namespace IdleGame
                 else if ((spritemap.CurrentAnim == Animation.WeaponOut || spritemap.CurrentAnim == Animation.Shoot) && runtime == 0)
                 {
                     spritemap.Play(Animation.Shoot);
+                    cokka_shoot.Play();
                     runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 5;
-                }
-                if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left))
-                {
-                    double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
-                    if (!scene.isHit)
-                        this.scene.stage.CurrentHP -= hit;
-                    CurrentHP -= hit;
-                    scene.isHit = true;
                 }
             }
             else
             {
                 if (!isDead)
                 {
+                    scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
                     isDead = true;
@@ -483,11 +504,13 @@ namespace IdleGame
         }
     }
 
-    class Enemy_Mummy : Entity
+    class Enemy_Mummy : Enemy_Units
     {
+        public Sound DeathSound = new Sound("Assets/Sounds/mummydeath.ogg")
+        {
+            Loop = false
+        };
         MainScene scene = (MainScene)MainScene.Instance;
-        double MaxHP;
-        double CurrentHP;
         bool isDead = false;
         public enum Animation
         {
@@ -510,9 +533,8 @@ namespace IdleGame
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
+            scene.enemyList.Add(this);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
-            Console.WriteLine("");
-
         }
 
         public override void Render()
@@ -540,19 +562,13 @@ namespace IdleGame
                     spritemap.Play(Animation.Shoot);
                     runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
                 }
-                if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left))
-                {
-                    double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
-                    if (!scene.isHit)
-                        this.scene.stage.CurrentHP -= hit;
-                    CurrentHP -= hit;
-                    scene.isHit = true;
-                }
             }
             else
             {
                 if (!isDead)
                 {
+                    DeathSound.Play();
+                    scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
                     isDead = true;

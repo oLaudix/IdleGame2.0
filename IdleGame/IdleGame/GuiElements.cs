@@ -123,7 +123,7 @@ namespace IdleGame
         public override void Update()
         {
             unitInfo.String = 
-                "Level: " + element.unit.level + "\n" +
+                "Level: " + element.unit.level + ((element.unit.GetNumLevelsToUnlockByGivenGoldAmount() > 0) ? " +" + element.unit.GetNumLevelsToUnlockByGivenGoldAmount().ToString() : "") + "\n" +
                 "Cost: " + FormatNumber(element.unit.nextUpgradeCost) + "\n" +
                 "Power: " + FormatNumber(element.unit.currentDPS) + "\n" +
                 "+Power: " + FormatNumber(element.unit.nextLevelDPSDiff);
@@ -147,12 +147,23 @@ namespace IdleGame
             else
                 element.can_buy.Visible = false;
 
-            if (Input.MouseButtonPressed(MouseButton.Left) && element.MouseHover())
+            if (element.MouseHover())
             {
-                if (element.unit.nextUpgradeCost <= scene.player.gold)
+                if (Input.MouseButtonPressed(MouseButton.Left))
                 {
-                    scene.player.gold -= element.unit.nextUpgradeCost;
-                    element.unit.UpgradeHero();
+                    if (element.unit.nextUpgradeCost <= scene.player.gold)
+                    {
+                        scene.player.gold -= element.unit.nextUpgradeCost;
+                        element.unit.UpgradeHero();
+                    }
+                }
+                else if (Input.MouseButtonPressed(MouseButton.Right))
+                {
+                    while (element.unit.nextUpgradeCost <= scene.player.gold)
+                    {
+                        scene.player.gold -= element.unit.nextUpgradeCost;
+                        element.unit.UpgradeHero();
+                    }
                 }
             }
             if (Input.MouseButtonPressed(MouseButton.Middle) && element.MouseHover())
@@ -278,7 +289,7 @@ namespace IdleGame
         public override void Update()
         {
             unitInfo.String =
-                "Level: " + element.level + "\n" +
+                "Level: " + element.level + ((element.GetNumLevelsToUnlockByGivenGoldAmount() > 0) ? " +" + element.GetNumLevelsToUnlockByGivenGoldAmount().ToString() : "") + "\n" +
                 "Cost: " + FormatNumber(element.upgradeCost) + "\n" +
                 "Power: " + FormatNumber(element.currentDamage) + "\n" +
                 "+Power: " + FormatNumber(element.nextLevelDamageDiff) + "\n" +
@@ -290,12 +301,23 @@ namespace IdleGame
             else
                 can_buy.Visible = false;
 
-            if (Input.MouseButtonPressed(MouseButton.Left) && MouseHover(icon))
+            if (MouseHover(icon))
             {
-                if (element.upgradeCost <= scene.player.gold)
+                if (Input.MouseButtonPressed(MouseButton.Left))
                 {
-                    scene.player.gold -= element.upgradeCost;
-                    element.UpgradePlayer();
+                    if (element.upgradeCost <= scene.player.gold)
+                    {
+                        scene.player.gold -= element.upgradeCost;
+                        element.UpgradePlayer();
+                    }
+                }
+                else if (Input.MouseButtonPressed(MouseButton.Right))
+                {
+                    while (element.upgradeCost <= scene.player.gold)
+                    {
+                        scene.player.gold -= element.upgradeCost;
+                        element.UpgradePlayer();
+                    }
                 }
             }
             base.Update();

@@ -15,6 +15,7 @@ namespace IdleGame
         public Double Prize;
         public bool Chest;
         public int stage;
+        public MainScene scene = (MainScene)MainScene.Instance;
         Dictionary<BonusType, double> Bonuses;
         public Stage(int stage, Dictionary<BonusType, double> Bonuses, Random random)
         {
@@ -43,7 +44,7 @@ namespace IdleGame
         {
             double stageBaseHP = this.GetStageBaseHP();
             double num = stageBaseHP * (double)(0.02 + 0.00045 * Math.Min((float)this.stage, 150));
-            return Math.Round(num * Math.Ceiling(1.0 + this.Bonuses[BonusType.AllGold]));
+            return Math.Round(num * Math.Ceiling(1.0 + scene.Bonuses[BonusType.AllGold]));
         }
         public double GetTreasureSpawnChance()
         {

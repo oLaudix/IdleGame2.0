@@ -15,6 +15,7 @@ namespace IdleGame
         public List<UnitSkill> skillList = new List<UnitSkill>();
         public List<Unit> unitsList = new List<Unit>();
         public List<Gear> gearList = new List<Gear>();
+        public List<Enemy_Units> enemyList;
         public Random random = new Random();
         public Stage stage;
         int currentStage = 0;
@@ -28,10 +29,10 @@ namespace IdleGame
         public PlayerGui menu;
         public int gearOwned = 0;
         public bool isHit = false;
-        public List<Entity> enemyList;
+        public bool needUpdate;
+        public Crosshair crosshair;
         Entity debuge;
         Text debugt;
-
         public double totalDPS = 0;
         public MainScene() : base()
         {
@@ -49,9 +50,9 @@ namespace IdleGame
         }
         public override void Begin()
         {
-            enemyList = new List<Entity>();
+            enemyList = new List<Enemy_Units>();
             base.Begin();
-            new Crosshair();
+            crosshair = new Crosshair();
             player = new MyPlayer(1000, 600);
             Add(player);
             AddGraphic(background);
@@ -96,12 +97,13 @@ namespace IdleGame
             new Sniper(1300, 600);
             new Turret(1300, 700);
             new Soldier(1200, 600);
+            player.gold = 1000000;
         }
 
         public void LayerEnemies()
         {
             int order = -500;
-            List<Enemy_Soldier> SortedList = GetEntities<Enemy_Soldier>().OrderBy(o => o.spritemap.TextureBottom).ToList();
+            List<Enemy_Units> SortedList = enemyList.OrderBy(o => o.Y).ToList();
             foreach(var unit in SortedList)
             {
                 order--;
@@ -111,29 +113,43 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (GetCount<Enemy_Soldier>() < 0)
+            if (needUpdate)
+            {
+                UpdateBonuses();
+                player.UpdatePlayerStats();
+                foreach (var unit in unitsList)
+                    unit.UpdateUnitStats();
+                needUpdate = false;
+            }
+            if (GetCount<Enemy_Soldier>() < 2)
             {
                 new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
             }
-            if (GetCount<Enemy_Bazooka>() < 0)
+            if (GetCount<Enemy_Bazooka>() < 2)
             {
                 new Enemy_Bazooka(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
             }
-            if (GetCount<Enemy_Riflemon>() < 0)
+            if (GetCount<Enemy_Riflemon>() < 2)
             {
                 new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
             }
-            if (GetCount<Enemy_Shield>() < 0)
+            if (GetCount<Enemy_Shield>() < 2)
             {
                 new Enemy_Shield(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
             }
-            if (GetCount<Enemy_Cokka>() < 0)
+            if (GetCount<Enemy_Cokka>() < 2)
             {
                 new Enemy_Cokka(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
             }
-            if (GetCount<Enemy_Mummy>() < 1)
+            if (GetCount<Enemy_Mummy>() < 2)
             {
                 new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
             }
             isHit = false;
             HUD();
@@ -168,7 +184,7 @@ namespace IdleGame
             {
                 stageNumbere.Graphic.CenterOrigin();
                 stageNumbert.String = stage.stage + "";
-                debugt.String = "X: " + Input.MouseX + "\nY: " + Input.MouseY + "\n" + Game.RenderTime;
+                debugt.String = "X: " + Input.MouseX + "\nY: " + Input.MouseY + "\n" + Game.SaveData;
                 staget.String = "Stage";
                 HPFG.ClippingRegion = new Rectangle(0, 0, (int)Math.Ceiling((HPFG.Width * (stage.CurrentHP / stage.MaxHP))), HPFG.Height);
             }
@@ -249,17 +265,11 @@ namespace IdleGame
             totalDPS = 0;
             foreach (var Unit in unitsList)
             {
-                this.stage.CurrentHP -= Unit.GetDPSByLevel(Unit.level)/60;
+                if (enemyList.Count != 0)
+                {
+                    enemyList[random.Next(0, enemyList.Count)].GetDamage(Unit.GetDPSByLevel(Unit.level) / 60);
+                }
                 totalDPS += Unit.GetDPSByLevel(Unit.level);
-            }
-            if (Input.MouseButtonDown(MouseButton.Left) && Input.MouseY < 1080 - 261 && isHit)
-            {
-                //Console.WriteLine(player.GetPlayerAttackDamageByLevel(player.level, Bonuses[BonusType.AllDamage], Bonuses[BonusType.PlayerDamage], Bonuses[BonusType.PlayerDamageDPS], totaldeeps, GetBonusArtifactDamage(), Bonuses[BonusType.CriticalChance], Bonuses[BonusType.CriticalDamage], random)/60);
-                //double hit = player.GetPlayerAttackDamageByLevel(player.level) * 15 / 60;
-                //this.stage.CurrentHP -= hit;
-                //totalDPS += player.GetPlayerAttackDamageByLevel(player.level, Bonuses[BonusType.AllDamage], Bonuses[BonusType.PlayerDamage], Bonuses[BonusType.PlayerDamageDPS], totaldeeps, GetBonusArtifactDamage(), Bonuses[BonusType.CriticalChance], Bonuses[BonusType.CriticalDamage], random) * 15;
-                //Console.WriteLine(hit);
-
             }
             //totalDPS += totaldeeps;
             //totalDPS
