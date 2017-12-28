@@ -17,6 +17,7 @@ namespace IdleGame
             Shoot
         }
         MainScene scene = (MainScene)MainScene.Instance;
+        public Sound Shooting = new Sound("Assets/Sounds/minigun.ogg") { Loop = true };
         public int level;
         public double gold;
         public double honor;
@@ -25,7 +26,6 @@ namespace IdleGame
         public double currentDamage = 0;
         public double upgradeCost = 0;
         public double nextLevelDamageDiff = 0;
-        int state = 0;
         Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/playerUnit.png", 140, 61);
         public MyPlayer(int x, int y)
         {
@@ -42,6 +42,7 @@ namespace IdleGame
             AddGraphic(spritemap);
             this.X = x;
             this.Y = y;
+            Sound.GlobalVolume = 0.1f;
         }
 
         public void UpdatePlayerStats()
@@ -98,10 +99,16 @@ namespace IdleGame
             if (Input.MouseY < 1080 - 261)
             {
                 if (Input.MouseButtonDown(MouseButton.Left) && spritemap.CurrentAnim == Animation.Idle)
+                {
                     spritemap.Play(Animation.Shoot);
+                    Shooting.Play();
+                }
             }
             if (Input.MouseButtonReleased(MouseButton.Left) || (Input.MouseY > 1080 - 261 && spritemap.CurrentAnim == Animation.Shoot))
+            {
                 spritemap.Play(Animation.Idle);
+                Shooting.Stop();
+            }
             /*if (spritemap.CurrentFrame == 19 && state == 1)
             {
                 spritemap.Play(Animation.Shoot);

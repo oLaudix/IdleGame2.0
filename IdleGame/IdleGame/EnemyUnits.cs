@@ -48,6 +48,7 @@ namespace IdleGame
     class Enemy_Soldier : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
+        public Sound Shooting;
         bool isDead = false;
         public enum Animation
         {
@@ -58,14 +59,16 @@ namespace IdleGame
             Death5,
             Death6,
             Death7,
-            Shoot,
-            WeaponOut,
+            Throw,
+            Idle,
             Run
         }
         int runtime;
+        //int sounddelay;
         public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_soldier.png", 88, 68);
         public Enemy_Soldier(float x, float y) : base(x, y)
         {
+            Shooting = new Sound("Assets/Sounds/machinegun2.ogg") { Loop = true };
             Layer = -500;
             this.MaxHP = scene.stage.MaxHP;
             this.CurrentHP = this.MaxHP/4;
@@ -78,9 +81,9 @@ namespace IdleGame
             spritemap.Add(Animation.Death5, scene.GetAnimationString(53, 67), 4).NoRepeat();
             spritemap.Add(Animation.Death6, scene.GetAnimationString(68, 80), 4).NoRepeat();
             spritemap.Add(Animation.Death7, scene.GetAnimationString(81, 95), 4).NoRepeat();
-            spritemap.Add(Animation.Shoot, scene.GetAnimationString(116, 119), 4);
-            spritemap.Add(Animation.WeaponOut, scene.GetAnimationString(96, 103), 3).NoRepeat();
-            spritemap.Add(Animation.Run, scene.GetAnimationString(104, 115), 4);
+            spritemap.Add(Animation.Throw, scene.GetAnimationString(115, 129), 4).NoRepeat();
+            spritemap.Add(Animation.Idle, scene.GetAnimationString(96, 102), 5);
+            spritemap.Add(Animation.Run, scene.GetAnimationString(103, 114), 4);
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
@@ -102,22 +105,34 @@ namespace IdleGame
                 X++;
                 if (runtime == 0)
                 {
-                    runtime = (int)spritemap.Anim(Animation.WeaponOut).TotalDuration;
-                    spritemap.Play(Animation.WeaponOut);
+                    runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration*3;
+                    spritemap.Play(Animation.Idle);
                 }
             }
-            if (spritemap.CurrentAnim == Animation.WeaponOut && !isDead)
+            if (spritemap.CurrentAnim == Animation.Idle && !isDead)
             {
                 runtime--;
                 if (runtime == 0)
                 {
-                    spritemap.Play(Animation.Shoot);
+                    scene.Add(new grenade(X + 45, Y + 32, scene.random.Next(900, 1701), scene.random.Next(520, 750)));
+                    spritemap.Play(Animation.Throw);
+                    runtime = (int)spritemap.Anim(Animation.Throw).TotalDuration;
+                }
+            }
+            if (spritemap.CurrentAnim == Animation.Throw && !isDead)
+            {
+                runtime--;
+                if (runtime == 0)
+                {
+                    spritemap.Play(Animation.Idle);
+                    runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration * scene.random.Next(3, 7);
                 }
             }
             if (CurrentHP <= 0)
             {
                 if (!isDead)
                 {
+                    Shooting.Stop();
                     scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
@@ -493,10 +508,14 @@ namespace IdleGame
                     scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
+                    scene.Add(new Explosions(X + 42, Y + 39, Explosions.ExplosionType.small, 0));
+                    scene.Add(new Explosions(X + 60, Y + 32, Explosions.ExplosionType.small, 6));
+                    scene.Add(new Explosions(X + 20, Y + 43, Explosions.ExplosionType.small, 12));
                     isDead = true;
                     runtime = 60 * 2;
                     spritemap.Play(Animation.Death);
                     this.LifeSpan = this.Timer + runtime;
+                    scene.Add(new Explosions(X + 45, Y + 45, Explosions.ExplosionType.big, runtime - 6));
                     //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
                 }
             }
