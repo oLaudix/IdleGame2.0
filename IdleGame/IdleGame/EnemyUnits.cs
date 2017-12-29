@@ -35,7 +35,7 @@ namespace IdleGame
 
         public void GetPlayerDamage()
         {
-            if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left))
+            if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left) && !scene.player.isWindingUp)
             {
                 double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
                 if (!scene.isHit)
@@ -48,7 +48,6 @@ namespace IdleGame
     class Enemy_Soldier : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
-        public Sound Shooting;
         bool isDead = false;
         public enum Animation
         {
@@ -68,7 +67,6 @@ namespace IdleGame
         public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_soldier.png", 88, 68);
         public Enemy_Soldier(float x, float y) : base(x, y)
         {
-            Shooting = new Sound("Assets/Sounds/machinegun2.ogg") { Loop = true };
             Layer = -500;
             this.MaxHP = scene.stage.MaxHP;
             this.CurrentHP = this.MaxHP/4;
@@ -132,7 +130,6 @@ namespace IdleGame
             {
                 if (!isDead)
                 {
-                    Shooting.Stop();
                     scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;

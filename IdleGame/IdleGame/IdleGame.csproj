@@ -69,16 +69,16 @@
     <None Include="Assets\Sounds\cokka_shoot.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Sounds\machinegun.ogg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Sounds\machinegun2.ogg">
+    <None Include="Assets\Sounds\grenade_throw.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Sounds\minigun.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Sounds\minigun2.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Sounds\minigun_spin.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Sounds\mummydeath.ogg">
@@ -94,6 +94,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Sounds\soldier_death_fire.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Sounds\wind_down.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Sounds\wind_up.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

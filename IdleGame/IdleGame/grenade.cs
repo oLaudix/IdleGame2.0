@@ -14,6 +14,7 @@ namespace IdleGame
             rotate
         }
         float height;
+        Sound Throw = new Sound("Assets/Sounds/grenade_throw.ogg") { Loop = false };
         MainScene scene = (MainScene)MainScene.Instance;
         public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/grenade.png", 26, 24);
         Vector2 destination;
@@ -41,6 +42,7 @@ namespace IdleGame
                 {
                     spritemap.Play(Animation.rotate);
                     AddGraphic(spritemap);
+                    Throw.Play();
                 }
                 if (!ally)
                     X += (destination.X - start.X) / 120;

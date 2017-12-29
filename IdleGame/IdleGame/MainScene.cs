@@ -160,6 +160,14 @@ namespace IdleGame
             HUD();
             base.Update();
             Attack();
+            if (Input.KeyDown(Key.Down))
+            {
+                Sound.GlobalVolume -= 0.02f;
+            }
+            if (Input.KeyDown(Key.Up))
+            {
+                Sound.GlobalVolume += 0.02f;
+            }
             //Console.WriteLine(isHit);
         }
 
@@ -189,7 +197,7 @@ namespace IdleGame
             {
                 stageNumbere.Graphic.CenterOrigin();
                 stageNumbert.String = stage.stage + "";
-                debugt.String = "X: " + Input.MouseX + "\nY: " + Input.MouseY + "\n" + Game.SaveData;
+                debugt.String = "X: " + Input.MouseX + "\nY: " + Input.MouseY + "\n" + Sound.GlobalVolume;
                 staget.String = "Stage";
                 HPFG.ClippingRegion = new Rectangle(0, 0, (int)Math.Ceiling((HPFG.Width * (stage.CurrentHP / stage.MaxHP))), HPFG.Height);
             }

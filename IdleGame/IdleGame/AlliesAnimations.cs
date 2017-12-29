@@ -372,7 +372,7 @@ namespace IdleGame
                 runtime--;
                 if (runtime == 0)
                 {
-                    Console.WriteLine(X + 45);
+                    //Console.WriteLine(X + 45);
                     scene.Add(new grenade(X + 42 - 44, Y + 32 - 34, scene.random.Next(50, 801), scene.random.Next(520, 750), 40, true));
                     spritemap.Play(Animation.Throw);
                     runtime = (int)spritemap.Anim(Animation.Throw).TotalDuration;

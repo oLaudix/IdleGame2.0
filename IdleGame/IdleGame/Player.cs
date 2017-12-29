@@ -14,10 +14,14 @@ namespace IdleGame
             Idle,
             IdleToShooting,
             ShootingToIdle,
+            Spin,
             Shoot
         }
         MainScene scene = (MainScene)MainScene.Instance;
-        public Sound Shooting = new Sound("Assets/Sounds/minigun.ogg") { Loop = true };
+        public Sound Shooting = new Sound("Assets/Sounds/minigun2.ogg") { Loop = true };
+        public Sound wind_up = new Sound("Assets/Sounds/wind_up.ogg") { Loop = false };
+        public Sound wind_down = new Sound("Assets/Sounds/wind_down.ogg") { Loop = false };
+        public Sound spin = new Sound("Assets/Sounds/minigun_spin.ogg") { Loop = true };
         public int level;
         public double gold;
         public double honor;
@@ -27,6 +31,8 @@ namespace IdleGame
         public double upgradeCost = 0;
         public double nextLevelDamageDiff = 0;
         Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/playerUnit.png", 140, 61);
+        int animating = -1;
+        public bool isWindingUp = false;
         public MyPlayer(int x, int y)
         {
             this.level = 0;
@@ -35,6 +41,7 @@ namespace IdleGame
             this.honor = 0;
             spritemap.Add(Animation.Idle, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15", 4);
             spritemap.Add(Animation.IdleToShooting, "16,17,18,19", 2).NoRepeat();
+            spritemap.Add(Animation.Spin, "19", 2).NoRepeat();
             spritemap.Add(Animation.ShootingToIdle, "19,18,17,16", 2).NoRepeat();
             spritemap.Add(Animation.Shoot, "20,21,22,23,24", 2);
             spritemap.CenterOrigin();
@@ -42,7 +49,7 @@ namespace IdleGame
             AddGraphic(spritemap);
             this.X = x;
             this.Y = y;
-            Sound.GlobalVolume = 0.1f;
+            //Sound.GlobalVolume = 0.1f;
         }
 
         public void UpdatePlayerStats()
@@ -96,19 +103,71 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (Input.MouseY < 1080 - 261)
+            if (Input.MouseButtonPressed(MouseButton.Left) || Input.MouseButtonReleased(MouseButton.Left))
+            {
+                Shooting.Stop();
+                wind_up.Stop();
+                wind_down.Stop();
+            }
+            if (Input.MouseButtonDown(MouseButton.Left) && Input.MouseY < 1080 - 261)
+            {
+                if (animating > 0)
+                {
+                    animating--;
+                }
+                else if (animating == 0)
+                {
+                    animating--;
+                    spritemap.Play(Animation.Shoot);
+                    wind_up.Stop();
+                    Shooting.Volume = Sound.GlobalVolume * 0.2f;
+                    Shooting.Play();
+                    isWindingUp = false;
+                }
+                else if (animating == -1 && spritemap.CurrentAnim == Animation.Idle)
+                {
+                    wind_up.Volume = Sound.GlobalVolume * 0.2f;
+                    wind_up.Play();
+                    spritemap.Play(Animation.IdleToShooting);
+                    animating = (int)(wind_up.Duration/60);
+                    isWindingUp = true;
+                }
+            }
+            if (Input.MouseButtonUp(MouseButton.Left) || Input.MouseY > 1080 - 261)
+            {
+                if (animating == -1 && (spritemap.CurrentAnim == Animation.Shoot || spritemap.CurrentAnim == Animation.Spin))
+                {
+                    spritemap.Play(Animation.ShootingToIdle);
+                    animating = (int)spritemap.Anim(Animation.ShootingToIdle).TotalDuration;
+                    Shooting.Stop();
+                    wind_down.Volume = Sound.GlobalVolume * 0.2f;
+                    wind_down.Play();
+                }
+                else if (animating > 0)
+                {
+                    animating--;
+                }
+                else if (animating == 0)
+                {
+                    animating--;
+                    spritemap.Play(Animation.Idle);
+                }
+            }
+            /*if (Input.MouseY < 1080 - 261)
             {
                 if (Input.MouseButtonDown(MouseButton.Left) && spritemap.CurrentAnim == Animation.Idle)
                 {
                     spritemap.Play(Animation.Shoot);
                     Shooting.Play();
+                    spin.Play();
                 }
             }
             if (Input.MouseButtonReleased(MouseButton.Left) || (Input.MouseY > 1080 - 261 && spritemap.CurrentAnim == Animation.Shoot))
             {
                 spritemap.Play(Animation.Idle);
                 Shooting.Stop();
-            }
+                spin.Stop();
+            }*/
             /*if (spritemap.CurrentFrame == 19 && state == 1)
             {
                 spritemap.Play(Animation.Shoot);
