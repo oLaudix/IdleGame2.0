@@ -161,6 +161,8 @@ namespace IdleGame
                 {
                     while (element.unit.nextUpgradeCost <= scene.player.gold)
                     {
+                        if (element.unit.level + 1 == element.unit.nextSkillToUnlock.requiredLevel)
+                            break;
                         scene.player.gold -= element.unit.nextUpgradeCost;
                         element.unit.UpgradeHero();
                     }

@@ -103,7 +103,7 @@ namespace IdleGame
         public void LayerEnemies()
         {
             int order = -500;
-            List<Enemy_Units> SortedList = enemyList.OrderBy(o => o.Y).ToList();
+            List<Enemy_Units> SortedList = enemyList.OrderBy(o => (o.Y + o.Hitbox.Height)).ToList();
             foreach(var unit in SortedList)
             {
                 order--;
@@ -121,41 +121,41 @@ namespace IdleGame
                     unit.UpdateUnitStats();
                 needUpdate = false;
             }
-            /*if (GetCount<Enemy_Soldier>() < 2)
+            if (GetCount<Enemy_Soldier>() < 2)
             {
-                new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }
             if (GetCount<Enemy_Bazooka>() < 2)
             {
-                new Enemy_Bazooka(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Bazooka(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }
             if (GetCount<Enemy_Riflemon>() < 2)
             {
-                new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }
             if (GetCount<Enemy_Shield>() < 2)
             {
-                new Enemy_Shield(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Shield(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }
             if (GetCount<Enemy_Cokka>() < 2)
             {
-                new Enemy_Cokka(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Cokka(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }
             if (GetCount<Enemy_Mummy>() < 2)
             {
-                new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
-            }*/
-            if (GetCount<Enemy_Soldier>() < 1)
+            }
+            /*if (GetCount<Enemy_Soldier>() < 1)
             {
                 new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
                 LayerEnemies();
-            }
+            }*/
             isHit = false;
             HUD();
             base.Update();

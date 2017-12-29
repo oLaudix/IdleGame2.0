@@ -35,6 +35,7 @@ namespace IdleGame
             {
                 spritemap.Play(Animation.Shoot);
                 cooldown = scene.random.Next(60 * 2, 60 * 3);
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
             }
             base.Update();
         }
@@ -68,6 +69,7 @@ namespace IdleGame
             {
                 spritemap.Play(Animation.Shoot);
                 cooldown = scene.random.Next(60 * 3, 60 * 4);
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_big, 60));
             }
             base.Update();
         }
@@ -101,6 +103,7 @@ namespace IdleGame
             {
                 spritemap.Play(Animation.Shoot);
                 cooldown = scene.random.Next(60 * 2, 60 * 3);
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
             }
             base.Update();
         }
@@ -173,6 +176,7 @@ namespace IdleGame
             {
                 spritemap.Play(Animation.Shoot);
                 cooldown = scene.random.Next(60 * 2, 60 * 3);
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
             }
             base.Update();
         }
@@ -226,6 +230,7 @@ namespace IdleGame
             {
                 spritemap.Play(Animation.Shoot);
                 cooldown = scene.random.Next(60 * 2, 60 * 3);
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.small, 60));
             }
             base.Update();
         }
@@ -258,7 +263,8 @@ namespace IdleGame
             if (cooldown == 0)
             {
                 spritemap.Play(Animation.Shoot);
-                cooldown = scene.random.Next(60 * 7, 60 * 8);
+                cooldown = scene.random.Next(60 * 15, 60 * 20);
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.huge, 30));
             }
             base.Update();
         }
@@ -343,18 +349,45 @@ namespace IdleGame
         public enum Animation
         {
             Idle,
-            Shoot
+            Throw
         }
-        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/soldier.png", 88, 68);
+        int runtime;
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_soldier.png", 88, 68);
         public Soldier(float x, float y) : base(x, y)
         {
-            spritemap.Add(Animation.Idle, "0", 4);
-            spritemap.Add(Animation.Shoot, "0, 1, 2, 3", 4);
+            spritemap.Add(Animation.Idle, scene.GetAnimationString(96, 102), 5);
+            spritemap.Add(Animation.Throw, scene.GetAnimationString(115, 129), 4).NoRepeat();
             spritemap.CenterOrigin();
-            spritemap.Play(Animation.Shoot);
+            spritemap.Play(Animation.Idle);
+            runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration * scene.random.Next(3, 4);
             AddGraphic(spritemap);
             spritemap.FlippedX = true;
             scene.Add(this);
+        }
+
+        public override void Update()
+        {
+            if (spritemap.CurrentAnim == Animation.Idle)
+            {
+                runtime--;
+                if (runtime == 0)
+                {
+                    Console.WriteLine(X + 45);
+                    scene.Add(new grenade(X + 42 - 44, Y + 32 - 34, scene.random.Next(50, 801), scene.random.Next(520, 750), 40, true));
+                    spritemap.Play(Animation.Throw);
+                    runtime = (int)spritemap.Anim(Animation.Throw).TotalDuration;
+                }
+            }
+            if (spritemap.CurrentAnim == Animation.Throw)
+            {
+                runtime--;
+                if (runtime == 0)
+                {
+                    spritemap.Play(Animation.Idle);
+                    runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration * scene.random.Next(3, 7);
+                }
+            }
+            base.Update();
         }
     }
 }
