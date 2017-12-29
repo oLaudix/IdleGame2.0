@@ -185,20 +185,40 @@ namespace IdleGame
     class Minigun : Entity
     {
         MainScene scene = (MainScene)MainScene.Instance;
+        int cooldown;
         public enum Animation
         {
             Idle,
             Shoot
         }
-        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/minigun.png", 110, 45);
+        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/wierd_tonk.png", 128, 63);
         public Minigun(float x, float y) : base(x, y)
         {
-            spritemap.Add(Animation.Idle, "0", 4);
-            spritemap.Add(Animation.Shoot, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11", 4);
-            spritemap.CenterOrigin();
-            spritemap.Play(Animation.Shoot);
+            spritemap.Add(Animation.Idle, "0, 1, 2, 3", 4);
+            spritemap.Add(Animation.Shoot, "4-20", 4).NoRepeat();
+            //spritemap.CenterOrigin();
+            spritemap.Play(Animation.Idle);
             AddGraphic(spritemap);
             scene.Add(this);
+            this.cooldown = scene.random.Next(60 * 4, 60 * 6);
+        }
+
+        public override void Update()
+        {
+            cooldown--;
+            //Console.WriteLine
+            if (cooldown == 0 && spritemap.CurrentAnim == Animation.Idle)
+            {
+                spritemap.Play(Animation.Shoot);
+                cooldown = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
+            }
+            else if (cooldown == 0 && spritemap.CurrentAnim == Animation.Shoot)
+            {
+                spritemap.Play(Animation.Idle);
+                cooldown = scene.random.Next(60 * 2, 60 * 3);
+            }
+            base.Update();
         }
     }
 

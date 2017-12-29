@@ -192,3 +192,7 @@ C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\minigun2.ogg
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\wind_down.ogg
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\wind_up.ogg
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\obj\Debug\IdleGame.csprojResolveAssemblyReference.cache
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\projectile_rocket.png
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\rocket_projectile.ogg
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\wierd_tonk.png

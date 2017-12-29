@@ -90,7 +90,7 @@ namespace IdleGame
             new FatTonk(1500, 700);
             new Heli(1500, 400);
             new BigTonk(1700, 500);
-            new Minigun(1700, 600);
+            new Minigun(1700, 605);
             new Mortar(1700, 700);
             new Rocket(1300, 500);
             new Hover(1300, 400);
@@ -168,6 +168,8 @@ namespace IdleGame
             {
                 Sound.GlobalVolume += 0.02f;
             }
+
+            //player.spritemap.Angle = (float)((Math.Atan2(Input.MouseX - player.X, Input.MouseY - player.Y) - 1.5) * (180 / Math.PI));
             //Console.WriteLine(isHit);
         }
 
@@ -197,7 +199,7 @@ namespace IdleGame
             {
                 stageNumbere.Graphic.CenterOrigin();
                 stageNumbert.String = stage.stage + "";
-                debugt.String = "X: " + Input.MouseX + "\nY: " + Input.MouseY + "\n" + Sound.GlobalVolume;
+                debugt.String = "X: " + Input.MouseX + "\nY: " + Input.MouseY + "\n" + Sound.GlobalVolume + "\n" + Math.Atan2(Input.MouseX - player.X, Input.MouseY - player.Y);
                 staget.String = "Stage";
                 HPFG.ClippingRegion = new Rectangle(0, 0, (int)Math.Ceiling((HPFG.Width * (stage.CurrentHP / stage.MaxHP))), HPFG.Height);
             }
@@ -333,11 +335,12 @@ namespace IdleGame
         {
             unitsList.Add(new Unit(1, "Cannon Fodder", 50, "Assets/Img/Gui/icon_private.png"));
             unitsList.Add(new Unit(2, "Master Sergeant Shooter Person", 175, "Assets/Img/Gui/icon_marksman.png"));
-            unitsList.Add(new Unit(3, "Richard Jordan Gatling", 675, "Assets/Img/Gui/icon_minigun.png"));
-            unitsList.Add(new Unit(4, "Captain James Hook", 2850, "Assets/Img/Gui/icon_mortar.png"));
-            unitsList.Add(new Unit(5, "Captain Ethan Obvious", 13300, "Assets/Img/Gui/icon_turret.png"));
-            unitsList.Add(new Unit(6, "Small Tonk", 68100, "Assets/Img/Gui/icon_dicokka.png"));
-            unitsList.Add(new Unit(7, "Fat Tonk", 384000, "Assets/Img/Gui/icon_ACP.png"));
+
+            unitsList.Add(new Unit(3, "Captain James Hook", 675, "Assets/Img/Gui/icon_mortar.png"));
+            unitsList.Add(new Unit(4, "Captain Ethan Obvious", 2850, "Assets/Img/Gui/icon_turret.png"));
+            unitsList.Add(new Unit(5, "Small Tonk", 13300, "Assets/Img/Gui/icon_dicokka.png"));
+            unitsList.Add(new Unit(6, "Fat Tonk", 68100, "Assets/Img/Gui/icon_ACP.png"));
+            unitsList.Add(new Unit(7, "Human Tonk", 384000, "Assets/Img/Gui/icon_minigun.png"));
             unitsList.Add(new Unit(8, "Big Tonk", 2800000, "Assets/Img/Gui/icon_ironiso.png"));
             unitsList.Add(new Unit(9, "Biggest Tonk", 23800000, "Assets/Img/Gui/icon_biggest_tank.png"));
             unitsList.Add(new Unit(10, "Sergeant Sergeant Master Sergeant", 143000000, "Assets/Img/Gui/icon_hover.png"));

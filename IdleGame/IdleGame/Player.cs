@@ -30,7 +30,7 @@ namespace IdleGame
         public double currentDamage = 0;
         public double upgradeCost = 0;
         public double nextLevelDamageDiff = 0;
-        Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/playerUnit.png", 140, 61);
+        public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/playerUnit.png", 140, 61);
         int animating = -1;
         public bool isWindingUp = false;
         public MyPlayer(int x, int y)
@@ -105,6 +105,7 @@ namespace IdleGame
         {
             if (Input.MouseButtonPressed(MouseButton.Left) || Input.MouseButtonReleased(MouseButton.Left))
             {
+                //Console.WriteLine(Math.Atan2(Input.MouseX, Input.MouseY));
                 Shooting.Stop();
                 wind_up.Stop();
                 wind_down.Stop();
@@ -153,41 +154,6 @@ namespace IdleGame
                     spritemap.Play(Animation.Idle);
                 }
             }
-            /*if (Input.MouseY < 1080 - 261)
-            {
-                if (Input.MouseButtonDown(MouseButton.Left) && spritemap.CurrentAnim == Animation.Idle)
-                {
-                    spritemap.Play(Animation.Shoot);
-                    Shooting.Play();
-                    spin.Play();
-                }
-            }
-            if (Input.MouseButtonReleased(MouseButton.Left) || (Input.MouseY > 1080 - 261 && spritemap.CurrentAnim == Animation.Shoot))
-            {
-                spritemap.Play(Animation.Idle);
-                Shooting.Stop();
-                spin.Stop();
-            }*/
-            /*if (spritemap.CurrentFrame == 19 && state == 1)
-            {
-                spritemap.Play(Animation.Shoot);
-                state = 2;
-            }
-            else if (spritemap.CurrentFrame == 16 && state == 3)
-            {
-                spritemap.Play(Animation.Idle);
-                state = 0;
-            }
-            else if (Input.MouseButtonPressed(MouseButton.Left))
-            {
-                state = 1;
-                spritemap.Play(Animation.IdleToShooting);
-            }
-            else if (Input.MouseButtonReleased(MouseButton.Left))
-            {
-                spritemap.Play(Animation.ShootingToIdle);
-                state = 3;
-            }*/
             base.Update();
         }
 

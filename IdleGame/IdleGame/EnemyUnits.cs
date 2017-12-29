@@ -182,7 +182,7 @@ namespace IdleGame
             spritemap.Add(Animation.Death5, scene.GetAnimationString(53, 67), 4).NoRepeat();
             spritemap.Add(Animation.Death6, scene.GetAnimationString(68, 80), 4).NoRepeat();
             spritemap.Add(Animation.Death7, scene.GetAnimationString(81, 95), 4).NoRepeat();
-            spritemap.Add(Animation.Kneel, scene.GetAnimationString(115, 132), 4).NoRepeat();
+            spritemap.Add(Animation.Kneel, "115, 114, 113", 4).NoRepeat();
             spritemap.Add(Animation.Run, scene.GetAnimationString(100, 111), 4);
             spritemap.Add(Animation.Shoot, scene.GetAnimationString(112, 132), 4).NoRepeat();
             spritemap.Play(Animation.Run);
@@ -218,13 +218,9 @@ namespace IdleGame
                     spritemap.Play(Animation.Shoot);
                     runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
                 }
-                if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left))
+                else if ((spritemap.CurrentAnim == Animation.Shoot && runtime == ((int)spritemap.Anim(Animation.Shoot).TotalDuration * 2 - 24)))
                 {
-                    double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
-                    if (!scene.isHit)
-                        this.scene.stage.CurrentHP -= hit;
-                    CurrentHP -= hit;
-                    scene.isHit = true;
+                    new Projectile_rocket(X + 69, Y + 37, scene.random.Next(900, 1701), scene.random.Next(520, 750));
                 }
             }
             else

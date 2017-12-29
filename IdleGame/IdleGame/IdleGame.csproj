@@ -48,7 +48,7 @@
     <Compile Include="enums.cs" />
     <Compile Include="Explosions.cs" />
     <Compile Include="Gear.cs" />
-    <Compile Include="grenade.cs" />
+    <Compile Include="projectiles.cs" />
     <Compile Include="GuiElements.cs" />
     <Compile Include="MainScene.cs" />
     <Compile Include="Player.cs" />
@@ -82,6 +82,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Sounds\mummydeath.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Sounds\rocket_projectile.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Sounds\soldier_death_1.ogg">
@@ -258,6 +261,9 @@
     <Content Include="Assets\Img\playerUnit.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\projectile_rocket.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\sniper.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -334,6 +340,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Img\Sprites\turret.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Sprites\wierd_tonk.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
