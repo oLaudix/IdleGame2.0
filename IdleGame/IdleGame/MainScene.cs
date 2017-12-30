@@ -85,18 +85,18 @@ namespace IdleGame
             {
                 Layer = 1000
             };
-            new Dicokka(1500, 500);
-            new BiggestTonk(1500, 600);
-            new FatTonk(1500, 700);
-            new Heli(1500, 400);
-            new BigTonk(1700, 500);
-            new Minigun(1700, 605);
-            new Mortar(1700, 700);
-            new Rocket(1300, 500);
-            new Hover(1300, 400);
-            new Sniper(1300, 600);
+            //new Dicokka(1500, 500);
+            //new BiggestTonk(1500, 600);
+            //new FatTonk(1500, 700);
+            //new Heli(1500, 400);
+            //new BigTonk(1700, 500);
+            //new Minigun(1700, 605);
+            //new Mortar(1700, 700);
+            //new Rocket(1300, 500);
+            //new Hover(1300, 400);
+            //new Sniper(1300, 600);
             new Turret(1300, 700);
-            new Soldier(1200, 600);
+            //new Soldier(1200, 600);
             player.gold = 1000000;
         }
 
@@ -151,9 +151,9 @@ namespace IdleGame
                 new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }*/
-            if (GetCount<Enemy_high_tonk>() < 1)
+            if (GetCount<Enemy_Cokka>() < 1)
             {
-                new Enemy_high_tonk(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Cokka(random.Next(-60, -40), random.Next(511, 730));
                 LayerEnemies();
             }
             isHit = false;
@@ -335,9 +335,8 @@ namespace IdleGame
         {
             unitsList.Add(new Unit(1, "Cannon Fodder", 50, "Assets/Img/Gui/icon_private.png"));
             unitsList.Add(new Unit(2, "Master Sergeant Shooter Person", 175, "Assets/Img/Gui/icon_marksman.png"));
-
             unitsList.Add(new Unit(3, "Captain James Hook", 675, "Assets/Img/Gui/icon_mortar.png"));
-            unitsList.Add(new Unit(4, "Captain Ethan Obvious", 2850, "Assets/Img/Gui/icon_turret.png"));
+            unitsList.Add(new Unit(4, "Scrap Cannon", 2850, "Assets/Img/Gui/icon_scrap_cannon.png"));
             unitsList.Add(new Unit(5, "Small Tonk", 13300, "Assets/Img/Gui/icon_dicokka.png"));
             unitsList.Add(new Unit(6, "Fat Tonk", 68100, "Assets/Img/Gui/icon_ACP.png"));
             unitsList.Add(new Unit(7, "Human Tonk", 384000, "Assets/Img/Gui/icon_minigun.png"));
