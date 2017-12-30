@@ -593,4 +593,101 @@ namespace IdleGame
             base.Update();
         }
     }
+
+    class Enemy_high_tonk : Enemy_Units
+    {
+        public Sound cokka_shoot = new Sound("Assets/Sounds/cokka_shoot.ogg")
+        {
+            Loop = false
+        };
+        MainScene scene = (MainScene)MainScene.Instance;
+        bool isDead = false;
+        public enum Animation
+        {
+            Death,
+            Shoot,
+            Idle,
+            Stop,
+            Run
+        }
+        int runtime;
+        public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_high_tonk.png", 161, 105);
+        public Enemy_high_tonk(float x, float y) : base(x, y)
+        {
+            Layer = -500;
+            this.MaxHP = scene.stage.MaxHP;
+            this.CurrentHP = this.MaxHP/5;
+            SetHitbox(72, 97, ColliderTags.EnemyUnit);
+            Hitbox.SetPosition(40, 10);
+            spritemap.Add(Animation.Death, "43, 44, 45, 0", 8).NoRepeat();
+            spritemap.Add(Animation.Run, "1-6", 4);
+            spritemap.Add(Animation.Idle, "7, 8", 4);
+            spritemap.Add(Animation.Shoot, "19-35,9-18", 4).NoRepeat();
+            //spritemap.Add(Animation.Shoot, "9-35", 4).NoRepeat();
+            spritemap.Add(Animation.Stop, "36-42", 4).NoRepeat();
+            spritemap.Play(Animation.Run);
+            AddGraphic(spritemap);
+            scene.Add(this);
+            scene.enemyList.Add(this);
+            runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
+
+        }
+
+        public override void Render()
+        {
+            base.Render();
+            Hitbox.Render();
+        }
+
+        public override void Update()
+        {
+            if (CurrentHP > 0)
+            {
+                runtime--;
+                if (spritemap.CurrentAnim == Animation.Run)
+                {
+                    X++;
+                    if (runtime == 0)
+                    {
+                        spritemap.Play(Animation.Stop);
+                        runtime = (int)spritemap.Anim(Animation.Stop).TotalDuration * 1;
+                    }
+                }
+                else if ((spritemap.CurrentAnim == Animation.Stop || spritemap.CurrentAnim == Animation.Shoot) && runtime == 0)
+                {
+                    spritemap.Play(Animation.Idle);
+                    //cokka_shoot.Play();
+                    Console.Write("test");
+                    runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration * 5;
+                }
+                else if (spritemap.CurrentAnim == Animation.Idle && runtime == 0)
+                {
+                    spritemap.Play(Animation.Shoot);
+                    cokka_shoot.Play();
+                    runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 1;
+                }
+            }
+            else
+            {
+                if (!isDead)
+                {
+                    scene.enemyList.RemoveIfContains(this);
+                    Hitbox.Width = 0;
+                    Hitbox.Height = 0;
+                    scene.Add(new Explosions(X + 54, Y + 83, Explosions.ExplosionType.medium, 0));
+                    scene.Add(new Explosions(X + 89, Y + 36, Explosions.ExplosionType.medium, 3));
+                    scene.Add(new Explosions(X + 87, Y + 83, Explosions.ExplosionType.medium, 12));
+                    scene.Add(new Explosions(X + 73, Y + 60, Explosions.ExplosionType.medium, 9));
+                    scene.Add(new Explosions(X + 65, Y + 29, Explosions.ExplosionType.medium, 6));
+                    isDead = true;
+                    runtime = 60 * 2;
+                    spritemap.Play(Animation.Death);
+                    this.LifeSpan = this.Timer + runtime;
+                    scene.Add(new Explosions(X + 78, Y + 105, Explosions.ExplosionType.huge, runtime - 6));
+                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                }
+            }
+            base.Update();
+        }
+    }
 }

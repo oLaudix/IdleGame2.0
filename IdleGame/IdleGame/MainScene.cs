@@ -121,7 +121,7 @@ namespace IdleGame
                     unit.UpdateUnitStats();
                 needUpdate = false;
             }
-            if (GetCount<Enemy_Soldier>() < 2)
+            /*if (GetCount<Enemy_Soldier>() < 2)
             {
                 new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
@@ -150,12 +150,12 @@ namespace IdleGame
             {
                 new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
-            }
-            /*if (GetCount<Enemy_Soldier>() < 1)
-            {
-                new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
-                LayerEnemies();
             }*/
+            if (GetCount<Enemy_high_tonk>() < 1)
+            {
+                new Enemy_high_tonk(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
+            }
             isHit = false;
             HUD();
             base.Update();

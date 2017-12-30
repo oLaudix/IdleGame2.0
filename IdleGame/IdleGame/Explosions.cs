@@ -37,7 +37,7 @@ namespace IdleGame
             else if (this.type == ExplosionType.medium)
             {
                 spritemap = new Spritemap<Animation>("Assets/Img/Sprites/Explosions/explosion_medium.png", 70, 70);
-                spritemap.Add(Animation.explosion, scene.GetAnimationString(0, 28), 3).NoRepeat();
+                spritemap.Add(Animation.explosion, scene.GetAnimationString(0, 27), 3).NoRepeat();
             }
             else if (this.type == ExplosionType.big)
             {

@@ -282,6 +282,9 @@
     <Content Include="Assets\Img\Sprites\enemy_cokka.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Sprites\enemy_high_tonk.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\Sprites\enemy_mummy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
