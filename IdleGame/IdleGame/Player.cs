@@ -121,13 +121,13 @@ namespace IdleGame
                     animating--;
                     spritemap.Play(Animation.Shoot);
                     wind_up.Stop();
-                    Shooting.Volume = Sound.GlobalVolume * 0.2f;
+                    //Shooting.Volume = Sound.GlobalVolume * 0.2f;
                     Shooting.Play();
                     isWindingUp = false;
                 }
                 else if (animating == -1 && spritemap.CurrentAnim == Animation.Idle)
                 {
-                    wind_up.Volume = Sound.GlobalVolume * 0.2f;
+                    //wind_up.Volume = Sound.GlobalVolume * 0.2f;
                     wind_up.Play();
                     spritemap.Play(Animation.IdleToShooting);
                     animating = (int)(wind_up.Duration/60);
@@ -141,7 +141,7 @@ namespace IdleGame
                     spritemap.Play(Animation.ShootingToIdle);
                     animating = (int)spritemap.Anim(Animation.ShootingToIdle).TotalDuration;
                     Shooting.Stop();
-                    wind_down.Volume = Sound.GlobalVolume * 0.2f;
+                    //wind_down.Volume = Sound.GlobalVolume * 0.2f;
                     wind_down.Play();
                 }
                 else if (animating > 0)

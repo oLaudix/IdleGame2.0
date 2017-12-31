@@ -120,7 +120,7 @@ namespace IdleGame
             Fly,
             Idle
         }
-        //public Sound sound = new Sound("Assets/Sounds/rocket_projectile.ogg") { Loop = false };
+        public Sound sound = new Sound("Assets/Sounds/rocket_projectile_heli.ogg") { Loop = false };
         public Spritemap<Animation> spritemap;
         Vector2 end;
         Vector2 start;
@@ -148,7 +148,10 @@ namespace IdleGame
         public override void Update()
         {
             if (this.Timer == 30)
+            {
                 spritemap.Play(Animation.Fly);
+                sound.Play();
+            }
             if (this.Timer > 30)
             {
                 X -= ((start.X - end.X) / 100000) * (float)Math.Pow(this.Timer, 2);
@@ -161,15 +164,10 @@ namespace IdleGame
             if (X < end.X)
             {
                 RemoveSelf();
+                sound.Stop();
                 scene.Add(new Explosions(X, Y, Explosions.ExplosionType.medium, 0));
             }
             base.Update();
-            /*if (Input.MouseButtonDown(MouseButton.Right))
-            {
-                start = new Vector2(X, Y);
-                end = new Vector2(Input.MouseX, Input.MouseY);
-                spritemap.Angle = (float)((Math.Atan2(start.X - end.X, start.Y - end.Y)) * (180 / Math.PI)) + 90;
-            }*/
         }
     }
 
@@ -207,7 +205,7 @@ namespace IdleGame
                 {
                     spritemap.Play(Animation.rotate);
                     AddGraphic(spritemap);
-                    Throw.Volume = Sound.GlobalVolume * 0.2f;
+                    //Throw.Volume = Sound.GlobalVolume * 0.2f;
                     Throw.Play();
                 }
                 if (this.Timer <= this.delay + 60)

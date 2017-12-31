@@ -11,6 +11,7 @@ namespace IdleGame
     {
         MainScene scene = (MainScene)MainScene.Instance;
         int cooldown;
+        public Sound sound = new Sound("Assets/Sounds/small_tank.ogg") { Loop = false };
         public enum Animation
         {
             Idle,
@@ -36,6 +37,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Idle)
                 {
                     spritemap.Play(Animation.Shoot);
+                    sound.Play();
                     cooldown = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
                     scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
                 }
@@ -53,6 +55,7 @@ namespace IdleGame
     {
         MainScene scene = (MainScene)MainScene.Instance;
         int cooldown;
+        public Sound sound = new Sound("Assets/Sounds/biggest_tank.ogg") { Loop = false };
         public enum Animation
         {
             Idle,
@@ -76,6 +79,7 @@ namespace IdleGame
             if (cooldown == 0)
             {
                 spritemap.Play(Animation.Shoot);
+                sound.Play();
                 cooldown = scene.random.Next(60 * 3, 60 * 4);
                 scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_big, 60));
             }
@@ -87,6 +91,7 @@ namespace IdleGame
     {
         MainScene scene = (MainScene)MainScene.Instance;
         int cooldown;
+        public Sound sound = new Sound("Assets/Sounds/fat_tank.ogg") { Loop = false };
         public enum Animation
         {
             Idle,
@@ -112,6 +117,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Idle)
                 {
                     spritemap.Play(Animation.Shoot);
+                    sound.Play();
                     cooldown = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
                     scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
                 }
@@ -177,6 +183,7 @@ namespace IdleGame
     {
         MainScene scene = (MainScene)MainScene.Instance;
         int cooldown;
+        public Sound sound = new Sound("Assets/Sounds/bigger_tank.ogg") { Loop = false };
         public enum Animation
         {
             Idle,
@@ -200,6 +207,7 @@ namespace IdleGame
             if (cooldown == 0)
             {
                 spritemap.Play(Animation.Shoot);
+                sound.Play();
                 cooldown = scene.random.Next(60 * 2, 60 * 3);
                 scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
             }
@@ -217,6 +225,7 @@ namespace IdleGame
             Shoot
         }
         Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/wierd_tonk.png", 128, 63);
+        public Sound sound = new Sound("Assets/Sounds/human_tonk.ogg") { Loop = false };
         public Minigun(float x, float y) : base(x, y)
         {
             spritemap.Add(Animation.Idle, "0, 1, 2, 3", 4);
@@ -235,6 +244,7 @@ namespace IdleGame
             if (cooldown == 0 && spritemap.CurrentAnim == Animation.Idle)
             {
                 spritemap.Play(Animation.Shoot);
+                sound.Play();
                 cooldown = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
                 scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
             }
@@ -286,16 +296,18 @@ namespace IdleGame
     {
         MainScene scene = (MainScene)MainScene.Instance;
         int cooldown;
+        int soundDelay = 0;
         public enum Animation
         {
             Idle,
             Shoot
         }
+        public Sound sound = new Sound("Assets/Sounds/rocket_launch.ogg") { Loop = false };
         Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/rocket.png", 124, 110);
         public Rocket(float x, float y) : base(x, y)
         {
             spritemap.Add(Animation.Idle, "0", 4);
-            spritemap.Add(Animation.Shoot, "0,1,2,3,4,5,6,7, 8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10, 11,12,13,14,15,16,11,12,13,14,15,16,11,12,13,14,15,16,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26, 27,28,29,30,31,32,33,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,", 4).NoRepeat();
+            spritemap.Add(Animation.Shoot, "0,1,2,3,4,5,6,7, 8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34", 4).NoRepeat();
             spritemap.CenterOrigin();
             spritemap.Play(Animation.Idle);
             AddGraphic(spritemap);
@@ -305,13 +317,17 @@ namespace IdleGame
         public override void Update()
         {
             cooldown--;
+            soundDelay--;
             //Console.WriteLine
             if (cooldown == 0)
             {
+                soundDelay = 148;
                 spritemap.Play(Animation.Shoot);
                 cooldown = scene.random.Next(60 * 15, 60 * 20);
                 scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.huge, 30));
             }
+            if (soundDelay == 0)
+                sound.Play();
             base.Update();
         }
     }
@@ -358,11 +374,12 @@ namespace IdleGame
             Idle,
             Shoot
         }
+        public Sound sound = new Sound("Assets/Sounds/sniper.ogg") { Loop = false };
         Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/sniper.png", 66, 27);
         public Sniper(float x, float y) : base(x, y)
         {
             spritemap.Add(Animation.Idle, "0", 4);
-            spritemap.Add(Animation.Shoot, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22", 4).NoRepeat();
+            spritemap.Add(Animation.Shoot, "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22", 3).NoRepeat();
             spritemap.CenterOrigin();
             spritemap.Play(Animation.Idle);
             AddGraphic(spritemap);
@@ -376,6 +393,7 @@ namespace IdleGame
             if (cooldown == 0)
             {
                 spritemap.Play(Animation.Shoot);
+                sound.Play();
                 cooldown = scene.random.Next(60 * 4, 60 * 5);
             }
             base.Update();
@@ -392,6 +410,7 @@ namespace IdleGame
         }
         int cooldown = 0;
         Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/scrap_turret.png", 170, 80);
+        public Sound sound = new Sound("Assets/Sounds/scrap_cannon.ogg") { Loop = false };
         public Turret(float x, float y) : base(x, y)
         {
             spritemap.Add(Animation.Idle, "0, 1", 4);
@@ -410,6 +429,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Idle)
                 {
                     spritemap.Play(Animation.Shoot);
+                    sound.Play();
                     cooldown = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
                 }
                 else if (spritemap.CurrentAnim == Animation.Shoot)

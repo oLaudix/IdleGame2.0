@@ -168,7 +168,6 @@ C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\turret.png
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Fonts\Reality Hyper Regular.ttf
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Fonts\trench100free.ttf
-C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\cokka_shoot.ogg
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\grenade_throw.ogg
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\minigun.ogg
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\mummydeath.ogg
@@ -203,3 +202,19 @@ c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets
 c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\projectile_hover_rocket.png
 c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\scrap_turret.png
 c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_scrap_cannon.png
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\scrap_cannon.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\bigger_tank.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\biggest_tank.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\fat_tank.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\human_tonk.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\small_tank.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\rocket_projectile_heli.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\rocket_launch.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\sniper.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\explosion_09.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\explosion_10.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\explosion_11.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\explosion_12.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\explosion_big.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\machinegun.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\shield_ire.ogg

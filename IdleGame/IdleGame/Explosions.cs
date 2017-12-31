@@ -25,10 +25,18 @@ namespace IdleGame
         ExplosionType type;
         int delay;
         MainScene scene = (MainScene)MainScene.Instance;
+        public List<Sound> explosion_sound_library = new List<Sound>();
+        public Sound sound;// = new Sound("Assets/Sounds/sniper.ogg") { Loop = false };
         public Spritemap<Animation> spritemap;// = new Spritemap<Animation>("Assets/Img/Sprites/fat_tonk.png", 130, 62);
         public Explosions(float x, float y, ExplosionType type, int delay) : base(x, y)
         {
+            explosion_sound_library.Add(new Sound("Assets/Sounds/explosion_big.ogg") { Loop = false });
+            explosion_sound_library.Add(new Sound("Assets/Sounds/explosion_09.ogg") { Loop = false });
+            explosion_sound_library.Add(new Sound("Assets/Sounds/explosion_10.ogg") { Loop = false });
+            explosion_sound_library.Add(new Sound("Assets/Sounds/explosion_11.ogg") { Loop = false });
+            explosion_sound_library.Add(new Sound("Assets/Sounds/explosion_12.ogg") { Loop = false });
             this.type = type;
+            sound = explosion_sound_library[scene.random.Next(1, 5)];
             if (this.type == ExplosionType.small)
             {
                 spritemap = new Spritemap<Animation>("Assets/Img/Sprites/Explosions/explosion_small.png", 32, 48);
@@ -49,6 +57,7 @@ namespace IdleGame
                 spritemap = new Spritemap<Animation>("Assets/Img/Sprites/Explosions/explosion_huge.png", 113, 137);
                 spritemap.Add(Animation.explosion, scene.GetAnimationString(0, 23), 3).NoRepeat();
                 spritemap.SetPosition(0, -137/2);
+                sound = explosion_sound_library[0];
                 //Console.WriteLine(X + "," + Y);
             }
             else if (this.type == ExplosionType.shell_normal)
@@ -74,6 +83,7 @@ namespace IdleGame
             {
                 this.LifeSpan = this.Timer + (int)spritemap.Anim(Animation.explosion).TotalDuration;
                 AddGraphic(spritemap);
+                sound.Play();
                 spritemap.Play(Animation.explosion);
             }
             base.Update();

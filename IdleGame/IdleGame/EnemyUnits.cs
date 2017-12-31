@@ -13,8 +13,11 @@ namespace IdleGame
         MainScene scene = (MainScene)MainScene.Instance;
         public double MaxHP;
         public double CurrentHP;
+        public bool isDead = false;
+        public double prize;
         public Enemy_Units(float x, float y) : base(x, y)
         {
+            this.prize = scene.stage.Prize/5;
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_fire.ogg"){Loop = false});
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_1.ogg"){ Loop = false });
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_2.ogg"){ Loop = false });
@@ -35,7 +38,7 @@ namespace IdleGame
 
         public void GetPlayerDamage()
         {
-            if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left) && !scene.player.isWindingUp)
+            if (Overlap(X, Y, ColliderTags.Crosshair) && Input.MouseButtonDown(MouseButton.Left) && !scene.player.isWindingUp && !isDead)
             {
                 double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
                 if (!scene.isHit)
@@ -48,7 +51,7 @@ namespace IdleGame
     class Enemy_Soldier : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
-        bool isDead = false;
+        //bool isDead = false;
         public enum Animation
         {
             Death1,
@@ -130,6 +133,7 @@ namespace IdleGame
             {
                 if (!isDead)
                 {
+                    scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
@@ -152,7 +156,7 @@ namespace IdleGame
     class Enemy_Bazooka : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
-        bool isDead = false;
+        //bool isDead = false;
         public enum Animation
         {
             Death1,
@@ -227,6 +231,7 @@ namespace IdleGame
             {
                 if (!isDead)
                 {
+                    scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
@@ -249,7 +254,7 @@ namespace IdleGame
     class Enemy_Riflemon : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
-        bool isDead = false;
+        //bool isDead = false;
         public enum Animation
         {
             Death1,
@@ -260,11 +265,13 @@ namespace IdleGame
             Death6,
             Death7,
             Shoot,
-            Kneel,
+            Idle,
             Run
         }
         int runtime;
         public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_riflemon.png", 88, 68);
+        public Sound sound = new Sound("Assets/Sounds/sniper.ogg") { Loop = false };
+        //public Sound sound = new Sound("Assets/Sounds/machinegun.ogg") { Loop = true };
         public Enemy_Riflemon(float x, float y) : base(x, y)
         {
             Layer = -500;
@@ -279,8 +286,9 @@ namespace IdleGame
             spritemap.Add(Animation.Death5, scene.GetAnimationString(53, 67), 4).NoRepeat();
             spritemap.Add(Animation.Death6, scene.GetAnimationString(68, 80), 4).NoRepeat();
             spritemap.Add(Animation.Death7, scene.GetAnimationString(81, 95), 4).NoRepeat();
-            spritemap.Add(Animation.Run, scene.GetAnimationString(96, 107), 4);
-            spritemap.Add(Animation.Shoot, scene.GetAnimationString(108, 127), 4).NoRepeat();
+            spritemap.Add(Animation.Idle, "96-99", 8);
+            spritemap.Add(Animation.Run, "101-111", 4);
+            spritemap.Add(Animation.Shoot, "112-131", 4).NoRepeat();
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
@@ -306,22 +314,31 @@ namespace IdleGame
                     if (runtime == 0)
                     {
                         spritemap.Play(Animation.Shoot);
-                        runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
+                        sound.Play();
+                        runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
                     }
+                }
+                else if (spritemap.CurrentAnim == Animation.Idle && runtime == 0)
+                {
+                    spritemap.Play(Animation.Shoot);
+                    sound.Play();
+                    runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
                 }
                 else if (spritemap.CurrentAnim == Animation.Shoot && runtime == 0)
                 {
-                    spritemap.Play(Animation.Shoot);
-                    runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
+                    spritemap.Play(Animation.Idle);
+                    runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration + scene.random.Next(60 * 4, 60 * 6);
                 }
             }
             else
             {
                 if (!isDead)
                 {
+                    scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
+                    sound.Stop();
                     scene.enemyList.RemoveIfContains(this);
-                    Hitbox.Width = 0;
-                    Hitbox.Height = 0;
+                    //Hitbox.Width = 0;
+                    //Hitbox.Height = 0;
                     isDead = true;
                     Animation test = (Animation)scene.random.Next(0, 7);
                     runtime = 60 * 2;
@@ -341,7 +358,8 @@ namespace IdleGame
     class Enemy_Shield : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
-        bool isDead = false;
+        //bool isDead = false;
+        public Sound sound = new Sound("Assets/Sounds/shield_ire.ogg") { Loop = false };
         public enum Animation
         {
             Death1,
@@ -353,10 +371,13 @@ namespace IdleGame
             Death7,
             Shoot,
             WeaponOut,
-            Run
+            WeaponBack,
+            Run,
+            Idle
         }
         int runtime;
         public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/enemy_shield.png", 88, 68);
+
         public Enemy_Shield(float x, float y) : base(x, y)
         {
             Layer = -500;
@@ -371,9 +392,11 @@ namespace IdleGame
             spritemap.Add(Animation.Death5, scene.GetAnimationString(53, 67), 4).NoRepeat();
             spritemap.Add(Animation.Death6, scene.GetAnimationString(68, 80), 4).NoRepeat();
             spritemap.Add(Animation.Death7, scene.GetAnimationString(81, 95), 4).NoRepeat();
-            spritemap.Add(Animation.WeaponOut, scene.GetAnimationString(96, 99), 4).NoRepeat();
-            spritemap.Add(Animation.Run, scene.GetAnimationString(100, 111), 4);
-            spritemap.Add(Animation.Shoot, scene.GetAnimationString(112, 117), 4);
+            spritemap.Add(Animation.WeaponOut, "96-99", 4).NoRepeat();
+            spritemap.Add(Animation.WeaponBack, "99-96", 4).NoRepeat();
+            spritemap.Add(Animation.Idle, "100-105", 8);
+            spritemap.Add(Animation.Run, "106-117", 4);
+            spritemap.Add(Animation.Shoot, "118-123", 4).NoRepeat();
             spritemap.Play(Animation.Run);
             AddGraphic(spritemap);
             scene.Add(this);
@@ -402,16 +425,33 @@ namespace IdleGame
                         runtime = (int)spritemap.Anim(Animation.WeaponOut).TotalDuration * 1;
                     }
                 }
-                else if ((spritemap.CurrentAnim == Animation.WeaponOut || spritemap.CurrentAnim == Animation.Shoot) && runtime == 0)
+                else if (spritemap.CurrentAnim == Animation.WeaponOut && runtime == 0)
                 {
                     spritemap.Play(Animation.Shoot);
-                    runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
+                    sound.Play();
+                    runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
+                }
+                else if (spritemap.CurrentAnim == Animation.Shoot && runtime == 0)
+                {
+                    spritemap.Play(Animation.WeaponBack);
+                    runtime = (int)spritemap.Anim(Animation.WeaponBack).TotalDuration;
+                }
+                else if (spritemap.CurrentAnim == Animation.WeaponBack && runtime == 0)
+                {
+                    spritemap.Play(Animation.Idle);
+                    runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration + scene.random.Next(5 * 60, 8 * 60);
+                }
+                else if (spritemap.CurrentAnim == Animation.Idle && runtime == 0)
+                {
+                    spritemap.Play(Animation.WeaponOut);
+                    runtime = (int)spritemap.Anim(Animation.WeaponOut).TotalDuration;
                 }
             }
             else
             {
                 if (!isDead)
                 {
+                    scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
@@ -433,12 +473,12 @@ namespace IdleGame
 
     class Enemy_Cokka : Enemy_Units
     {
-        public Sound cokka_shoot = new Sound("Assets/Sounds/cokka_shoot.ogg")
+        public Sound cokka_shoot = new Sound("Assets/Sounds/small_tank.ogg")
         {
             Loop = false
         };
         MainScene scene = (MainScene)MainScene.Instance;
-        bool isDead = false;
+        //bool isDead = false;
         public enum Animation
         {
             Death,
@@ -498,6 +538,7 @@ namespace IdleGame
             {
                 if (!isDead)
                 {
+                    scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;
@@ -523,7 +564,7 @@ namespace IdleGame
             Loop = false
         };
         MainScene scene = (MainScene)MainScene.Instance;
-        bool isDead = false;
+        //bool isDead = false;
         public enum Animation
         {
             Death,
@@ -579,6 +620,7 @@ namespace IdleGame
             {
                 if (!isDead)
                 {
+                    scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     DeathSound.Play();
                     scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
@@ -596,12 +638,12 @@ namespace IdleGame
 
     class Enemy_high_tonk : Enemy_Units
     {
-        public Sound cokka_shoot = new Sound("Assets/Sounds/cokka_shoot.ogg")
+        public Sound cokka_shoot = new Sound("Assets/Sounds/small_tank.ogg")
         {
             Loop = false
         };
         MainScene scene = (MainScene)MainScene.Instance;
-        bool isDead = false;
+        //bool isDead = false;
         public enum Animation
         {
             Death,
@@ -658,7 +700,7 @@ namespace IdleGame
                     spritemap.Play(Animation.Idle);
                     //cokka_shoot.Play();
                     Console.Write("test");
-                    runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration * 5;
+                    runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration + scene.random.Next(5 * 60, 7 * 60);
                 }
                 else if (spritemap.CurrentAnim == Animation.Idle && runtime == 0)
                 {
@@ -671,6 +713,7 @@ namespace IdleGame
             {
                 if (!isDead)
                 {
+                    scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     scene.enemyList.RemoveIfContains(this);
                     Hitbox.Width = 0;
                     Hitbox.Height = 0;

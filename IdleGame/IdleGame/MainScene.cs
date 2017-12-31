@@ -63,10 +63,11 @@ namespace IdleGame
             CreateGear();
             CreateSkills();
             CreateUnits();
+            gearList[0].level = 10;
+            gearList[0].unlocked = true;
             UpdateBonuses();
             StartStage();
             HUD();
-            unitsList[0].level = 0;
             Vector2 Pos = new Vector2(47, 854);
             int counter = 1;
             foreach(var Unit in unitsList)
@@ -95,9 +96,9 @@ namespace IdleGame
             //new Rocket(1300, 500);
             //new Hover(1300, 400);
             //new Sniper(1300, 600);
-            new Turret(1300, 700);
+            //new Turret(1300, 700);
             //new Soldier(1200, 600);
-            player.gold = 1000000;
+            player.gold = 50;
         }
 
         public void LayerEnemies()
@@ -151,9 +152,9 @@ namespace IdleGame
                 new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }*/
-            if (GetCount<Enemy_Cokka>() < 1)
+            if (GetCount<Enemy_Riflemon>() < 20)
             {
-                new Enemy_Cokka(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 730));
                 LayerEnemies();
             }
             isHit = false;
