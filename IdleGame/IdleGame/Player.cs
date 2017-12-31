@@ -166,7 +166,7 @@ namespace IdleGame
             }
             double num2 = (double)num / (double)500;
             if (num2 < 1)
-                //num2 = 0;
+                num2 = 0;
             num2 *= 1.0 + scene.Bonuses[BonusType.BonusRelic];
             num2 = Math.Ceiling(num2);
             return num2;
@@ -203,6 +203,7 @@ namespace IdleGame
             scene.enemyList.Clear();
             Console.WriteLine(scene.enemyList.Count);
             scene.StartStage();
+            scene.needUpdate = true;
         }
     }
 }

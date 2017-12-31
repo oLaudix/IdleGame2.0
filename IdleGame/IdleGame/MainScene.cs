@@ -35,6 +35,7 @@ namespace IdleGame
         Entity debuge;
         Text debugt;
         Session session;
+        DataSaver saveGame = new DataSaver();
         public double totalDPS = 0;
         public MainScene(Session session) : base()
         {
@@ -70,7 +71,6 @@ namespace IdleGame
             UpdateBonuses();
             //currentStage = 1000;
             player.gold = 50;
-            StartStage();
             HUD();
             Vector2 Pos = new Vector2(47, 854);
             int counter = 1;
@@ -102,9 +102,46 @@ namespace IdleGame
             //new Sniper(1300, 600);
             //new Turret(1300, 700);
             //new Soldier(1200, 600);
-            session.Data.GetIntOrDefault("stageUnlocked", currentStage);
-            session.Data.ExportMode = DataSaver.DataExportMode.Config;
-            session.Data.Export("test");
+            if (session.Data.FileExists())
+                LoadGame();
+            else
+                Console.WriteLine("Ni ma pliku");
+            StartStage();
+        }
+
+        public void LoadGame()
+        {
+            session.Data.Import();
+            foreach (var unit in unitsList)
+            {
+                while (unit.level != session.Data.GetInt(unit.name))
+                    unit.UpgradeHero();
+            }
+            foreach (var gear in gearList)
+            {
+                gear.level = session.Data.GetInt(gear.name + "Level");
+                gear.unlocked = session.Data.GetBool(gear.name + "Unlocked");
+            }
+            player.honor = session.Data.GetFloat("playerHonor");
+            player.gold = session.Data.GetFloat("playerGold");
+            player.level = session.Data.GetInt("playerLevel");
+            this.currentStage = session.Data.GetInt("stageUnlocked");
+        }
+
+        public void SaveGame()
+        {
+            session.Data.SetData("playerHonor", player.honor);
+            session.Data.SetData("playerGold", player.gold);
+            session.Data.SetData("playerLevel", player.level);
+            session.Data.SetData("stageUnlocked", currentStage);
+            foreach (var unit in unitsList)
+                session.Data.SetData(unit.name, unit.level);
+            foreach (var gear in gearList)
+            {
+                session.Data.SetData(gear.name + "Level", gear.level);
+                session.Data.SetData(gear.name + "Unlocked", gear.unlocked);
+            }
+            session.Data.Export();
         }
 
         public void LayerEnemies()
@@ -120,6 +157,7 @@ namespace IdleGame
 
         public override void Update()
         {
+            SaveGame();
             if (needUpdate)
             {
                 UpdateBonuses();
@@ -313,8 +351,12 @@ namespace IdleGame
                     player.gold += this.stage.Prize;
                     StartStage();
                 }
+                double chestTest = random.NextDouble();
                 if (stage.GetTreasureSpawnChance() > random.NextDouble())
+                {
                     new Chest(random.Next(50, 801), random.Next(520, 750));
+                    Console.WriteLine(chestTest + "<" + stage.GetTreasureSpawnChance());
+                }
             }
         }
 

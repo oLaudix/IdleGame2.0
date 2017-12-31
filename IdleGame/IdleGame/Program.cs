@@ -16,8 +16,7 @@ namespace IdleGame
             game.GameFolder = "PlayerSessionDemo";
             var session = game.AddSession("Player");
             Console.WriteLine(session.Data.DefaultFilename);
-            session.Data.GetIntOrDefault("stageUnlocked", 0);
-            //session.Data.ExportMode = DataSaver.DataExportMode.Config;
+            session.Data.ExportMode = DataSaver.DataExportMode.Config;
             game.SetWindowAutoFullscreen(true);
             var scene = new MainScene(session);
             game.MouseVisible = true ;
