@@ -20,6 +20,7 @@ namespace IdleGame
         public bool unlocked;
         public string name;
         public string icon;
+        public MainScene scene = (MainScene)MainScene.Instance;
         public Gear(string name, int maxLevel, BonusType bonusType2, double bonusPerLevel2, double damageBonusBase, double bonusPerLevel, string icon)
         {
             this.name = name;
@@ -34,6 +35,13 @@ namespace IdleGame
             this.icon = icon;
         }
 
+        public double GetUpgradeCost()
+        {
+            if (this.unlocked)
+                return LevelUpCost();
+            else
+                return GetUnlockCost();
+        }
 
         public double LevelUpCost()
         {
@@ -57,7 +65,21 @@ namespace IdleGame
 
         public void UpgradeGear()
         {
-            this.level++;
+            if (this.unlocked)
+                this.level++;
+            else
+            {
+                scene.gearOwned++;
+                this.unlocked = true;
+            }
+            scene.needUpdate = true;
+        }
+
+        public double GetUnlockCost()
+        {
+            int num = scene.gearOwned + 1;
+            float num2 = 1.35f;
+            return Math.Floor((double)num * Math.Pow((double)num2, (double)num));
         }
 
         public string GetDescritopion()
@@ -93,10 +115,10 @@ namespace IdleGame
                     text = Math.Round(GetBonusMagnitude() * 100) + "% decreased Critical Strike cooldown";
                     break;
                 case BonusType.HandOfMidasCooldown:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% increased Money Shot duration";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Money Shot cooldown";
                     break;
                 case BonusType.HandOfMidasDuration:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% decreased Money Shot cooldown";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% longer Money Shot duration";
                     break;
                 case BonusType.HeavenlyStrikeCooldown:
                     text = Math.Round(GetBonusMagnitude() * 100) + "% decreased Artillery Strike cooldown";
@@ -120,16 +142,16 @@ namespace IdleGame
                     text = Math.Round(GetBonusMagnitude() * 100) + "% all power increase";
                     break;
                 case BonusType.ChestChance:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% increased chance for bonus gold from round";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% chance for bonus money";
                     break;
                 case BonusType.ChanceFor10xGold:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% increased chance for 10 times bonus gold for kill";
+                    text = Math.Round(GetBonusMagnitude() * 1000)/10 + "% chance for 10 times more dosh for kill";
                     break;
                 case BonusType.UpgradeCost:
                     text = Math.Round(GetBonusMagnitude() * 100) + "% upgrade cost decrease";
                     break;
                 case BonusType.MonsterGold:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% more money gained for kills";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% more dosh for kills";
                     break;
                 default:
                     text = "nieznany bonus";

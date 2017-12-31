@@ -12,13 +12,14 @@ namespace IdleGame
         public Dictionary<BonusType, double> Bonuses = new Dictionary<BonusType, double>();
         public Image background = new Image("Assets/Img/background_road2.png");
         public MyPlayer player;
+        public MyPlayer player2;
         public List<UnitSkill> skillList = new List<UnitSkill>();
         public List<Unit> unitsList = new List<Unit>();
         public List<Gear> gearList = new List<Gear>();
         public List<Enemy_Units> enemyList;
         public Random random = new Random();
         public Stage stage;
-        int currentStage = 0;
+        public int currentStage = 0;
         public Image HPBG = new Image("Assets/Img/HPBarBG.png");
         public Image HPFG = new Image("Assets/Img/HPBarFG.png");
         public Entity stagee;
@@ -63,9 +64,10 @@ namespace IdleGame
             CreateGear();
             CreateSkills();
             CreateUnits();
-            gearList[0].level = 10;
-            gearList[0].unlocked = true;
+            //gearList[8].level = 10;
+            //gearList[8].unlocked = true;
             UpdateBonuses();
+            currentStage = 1000;
             StartStage();
             HUD();
             Vector2 Pos = new Vector2(47, 854);
@@ -98,7 +100,6 @@ namespace IdleGame
             //new Sniper(1300, 600);
             //new Turret(1300, 700);
             //new Soldier(1200, 600);
-            player.gold = 50;
         }
 
         public void LayerEnemies()
@@ -152,9 +153,14 @@ namespace IdleGame
                 new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }*/
-            if (GetCount<Enemy_Riflemon>() < 20)
+            if (GetCount<Enemy_Riflemon>() < 10)
             {
                 new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 730));
+                LayerEnemies();
+            }
+            if (GetCount<Enemy_Soldier>() < 10)
+            {
+                new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
                 LayerEnemies();
             }
             isHit = false;
@@ -302,34 +308,36 @@ namespace IdleGame
                     player.gold += this.stage.Prize;
                     StartStage();
                 }
+                if (stage.GetTreasureSpawnChance() > random.NextDouble())
+                    new Chest(random.Next(50, 801), random.Next(520, 750));
             }
         }
 
         void CreateGear()
         {
-            this.gearList.Add(new Gear("Amulet of the Valrunes", 0, BonusType.MonsterGold, 0.1f, 0.5f, 0.25f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Axe of Resolution", 0, BonusType.BerserkerRageDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Barbarian's Mettle", 10, BonusType.BerserkerRageCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Brew of Absorbtion", 0, BonusType.AllDamage, 0.02f, 0.9f, 0.9f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Chest of Contentment", 0, BonusType.ChestGold, 0.2f, 0.4f, 0.2f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Crafter's Elixir", 0, BonusType.AllGold, 0.15f, 0.4f, 0.2f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Crown Egg", 0, BonusType.ChestChance, 0.2f, 0.4f, 0.2f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Death Seeker", 25, BonusType.CriticalChance, 0.02f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Divine Chalice", 0, BonusType.ChanceFor10xGold, 0.005f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Drunken Hammer", 0, BonusType.PlayerDamage, 0.04f, 0.6f, 0.30f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Hero's Thrust", 0, BonusType.CriticalDamage, 0.2f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Hunter's Ointment", 10, BonusType.WarCryCooldown, 0.05f, 1.2f, 0.6f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Laborer's Pendant", 10, BonusType.HandOfMidasCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Ogre's Gauntlet", 0, BonusType.ShadowCloneDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Overseer's Lotion", 10, BonusType.ShadowCloneCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Parchment of Importance", 0, BonusType.CriticalStrikeDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Ring of Opulence", 0, BonusType.HandOfMidasDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Ring of Wonderous Charm", 25, BonusType.UpgradeCost, 0.02f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Sacred Scroll", 10, BonusType.CriticalStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Saintly Shield", 10, BonusType.HeavenlyStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Tincture of the Maker", 0, BonusType.AllDamage, 0.05f, 0.1f, 0.05f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Undead Aura", 0, BonusType.BonusRelic, 0.05f, 0.3f, 0.15f, "Assets/Img/Gear/icon_chest.png"));
-            this.gearList.Add(new Gear("Universal Fissure", 0, BonusType.WarCryDuration, 0.1f, 1.2f, 0.6f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Medal of Honor", 0, BonusType.MonsterGold, 0.1f, 0.5f, 0.25f, "Assets/Img/Gear/icon_moh.png"));
+            //this.gearList.Add(new Gear("High Capacity Battery", 0, BonusType.BerserkerRageDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_battery.png"));
+            //this.gearList.Add(new Gear("Fusion Core", 10, BonusType.BerserkerRageCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_fusion_core.png"));
+            this.gearList.Add(new Gear("Dark Matter", 0, BonusType.AllDamage, 0.02f, 0.9f, 0.9f, "Assets/Img/Gear/icon_dark_matter.png"));
+            this.gearList.Add(new Gear("Treasure Chest", 0, BonusType.ChestGold, 0.2f, 0.4f, 0.2f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Philosopher's Stone", 0, BonusType.AllGold, 0.15f, 0.4f, 0.2f, "Assets/Img/Gear/icon_stone.png"));
+            this.gearList.Add(new Gear("Illuminati Membership", 0, BonusType.ChestChance, 0.2f, 0.4f, 0.2f, "Assets/Img/Gear/icon_illu.png"));
+            this.gearList.Add(new Gear("Ancient Tablet", 25, BonusType.CriticalChance, 0.02f, 0.3f, 0.15f, "Assets/Img/Gear/icon_ancient.png"));
+            this.gearList.Add(new Gear("Tyrant Treasure Box", 0, BonusType.ChanceFor10xGold, 0.005f, 0.3f, 0.15f, "Assets/Img/Gear/icon_tyrant.png"));
+            this.gearList.Add(new Gear("Unit 2 Vulcan Cannon", 0, BonusType.PlayerDamage, 0.04f, 0.6f, 0.30f, "Assets/Img/Gear/icon_vulcan_cannon.png"));
+            this.gearList.Add(new Gear("Poo Covered Ammo", 0, BonusType.CriticalDamage, 0.2f, 0.3f, 0.15f, "Assets/Img/Gear/icon_poo.png"));
+            //this.gearList.Add(new Gear("Canned Food", 10, BonusType.WarCryCooldown, 0.05f, 1.2f, 0.6f, "Assets/Img/Gear/icon_canned_food.png"));
+            //this.gearList.Add(new Gear("Martian Element X", 10, BonusType.HandOfMidasCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_martian_element_x.png"));
+            //this.gearList.Add(new Gear("Experimental Core", 0, BonusType.ShadowCloneDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_unit03_core.png"));
+            //this.gearList.Add(new Gear("Scrap", 10, BonusType.ShadowCloneCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_scrap.png"));
+            //this.gearList.Add(new Gear("Mysterious Liquid 2.0", 0, BonusType.CriticalStrikeDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_mysterious_liquid_special.png"));
+            //this.gearList.Add(new Gear("Martian Energy", 0, BonusType.HandOfMidasDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_martian_energy.png"));
+            this.gearList.Add(new Gear("Spoils of War", 25, BonusType.UpgradeCost, 0.02f, 0.3f, 0.15f, "Assets/Img/Gear/icon_spoils.png"));
+            //this.gearList.Add(new Gear("Mysterious Liquid", 10, BonusType.CriticalStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_mysterious_liquid.png"));
+            //this.gearList.Add(new Gear("Mobile Artillery Cannons", 10, BonusType.HeavenlyStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_warhead.png"));
+            //this.gearList.Add(new Gear("Tincture of the Maker", 0, BonusType.AllDamage, 0.05f, 0.1f, 0.05f, "Assets/Img/Gear/icon_chest.png"));
+            this.gearList.Add(new Gear("Lucky Charm", 0, BonusType.BonusRelic, 0.05f, 0.3f, 0.15f, "Assets/Img/Gear/icon_charm.png"));
+            //this.gearList.Add(new Gear("Shrooms", 0, BonusType.WarCryDuration, 0.1f, 1.2f, 0.6f, "Assets/Img/Gear/icon_shroom.png"));
         }
 
         void CreateUnits()

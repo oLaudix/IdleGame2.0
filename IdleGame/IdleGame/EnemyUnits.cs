@@ -18,12 +18,21 @@ namespace IdleGame
         public Enemy_Units(float x, float y) : base(x, y)
         {
             this.prize = scene.stage.Prize/5;
+            if(scene.Bonuses[BonusType.ChanceFor10xGold] >= scene.random.NextDouble())
+            {
+                prize = prize * 10;
+            }
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_fire.ogg"){Loop = false});
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_1.ogg"){ Loop = false });
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_2.ogg"){ Loop = false });
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_3.ogg"){ Loop = false });
         }
 
+        public void Reset()
+        {
+            scene.enemyList.RemoveIfContains(this);
+            RemoveSelf();
+        }
         public override void Update()
         {
             GetPlayerDamage();
@@ -699,7 +708,6 @@ namespace IdleGame
                 {
                     spritemap.Play(Animation.Idle);
                     //cokka_shoot.Play();
-                    Console.Write("test");
                     runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration + scene.random.Next(5 * 60, 7 * 60);
                 }
                 else if (spritemap.CurrentAnim == Animation.Idle && runtime == 0)

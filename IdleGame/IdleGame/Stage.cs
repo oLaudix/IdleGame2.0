@@ -22,16 +22,8 @@ namespace IdleGame
             this.stage = stage;
             this.Bonuses = Bonuses;
             this.MaxHP = GetStageBaseHP();
-            if (GetTreasureSpawnChance() >= random.NextDouble())
-            {
-                this.Prize = GetTreasureGold();
-                this.Chest = true;
-            }
-            else
-            {
-                this.Prize = GetStageBaseGold();
-                this.Chest = false;
-            }
+            this.Prize = GetStageBaseGold();
+            this.Chest = true;
             this.CurrentHP = MaxHP;
             this.Wave = 1;
         }
@@ -48,7 +40,7 @@ namespace IdleGame
         }
         public double GetTreasureSpawnChance()
         {
-            return 0.021f * (1f + this.Bonuses[BonusType.ChestChance]);
+            return 0.02 * (1f + this.Bonuses[BonusType.ChestChance]);
         }
 
         public double GetTreasureGold()

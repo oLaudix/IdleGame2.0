@@ -204,14 +204,6 @@ namespace IdleGame
     {
         Text unitName;
         Text unitInfo;
-        Text skills;
-        Text skill1;
-        Text skill2;
-        Text skill3;
-        Text skill4;
-        Text skill5;
-        Text skill6;
-        Text skill7;
         List<Image> gearList;
         List<Text> skillsInfo;
         bool permanent = true;
@@ -260,6 +252,7 @@ namespace IdleGame
                         Pos.X = 850 - 25;
                 }
             }
+            new PlayerInfo(1920 / 2, 1080 - 261 - 261, icon, this);
         }
 
         public string FormatNumber(double number)
@@ -301,7 +294,7 @@ namespace IdleGame
                 "+Power: " + FormatNumber(element.nextLevelDamageDiff) + "\n" +
                 "Money: " + FormatNumber(element.gold) + "\n" +
                 "Total Power: " + FormatNumber(scene.totalDPS);
-
+            unitName.String = "Player - " + element.honor + " Honor";
             if (element.upgradeCost <= scene.player.gold)
                 can_buy.Visible = true;
             else
@@ -357,9 +350,10 @@ namespace IdleGame
         Image parent;
         Image background;
         PlayerGui parentGui;
+        MainScene scene = (MainScene)MainScene.Instance;
         public GearGui(float x, float y, Gear gearPiece, Image parent, PlayerGui parentGui) : base(x, y)
         {
-            this.background = Image.CreateRectangle(961/2,261, Color.Black);
+            this.background = new Image("Assets/Img/artifact_menu.png");
             AddGraphic(background);
             this.gearPiece = gearPiece;
             this.parent = parent;
@@ -367,7 +361,7 @@ namespace IdleGame
             Visible = true;
             MainScene.Instance.Add(this);
             CreateText(ref gearName, gearPiece.name, 40, new Vector2(0, 0));
-            CreateText(ref gearInfo, "", 30, new Vector2(50, 100));
+            CreateText(ref gearInfo, "", 20, new Vector2(50, 100));
             gearName.SetPosition(250, 0);
             gearName.CenterTextOriginX();
             gearInfo.CenterTextOriginX();
@@ -394,13 +388,103 @@ namespace IdleGame
         public override void Update()
         {
             gearInfo.String =
-                "Cost: " + gearPiece.LevelUpCost() +
+                "Cost: " + gearPiece.GetUpgradeCost() +
                 "\nBonus to all power: " + Math.Round(gearPiece.GetDamageBonus() * 100) + "%" +
-                "\n" + gearPiece.GetDescritopion();
+                "\n" + gearPiece.GetDescritopion() + "\n" + ((gearPiece.unlocked) ? "Level: " + gearPiece.level : "Locked") + 
+                "\nBonus Damage Per Level: " + Math.Round(gearPiece.bonusPerLevel * 100) + "%" +
+                "\nBonus Per Level: " + Math.Round(gearPiece.bonusPerLevel2 * 100) + "%";
+
             if (parentGui.MouseHover(parent))
                 Visible = true;
             else
                 Visible = false;
+
+            if (parentGui.MouseHover(parent))
+            {
+                if (Input.MouseButtonPressed(MouseButton.Left))
+                {
+                    if (gearPiece.GetUpgradeCost() <= scene.player.honor)
+                    {
+                        scene.player.honor -= gearPiece.GetUpgradeCost();
+                        gearPiece.UpgradeGear();
+                    }
+                }
+            }
+            base.Update();
+        }
+    }
+
+
+    class PlayerInfo : Entity
+    {
+        public string font = "Assets/Fonts/trench100free.ttf";
+        Text InfoText;
+        Image parent;
+        Image background;
+        PlayerGui parentGui;
+        MainScene scene = (MainScene)MainScene.Instance;
+        public PlayerInfo(float x, float y, Image parent, PlayerGui parentGui) : base(x, y)
+        {
+            this.background = new Image("Assets/Img/artifact_menu.png");
+            AddGraphic(background);
+            this.parent = parent;
+            this.parentGui = parentGui;
+            Visible = true;
+            MainScene.Instance.Add(this);
+            //CreateText(ref gearName, gearPiece.name, 40, new Vector2(0, 0));
+            CreateText(ref InfoText, "", 20, new Vector2(50, 25));
+            //gearName.SetPosition(250, 0);
+            //gearName.CenterTextOriginX();
+            InfoText.CenterTextOriginX();
+        }
+
+        public void CreateText(ref Text t, string text, int size, Vector2 Pos)
+        {
+            t = new Text(text, this.font, size);
+            this.AddGraphic(t);
+            //t.CenterOrigin();
+            FormatText(t);
+            t.SetPosition(Pos.X, Pos.Y);
+        }
+
+        public void FormatText(Text Text)
+        {
+            Text.OutlineThickness = 2;
+            Text.TextStyle = TextStyle.Bold;
+            Text.Color = Color.Yellow;
+            Text.OutlineColor = Color.Black;
+            //Text.CenterTextOriginX();
+        }
+
+        public override void Update()
+        {
+            var num = 0;
+            foreach (var unit in scene.unitsList)
+            {
+                num += unit.level;
+            }
+            InfoText.String =
+                "Player Info:" +
+                "\nTotal Hero Levels: " + num +
+                "\nCritical Strike Chance: " + Math.Round((scene.Bonuses[BonusType.CriticalChance] + scene.player.critChance) * 1000) / 10 + "%" +
+                "\nCritical Strike Damage Multiplier: " + Math.Round(((1 + scene.Bonuses[BonusType.CriticalDamage]) * scene.player.critMagnitude)) +
+                "\nAll Money Bonus: " + Math.Round((scene.Bonuses[BonusType.AllGold]) * 1000) / 10 + "%" +
+                "\nMoney for Kills Bonus: " + Math.Round((scene.Bonuses[BonusType.MonsterGold]) * 1000) / 10 + "%" +
+                "\nMoney From Chests Bonus: " + Math.Round((scene.Bonuses[BonusType.ChestGold]) * 1000) / 10 + "%" +
+                "\nChance for Chest: " + Math.Round((0.02 * (1f + scene.Bonuses[BonusType.ChestChance])) * 1000) / 10 + "%" +
+                "\n\nHonor on Prestige: " + scene.player.GetPrestigeRelicCount() + " (Middle Mouse Button)";
+            if (parentGui.MouseHover(parent))
+                Visible = true;
+            else
+                Visible = false;
+
+            if (parentGui.MouseHover(parent))
+            {
+                if (Input.MouseButtonPressed(MouseButton.Middle))
+                {
+                    scene.player.Prestige();
+                }
+            }
             base.Update();
         }
     }

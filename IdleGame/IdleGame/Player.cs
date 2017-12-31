@@ -121,7 +121,7 @@ namespace IdleGame
                     animating--;
                     spritemap.Play(Animation.Shoot);
                     wind_up.Stop();
-                    //Shooting.Volume = Sound.GlobalVolume * 0.2f;
+                    Shooting.Volume = Sound.GlobalVolume * 0.5f;
                     Shooting.Play();
                     isWindingUp = false;
                 }
@@ -193,8 +193,12 @@ namespace IdleGame
             foreach (var skill in scene.skillList)
                 skill.isUnlocked = false;
             this.gold = 0;
-            scene.stage.stage = 0;
+            scene.currentStage = 0;
             this.honor += GetPrestigeRelicCount();
+            foreach (var enemy in scene.enemyList)
+                enemy.RemoveSelf();
+            scene.enemyList.Clear();
+            Console.WriteLine(scene.enemyList.Count);
             scene.StartStage();
         }
     }
