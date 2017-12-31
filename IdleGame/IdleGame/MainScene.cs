@@ -34,10 +34,11 @@ namespace IdleGame
         public Crosshair crosshair;
         Entity debuge;
         Text debugt;
+        Session session;
         public double totalDPS = 0;
-        public MainScene() : base()
+        public MainScene(Session session) : base()
         {
-            
+            this.session = session;
         }
         public string GetAnimationString(int a, int b)
         {
@@ -67,7 +68,8 @@ namespace IdleGame
             //gearList[8].level = 10;
             //gearList[8].unlocked = true;
             UpdateBonuses();
-            currentStage = 1000;
+            //currentStage = 1000;
+            player.gold = 50;
             StartStage();
             HUD();
             Vector2 Pos = new Vector2(47, 854);
@@ -100,6 +102,9 @@ namespace IdleGame
             //new Sniper(1300, 600);
             //new Turret(1300, 700);
             //new Soldier(1200, 600);
+            session.Data.GetIntOrDefault("stageUnlocked", currentStage);
+            session.Data.ExportMode = DataSaver.DataExportMode.Config;
+            session.Data.Export("test");
         }
 
         public void LayerEnemies()

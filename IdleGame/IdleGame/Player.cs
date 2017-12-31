@@ -165,6 +165,8 @@ namespace IdleGame
                 num += unit.level;
             }
             double num2 = (double)num / (double)500;
+            if (num2 < 1)
+                //num2 = 0;
             num2 *= 1.0 + scene.Bonuses[BonusType.BonusRelic];
             num2 = Math.Ceiling(num2);
             return num2;
@@ -186,6 +188,8 @@ namespace IdleGame
         }
         public void Prestige()
         {
+            this.honor += GetPrestigeRelicCount();
+            this.level = 1;
             foreach (var unit in scene.unitsList)
             {
                 unit.level = 0;
@@ -194,7 +198,6 @@ namespace IdleGame
                 skill.isUnlocked = false;
             this.gold = 0;
             scene.currentStage = 0;
-            this.honor += GetPrestigeRelicCount();
             foreach (var enemy in scene.enemyList)
                 enemy.RemoveSelf();
             scene.enemyList.Clear();
