@@ -15,6 +15,7 @@ namespace IdleGame
         public double CurrentHP;
         public bool isDead = false;
         public double prize;
+        public int stop_running = 0;
         public Enemy_Units(float x, float y) : base(x, y)
         {
             this.prize = scene.stage.Prize/5;
@@ -26,6 +27,8 @@ namespace IdleGame
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_1.ogg"){ Loop = false });
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_2.ogg"){ Loop = false });
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_3.ogg"){ Loop = false });
+            stop_running = scene.random.Next(50, 660);
+            Console.WriteLine(stop_running);
         }
 
         public void Reset()
@@ -57,6 +60,29 @@ namespace IdleGame
             }
         }
     }
+
+    class Garbage : Entity
+    {
+        Image image;
+        MainScene scene = (MainScene)MainScene.Instance;
+        public Garbage(float x, float y, string source, bool flipped) : base(x, y)
+        {
+            image = new Image(source);
+            AddGraphic(image);
+            scene.Add(this);
+            image.FlippedX = flipped;
+            SetHitbox(image.TextureRegion.Width, image.TextureRegion.Height, ColliderTags.Garbage);
+        }
+        public override void Update()
+        {
+            if (Overlap(X, Y, ColliderTags.Garbage))
+                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
+                    Layer = Overlapped.Layer + 1;
+
+            base.Update();
+        }
+    }
+
     class Enemy_Soldier : Enemy_Units
     {
         MainScene scene = (MainScene)MainScene.Instance;
@@ -80,8 +106,8 @@ namespace IdleGame
         public Enemy_Soldier(float x, float y) : base(x, y)
         {
             Layer = -500;
-            this.MaxHP = scene.stage.MaxHP;
-            this.CurrentHP = this.MaxHP/4;
+            this.MaxHP = scene.stage.MaxHP / 4;
+            this.CurrentHP = this.MaxHP;
             SetHitbox(33, 40, ColliderTags.EnemyUnit);
             Hitbox.SetPosition(28, 27);
             spritemap.Add(Animation.Death1, scene.GetAnimationString(0, 21), 4).NoRepeat();
@@ -184,8 +210,8 @@ namespace IdleGame
         public Enemy_Bazooka(float x, float y) : base(x, y)
         {
             Layer = -500;
-            this.MaxHP = scene.stage.MaxHP;
-            this.CurrentHP = this.MaxHP / 4;
+            this.MaxHP = scene.stage.MaxHP / 4;
+            this.CurrentHP = this.MaxHP;
             SetHitbox(33, 40, ColliderTags.EnemyUnit);
             Hitbox.SetPosition(28, 27);
             spritemap.Add(Animation.Death1, scene.GetAnimationString(0, 21), 4).NoRepeat();
@@ -284,8 +310,8 @@ namespace IdleGame
         public Enemy_Riflemon(float x, float y) : base(x, y)
         {
             Layer = -500;
-            this.MaxHP = scene.stage.MaxHP;
-            this.CurrentHP = this.MaxHP / 4;
+            this.MaxHP = scene.stage.MaxHP / 4;
+            this.CurrentHP = this.MaxHP;
             SetHitbox(33, 40, ColliderTags.EnemyUnit);
             Hitbox.SetPosition(28, 27);
             spritemap.Add(Animation.Death1, scene.GetAnimationString(0, 21), 4).NoRepeat();
@@ -302,8 +328,7 @@ namespace IdleGame
             AddGraphic(spritemap);
             scene.Add(this);
             scene.enemyList.Add(this);
-            runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
-
+            runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * 3;
         }
 
         public override void Render()
@@ -320,7 +345,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Run)
                 {
                     X++;
-                    if (runtime == 0)
+                    if (X > stop_running || (CurrentHP < MaxHP && X > 50))
                     {
                         spritemap.Play(Animation.Shoot);
                         sound.Play();
@@ -390,8 +415,8 @@ namespace IdleGame
         public Enemy_Shield(float x, float y) : base(x, y)
         {
             Layer = -500;
-            this.MaxHP = scene.stage.MaxHP;
-            this.CurrentHP = this.MaxHP / 4;
+            this.MaxHP = scene.stage.MaxHP / 4;
+            this.CurrentHP = this.MaxHP;
             SetHitbox(33, 40, ColliderTags.EnemyUnit);
             Hitbox.SetPosition(28, 27);
             spritemap.Add(Animation.Death1, scene.GetAnimationString(0, 21), 4).NoRepeat();
@@ -500,8 +525,8 @@ namespace IdleGame
         public Enemy_Cokka(float x, float y) : base(x, y)
         {
             Layer = -500;
-            this.MaxHP = scene.stage.MaxHP;
-            this.CurrentHP = this.MaxHP * 5;
+            this.MaxHP = scene.stage.MaxHP * 2;
+            this.CurrentHP = this.MaxHP;
             SetHitbox(72, 57, ColliderTags.EnemyUnit);
             Hitbox.SetPosition(12, 20);
             spritemap.Add(Animation.Shoot, scene.GetAnimationString(0, 16), 4).NoRepeat();
@@ -666,8 +691,8 @@ namespace IdleGame
         public Enemy_high_tonk(float x, float y) : base(x, y)
         {
             Layer = -500;
-            this.MaxHP = scene.stage.MaxHP;
-            this.CurrentHP = this.MaxHP/5;
+            this.MaxHP = scene.stage.MaxHP * 4;
+            this.CurrentHP = this.MaxHP;
             SetHitbox(72, 97, ColliderTags.EnemyUnit);
             Hitbox.SetPosition(40, 10);
             spritemap.Add(Animation.Death, "43, 44, 45, 0", 8).NoRepeat();

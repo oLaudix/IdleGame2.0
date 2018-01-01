@@ -9,6 +9,7 @@ namespace IdleGame
 {
     class MainScene : Scene
     {
+        public Music Music = new Music("Assets/Sounds/Rolemusic - If Pigs Could Sing.ogg");
         public Dictionary<BonusType, double> Bonuses = new Dictionary<BonusType, double>();
         public Image background = new Image("Assets/Img/background_road2.png");
         public MyPlayer player;
@@ -32,6 +33,8 @@ namespace IdleGame
         public bool isHit = false;
         public bool needUpdate;
         public Crosshair crosshair;
+        public double soundVolume;
+        public double musicVolume;
         Entity debuge;
         Text debugt;
         Session session;
@@ -56,7 +59,7 @@ namespace IdleGame
             enemyList = new List<Enemy_Units>();
             base.Begin();
             crosshair = new Crosshair();
-            player = new MyPlayer(1000, 600);
+            player = new MyPlayer(941, 575);
             Add(player);
             AddGraphic(background);
             foreach (BonusType bonusType in Enum.GetValues(typeof(BonusType)))
@@ -70,7 +73,6 @@ namespace IdleGame
             //gearList[8].unlocked = true;
             UpdateBonuses();
             //currentStage = 1000;
-            player.gold = 50;
             HUD();
             Vector2 Pos = new Vector2(47, 854);
             int counter = 1;
@@ -90,23 +92,47 @@ namespace IdleGame
             {
                 Layer = 1000
             };
-            //new Dicokka(1500, 500);
-            //new BiggestTonk(1500, 600);
-            //new FatTonk(1500, 700);
-            //new Heli(1500, 400);
-            //new BigTonk(1700, 500);
-            //new Minigun(1700, 605);
-            //new Mortar(1700, 700);
-            //new Rocket(1300, 500);
-            //new Hover(1300, 400);
-            //new Sniper(1300, 600);
-            //new Turret(1300, 700);
-            //new Soldier(1200, 600);
+            player.gold = 2.0e100;
+            new Sniper(1112, 610);
+            new Soldier(1280, 510);
+            new Mortar(1730, 722);
+            new Turret(930, 500);
+            new Dicokka(1550, 500);
+            new FatTonk(1500, 550);
+            new Minigun(1320, 700);
+            new BigTonk(1460, 480);
+            new BiggestTonk(1770, 660);
+            new Heli(1080, 280);
+            new Hover(1450, 320);
+            new Rocket(1700, 550);
             if (session.Data.FileExists())
                 LoadGame();
             else
                 Console.WriteLine("Ni ma pliku");
             StartStage();
+            this.soundVolume = Sound.GlobalVolume;
+            Sound.GlobalVolume = 0;
+            Music.Play();
+
+            new Garbage(754, 462, "Assets/Img/Decals/des09.png", false);
+            new Garbage(831, 533, "Assets/Img/Decals/des16.png", true);
+            new Garbage(832, 689, "Assets/Img/Decals/des17.png", true);
+            new Garbage(925, 670, "Assets/Img/Decals/des10.png", false);
+            new Garbage(936, 531, "Assets/Img/Decals/des01.png", false);
+            new Garbage(1004, 575, "Assets/Img/Decals/des19.png", false);
+            new Garbage(1322, 497, "Assets/Img/Decals/des19.png", false);
+            new Garbage(1082, 612, "Assets/Img/Decals/des14.png", false);
+            new Garbage(1115, 704, "Assets/Img/Decals/des18.png", false);
+            new Garbage(1206, 665, "Assets/Img/Decals/des08.png", false);
+            new Garbage(1161, 537, "Assets/Img/Decals/des08.png", false);
+            new Garbage(1214, 484, "Assets/Img/Decals/des15.png", false);
+            new Garbage(1032, 378, "Assets/Img/Decals/des13.png", true);
+            new Garbage(1276, 555, "Assets/Img/Decals/des11.png", false);
+            new Garbage(1248, 597, "Assets/Img/Decals/des24.png", false);
+            new Garbage(1377, 595, "Assets/Img/Decals/des25.png", false);
+            new Garbage(1372, 659, "Assets/Img/Decals/des20.png", false);
+            new Garbage(1476, 648, "Assets/Img/Decals/des12.png", false);
+            new Garbage(1381, 709, "Assets/Img/Decals/des22.png", false);
         }
 
         public void LoadGame()
@@ -121,11 +147,13 @@ namespace IdleGame
             {
                 gear.level = session.Data.GetInt(gear.name + "Level");
                 gear.unlocked = session.Data.GetBool(gear.name + "Unlocked");
+                if (gear.unlocked)
+                    gearOwned++;
             }
             player.honor = session.Data.GetFloat("playerHonor");
             player.gold = session.Data.GetFloat("playerGold");
             player.level = session.Data.GetInt("playerLevel");
-            this.currentStage = session.Data.GetInt("stageUnlocked");
+            this.currentStage = session.Data.GetInt("stageUnlocked") - 1;
         }
 
         public void SaveGame()
@@ -196,16 +224,16 @@ namespace IdleGame
                 new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }*/
-            if (GetCount<Enemy_Riflemon>() < 10)
+            /*if (GetCount<Enemy_Riflemon>() < 20)
             {
-                new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Riflemon(random.Next(-100, -50), random.Next(490, 720));
                 LayerEnemies();
             }
-            if (GetCount<Enemy_Soldier>() < 10)
+            if (GetCount<Enemy_Soldier>() < 0)
             {
-                new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 730));
+                new Enemy_Soldier(random.Next(-100, -50), random.Next(490, 720));
                 LayerEnemies();
-            }
+            }*/
             isHit = false;
             HUD();
             base.Update();
@@ -213,10 +241,40 @@ namespace IdleGame
             if (Input.KeyDown(Key.Down))
             {
                 Sound.GlobalVolume -= 0.02f;
+                Music.GlobalVolume -= 0.02f;
             }
             if (Input.KeyDown(Key.Up))
             {
                 Sound.GlobalVolume += 0.02f;
+                Music.GlobalVolume += 0.02f;
+            }
+            if (Input.KeyPressed(Key.Space))
+            {
+                if (Music.IsPlaying)
+                {
+                    Music.Pause();
+                }
+                else
+                {
+                    Music.Play();
+                }
+            }
+            if (Input.KeyPressed(Key.S))
+            {
+                if (Sound.GlobalVolume == 0 && this.soundVolume != 0)
+                {
+                    Sound.GlobalVolume = (float)this.soundVolume;
+                }
+                else
+                {
+                    this.soundVolume = Sound.GlobalVolume;
+                    Sound.GlobalVolume = 0;
+                }
+            }
+            if (Input.KeyPressed(Key.R))
+            {
+                session.Data.ClearFile();
+                Game.Close();
             }
 
             //player.spritemap.Angle = (float)((Math.Atan2(Input.MouseX - player.X, Input.MouseY - player.Y) - 1.5) * (180 / Math.PI));
@@ -352,7 +410,7 @@ namespace IdleGame
                     StartStage();
                 }
                 double chestTest = random.NextDouble();
-                if (stage.GetTreasureSpawnChance() > random.NextDouble())
+                if (stage.GetTreasureSpawnChance() >= chestTest)
                 {
                     new Chest(random.Next(50, 801), random.Next(520, 750));
                     Console.WriteLine(chestTest + "<" + stage.GetTreasureSpawnChance());
@@ -452,7 +510,7 @@ namespace IdleGame
 
             skillList.Add(new UnitSkill(4, BonusType.HeroDamage, 1.0f, 10));
             skillList.Add(new UnitSkill(4, BonusType.HeroDamage, 8.0f, 25));
-            skillList.Add(new UnitSkill(4, BonusType.AllGold, 6.0f, 50));
+            skillList.Add(new UnitSkill(4, BonusType.AllGold, 0.06f, 50));
             skillList.Add(new UnitSkill(4, BonusType.HeroDamage, 5.0f, 100));
             skillList.Add(new UnitSkill(4, BonusType.CriticalDamage, 0.5f, 200));
             skillList.Add(new UnitSkill(4, BonusType.AllDamage, 0.2f, 400));

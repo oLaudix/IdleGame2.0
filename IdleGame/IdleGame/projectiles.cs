@@ -92,6 +92,7 @@ namespace IdleGame
             spritemap.Play(Animation.Fly);
             scene.Add(this);
             sound.Play();
+            Layer = -600;
         }
         public override void Update()
         {
@@ -142,7 +143,7 @@ namespace IdleGame
             spritemap.Angle = (float)((Math.Atan2(start.X - end.X, start.Y - end.Y)) * (180 / Math.PI)) - 90;
             AddGraphic(spritemap);
             spritemap.Play(Animation.Idle);
-            Layer = 1000;
+            Layer = -600;
             scene.Add(this);
         }
         public override void Update()
@@ -227,6 +228,85 @@ namespace IdleGame
             {
                 scene.Add(new Explosions(X, Y, Explosions.ExplosionType.small, 0));
                 RemoveSelf();
+            }
+            base.Update();
+        }
+    }
+
+    class Bradley_rocket : Entity
+    {
+        public enum Animation
+        {
+            up,
+            down
+        }
+        float height;
+        Sound Throw = new Sound("Assets/Sounds/rocket_launch.ogg") { Loop = false };
+        MainScene scene = (MainScene)MainScene.Instance;
+        public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/bradley_rocket_start.png", 69, 69);
+        public Spritemap<Animation> spritemap2 = new Spritemap<Animation>("Assets/Img/Sprites/bradley_rocket_down.png", 29, 92);
+        float  counter;
+        int delay = 0;
+        int stage = 1;
+        float hitY;
+        public Bradley_rocket(float x, float y, int delay) : base(x, y)
+        {
+            spritemap.Add(Animation.up, "0-2", 1);
+            spritemap2.Add(Animation.down, "0-2", 1);
+            spritemap.CenterOrigin();
+            spritemap2.CenterOrigin();
+            Layer = +600;
+            this.delay = delay;
+            scene.Add(this);
+        }
+
+        public override void Update()
+        {
+            if (this.Timer >= this.delay)
+            {
+                if (stage == 1)
+                {
+                    if (this.Timer == this.delay)
+                    {
+                        spritemap.Play(Animation.up);
+                        AddGraphic(spritemap);
+                        //Throw.Volume = Sound.GlobalVolume * 0.2f;
+                        Throw.Play();
+                    }
+                    if (this.Timer > 30)
+                    {
+                        X -= ((100f) / 100000) * (float)Math.Pow(this.Timer - this.delay, 2);
+                        Y -= ((100f) / 100000) * (float)Math.Pow(this.Timer - this.delay, 2);
+                    }
+                    else
+                    {
+                        X -= ((100f) / 10000000) * (float)Math.Pow(this.Timer - this.delay, 2);
+                        Y -= ((100f) / 10000000) * (float)Math.Pow(this.Timer - this.delay, 2);
+                    }
+                    if (Y < -200)
+                        stage = 2;
+                }
+                else if (stage == 2)
+                {
+                    RemoveGraphic(spritemap);
+                    spritemap2.Play(Animation.down);
+                    AddGraphic(spritemap2);
+                    SetPosition(scene.random.Next(50, 801), -1000);
+                    stage = 3;
+                    counter = this.Timer;
+                    hitY = scene.random.Next(520, 750);
+                    //scene.random.Next(50, 801), scene.random.Next(520, 750)
+                }
+                else if (stage == 3)
+                {
+                    Console.WriteLine(Math.Pow(this.Timer - this.delay, 2));
+                    Y += ((100f) / 10000) * (float)Math.Pow(this.Timer - counter, 2);
+                    if (Y + 92/2 > hitY)
+                    {
+                        scene.Add(new Explosions(X, Y + 92 / 2, Explosions.ExplosionType.huge, 0));
+                        RemoveSelf();
+                    }
+                }
             }
             base.Update();
         }

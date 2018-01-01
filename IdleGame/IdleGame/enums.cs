@@ -41,5 +41,6 @@ namespace IdleGame
         Player,
         Crosshair,
         EnemyUnit,
+        Garbage
     }
 }

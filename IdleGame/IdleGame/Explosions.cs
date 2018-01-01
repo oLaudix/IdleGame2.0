@@ -41,21 +41,26 @@ namespace IdleGame
             {
                 spritemap = new Spritemap<Animation>("Assets/Img/Sprites/Explosions/explosion_small.png", 32, 48);
                 spritemap.Add(Animation.explosion, scene.GetAnimationString(0, 27), 3).NoRepeat();
+                SetHitbox(spritemap.TextureRegion.Width, spritemap.TextureRegion.Height, ColliderTags.Garbage);
             }
             else if (this.type == ExplosionType.medium)
             {
                 spritemap = new Spritemap<Animation>("Assets/Img/Sprites/Explosions/explosion_medium.png", 70, 70);
                 spritemap.Add(Animation.explosion, scene.GetAnimationString(0, 27), 3).NoRepeat();
+                SetHitbox(spritemap.TextureRegion.Width, spritemap.TextureRegion.Height, ColliderTags.Garbage);
             }
             else if (this.type == ExplosionType.big)
             {
                 spritemap = new Spritemap<Animation>("Assets/Img/Sprites/Explosions/explosion_big.png", 80, 96);
                 spritemap.Add(Animation.explosion, scene.GetAnimationString(0, 27), 3).NoRepeat();
+                SetHitbox(spritemap.TextureRegion.Width, spritemap.TextureRegion.Height, ColliderTags.Garbage);
             }
             else if (this.type == ExplosionType.huge)
             {
                 spritemap = new Spritemap<Animation>("Assets/Img/Sprites/Explosions/explosion_huge.png", 113, 137);
                 spritemap.Add(Animation.explosion, scene.GetAnimationString(0, 23), 3).NoRepeat();
+                SetHitbox(spritemap.TextureRegion.Width, spritemap.TextureRegion.Height, ColliderTags.Garbage);
+                Hitbox.SetPosition(0, -137 / 2);
                 spritemap.SetPosition(0, -137/2);
                 sound = explosion_sound_library[0];
                 //Console.WriteLine(X + "," + Y);
@@ -64,21 +69,29 @@ namespace IdleGame
             {
                 spritemap = new Spritemap<Animation>("Assets/Img/Sprites/Explosions/explosion_shell_normal.png", 60, 112);
                 spritemap.Add(Animation.explosion, scene.GetAnimationString(0, 26), 3).NoRepeat();
+                SetHitbox(spritemap.TextureRegion.Width, spritemap.TextureRegion.Height, ColliderTags.Garbage);
+                Hitbox.SetPosition(0, -112 / 2);
                 spritemap.SetPosition(0, -112 / 2);
             }
             else if (this.type == ExplosionType.shell_big)
             {
                 spritemap = new Spritemap<Animation>("Assets/Img/Sprites/Explosions/explosion_shell_big.png", 68, 170);
                 spritemap.Add(Animation.explosion, scene.GetAnimationString(0, 29), 3).NoRepeat();
+                SetHitbox(spritemap.TextureRegion.Width, spritemap.TextureRegion.Height, ColliderTags.Garbage);
+                Hitbox.SetPosition(0, -170 / 2);
                 spritemap.SetPosition(0, -170 / 2);
             }
             spritemap.CenterOrigin();
-
+            Hitbox.CenterOrigin();
             this.delay = delay;
             Layer = -600;
         }
+
         public override void Update()
         {
+            if (Overlap(X, Y, ColliderTags.Garbage) || Overlap(X, Y, ColliderTags.EnemyUnit))
+                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
+                    Layer = Overlapped.Layer + 1;
             if (this.Timer == delay)
             {
                 this.LifeSpan = this.Timer + (int)spritemap.Anim(Animation.explosion).TotalDuration;

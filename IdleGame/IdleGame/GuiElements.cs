@@ -123,7 +123,7 @@ namespace IdleGame
         public override void Update()
         {
             unitInfo.String = 
-                "Level: " + element.unit.level + ((element.unit.GetNumLevelsToUnlockByGivenGoldAmount() > 0) ? " +" + element.unit.GetNumLevelsToUnlockByGivenGoldAmount().ToString() : "") + "\n" +
+                "Level: " + element.unit.level + ((element.unit.NumLevelsToUnlock > 0) ? " +" + element.unit.NumLevelsToUnlock.ToString() : "") + "\n" +
                 "Cost: " + FormatNumber(element.unit.nextUpgradeCost) + "\n" +
                 "Power: " + FormatNumber(element.unit.currentDPS) + "\n" +
                 "+Power: " + FormatNumber(element.unit.nextLevelDPSDiff);
@@ -288,7 +288,7 @@ namespace IdleGame
         public override void Update()
         {
             unitInfo.String =
-                "Level: " + element.level + ((element.GetNumLevelsToUnlockByGivenGoldAmount() > 0) ? " +" + element.GetNumLevelsToUnlockByGivenGoldAmount().ToString() : "") + "\n" +
+                "Level: " + element.level + ((element.NumLevelsToUnlock > 0) ? " +" + element.NumLevelsToUnlock.ToString() : "") + "\n" +
                 "Cost: " + FormatNumber(element.upgradeCost) + "\n" +
                 "Power: " + FormatNumber(element.currentDamage) + "\n" +
                 "+Power: " + FormatNumber(element.nextLevelDamageDiff) + "\n" +
@@ -436,6 +436,7 @@ namespace IdleGame
             //gearName.SetPosition(250, 0);
             //gearName.CenterTextOriginX();
             InfoText.CenterTextOriginX();
+            Layer = -999;
         }
 
         public void CreateText(ref Text t, string text, int size, Vector2 Pos)

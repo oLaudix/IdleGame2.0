@@ -30,6 +30,7 @@ namespace IdleGame
         public double currentDamage = 0;
         public double upgradeCost = 0;
         public double nextLevelDamageDiff = 0;
+        public int NumLevelsToUnlock = 0;
         public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/playerUnit.png", 140, 61);
         int animating = -1;
         public bool isWindingUp = false;
@@ -49,6 +50,8 @@ namespace IdleGame
             AddGraphic(spritemap);
             this.X = x;
             this.Y = y;
+            SetHitbox(140, 61, ColliderTags.Garbage);
+            Hitbox.CenterOrigin();
             //Sound.GlobalVolume = 0.1f;
         }
 
@@ -103,6 +106,12 @@ namespace IdleGame
 
         public override void Update()
         {
+            if (this.Timer % 60 == 0)
+                this.NumLevelsToUnlock = this.GetNumLevelsToUnlockByGivenGoldAmount();
+
+            if (Overlap(X, Y, ColliderTags.Garbage))
+                if (Hitbox.Bottom > Overlapped.Hitbox.Bottom)
+                    Layer = Overlapped.Layer - 1;
             if (Input.MouseButtonPressed(MouseButton.Left) || Input.MouseButtonReleased(MouseButton.Left))
             {
                 //Console.WriteLine(Math.Atan2(Input.MouseX, Input.MouseY));
@@ -121,7 +130,7 @@ namespace IdleGame
                     animating--;
                     spritemap.Play(Animation.Shoot);
                     wind_up.Stop();
-                    Shooting.Volume = Sound.GlobalVolume * 0.5f;
+                    //Shooting.Volume = Sound.GlobalVolume * 0.5f;
                     Shooting.Play();
                     isWindingUp = false;
                 }

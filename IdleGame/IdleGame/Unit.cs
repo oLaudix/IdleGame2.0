@@ -19,6 +19,7 @@ namespace IdleGame
         public int heroID;
         public string name;
         public int level;
+        public int NumLevelsToUnlock = 0;
         MainScene scene = (MainScene)MainScene.Instance;
 
         public Unit(int heroID, string name, double purchaseCost, string icon)
@@ -158,6 +159,11 @@ namespace IdleGame
             double baseUpgradeCostByLevel = this.GetBaseUpgradeCostByLevel(iLevel);
             double a = baseUpgradeCostByLevel * (1.0 - scene.Bonuses[BonusType.UpgradeCost]);
             return (double)Math.Ceiling(a);
+        }
+        public override void Update()
+        {
+            Console.WriteLine("test");
+            base.Update();
         }
     }
 }

@@ -15,11 +15,12 @@ namespace IdleGame
             var game = new Game("Spritemap Animation", 1920, 1080);
             game.GameFolder = "PlayerSessionDemo";
             var session = game.AddSession("Player");
-            Console.WriteLine(session.Data.DefaultFilename);
             session.Data.ExportMode = DataSaver.DataExportMode.Config;
             game.SetWindowAutoFullscreen(true);
             var scene = new MainScene(session);
             game.MouseVisible = true ;
+            Music.GlobalVolume = 1f;
+            Sound.GlobalVolume = 0.5f;
             game.Start(scene);
         }
     }
