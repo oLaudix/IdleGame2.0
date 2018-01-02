@@ -98,8 +98,8 @@ namespace IdleGame
             {
                 Layer = 1000
             };
-            player.gold = 1E100;
-            Console.WriteLine(Convert.ToSingle(1E100));
+            //player.gold = 1E100;
+            //Console.WriteLine(Convert.ToSingle(1E100));
             /*new Sniper(1112, 610);
             new Soldier(1280, 510);
             new Mortar(1730, 722);
@@ -113,9 +113,9 @@ namespace IdleGame
             new Hover(1450, 320);
             new Rocket(1700, 550);*/
 
-            //this.soundVolume = Sound.GlobalVolume;
-            //Sound.GlobalVolume = 0;
-            //Music.Play();
+            this.soundVolume = Sound.GlobalVolume;
+            Sound.GlobalVolume = 0;
+            Music.Play();
 
             new Garbage(754, 462, "Assets/Img/Decals/des09.png", false);
             new Garbage(831, 533, "Assets/Img/Decals/des16.png", true);
@@ -143,6 +143,17 @@ namespace IdleGame
             else
                 Console.WriteLine("Ni ma pliku");
             StartStage();
+            for (var a = 0; a < 5; a++)
+            {
+                new Enemy_Soldier(random.Next(-500, -40), random.Next(511, 700));
+                new Enemy_Bazooka(random.Next(-500, -40), random.Next(511, 700));
+                new Enemy_Shield(random.Next(-500, -40), random.Next(511, 700));
+                new Enemy_Riflemon(random.Next(-500, -40), random.Next(511, 700));
+                if (a > 2)
+                    new Enemy_Cokka(random.Next(-500, -40), random.Next(511, 700));
+                if (a > 3)
+                    new Enemy_high_tonk(random.Next(-500, -40), random.Next(511, 700));
+            }
         }
 
         public void LoadGame()
@@ -175,8 +186,6 @@ namespace IdleGame
         public void SaveGame()
         {
             session.Data.SetData("playerHonor", player.honor);
-            float temp_gold_1 = (float)(player.gold / 1E30f);
-            float temp_gold_2 = (float)player.gold % 1E30f;
             session.Data.SetData("playerGold", player.gold);
             session.Data.SetData("playerLevel", player.level);
             session.Data.SetData("stageUnlocked", currentStage);
@@ -199,8 +208,8 @@ namespace IdleGame
         public void LayerEnemies()
         {
             int order = -500;
-            List<Enemy_Units> SortedList = enemyList.OrderBy(o => (o.Y + o.Hitbox.Height)).ToList();
-            foreach(var unit in SortedList)
+            List<Enemy_Units> SortedList = enemyList.OrderBy(o => (o.Hitbox.Bottom)).ToList();
+            foreach (var unit in SortedList)
             {
                 order--;
                 unit.Layer = order;
@@ -210,7 +219,10 @@ namespace IdleGame
         public override void Update()
         {
             if (this.Timer % 60 == 0)
+            {
                 SaveGame();
+                LayerEnemies();
+            }
             if (needUpdate)
             {
                 UpdateBonuses();
@@ -219,22 +231,22 @@ namespace IdleGame
                     unit.UpdateUnitStats();
                 needUpdate = false;
             }
-            /*if (GetCount<Enemy_Soldier>() < 2)
+            /*if (GetCount<Enemy_Soldier>() < 5)
             {
                 new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }
-            if (GetCount<Enemy_Bazooka>() < 2)
+            if (GetCount<Enemy_Bazooka>() < 5)
             {
                 new Enemy_Bazooka(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }
-            if (GetCount<Enemy_Riflemon>() < 2)
+            if (GetCount<Enemy_Riflemon>() < 5)
             {
                 new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }
-            if (GetCount<Enemy_Shield>() < 2)
+            if (GetCount<Enemy_Shield>() < 5)
             {
                 new Enemy_Shield(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
@@ -244,21 +256,16 @@ namespace IdleGame
                 new Enemy_Cokka(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }
-            if (GetCount<Enemy_Mummy>() < 2)
+            if (GetCount<Enemy_Mummy>() < 0)
             {
                 new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
+            }
+            if (GetCount<Enemy_high_tonk>() < 1)
+            {
+                new Enemy_high_tonk(random.Next(-60, -40), random.Next(511, 700));
+                LayerEnemies();
             }*/
-            if (GetCount<Enemy_Riflemon>() < 20)
-            {
-                new Enemy_Riflemon(random.Next(-100, -50), random.Next(490, 720));
-                LayerEnemies();
-            }
-            if (GetCount<Enemy_Soldier>() < 0)
-            {
-                new Enemy_Soldier(random.Next(-100, -50), random.Next(490, 720));
-                LayerEnemies();
-            }
             isHit = false;
             HUD();
             base.Update();

@@ -28,6 +28,8 @@ namespace IdleGame
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_2.ogg"){ Loop = false });
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_3.ogg"){ Loop = false });
             stop_running = scene.random.Next(50, 660);
+            //SetPosition(scene.random.Next(-500, -40), scene.random.Next(490, 700));
+            //Console.WriteLine(X + " " + Y);
         }
 
         public void Reset()
@@ -142,7 +144,7 @@ namespace IdleGame
             {
                 runtime--;
                 X++;
-                if (runtime == 0)
+                if (X > stop_running)
                 {
                     runtime = (int)spritemap.Anim(Animation.Idle).TotalDuration*3;
                     spritemap.Play(Animation.Idle);
@@ -172,19 +174,21 @@ namespace IdleGame
                 if (!isDead)
                 {
                     scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
-                    scene.enemyList.RemoveIfContains(this);
-                    Hitbox.Width = 0;
-                    Hitbox.Height = 0;
+                    //scene.enemyList.RemoveIfContains(this);
                     isDead = true;
                     Animation test = (Animation)scene.random.Next(0, 7);
-                    runtime = 60 * 2;
+                    runtime = 60 * 10;
                     if ((int)test == 0)
                         soldier_death_list[0].Play();
                     else
                         soldier_death_list[scene.random.Next(1, 4)].Play();
                     spritemap.Play(test);
                     this.LifeSpan = this.Timer + runtime;
-                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                    new Enemy_Soldier(scene.random.Next(-60, -40), scene.random.Next(490, 700));
+                }
+                if (isDead && runtime == 1)
+                {
+                    scene.enemyList.RemoveIfContains(this);
                 }
             }
             base.Update();
@@ -249,7 +253,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Run)
                 {
                     X++;
-                    if (runtime == 0)
+                    if (X > stop_running)
                     {
                         spritemap.Play(Animation.Kneel);
                         runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
@@ -270,19 +274,21 @@ namespace IdleGame
                 if (!isDead)
                 {
                     scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
-                    scene.enemyList.RemoveIfContains(this);
-                    Hitbox.Width = 0;
-                    Hitbox.Height = 0;
+                    //scene.enemyList.RemoveIfContains(this);
                     isDead = true;
                     Animation test = (Animation)scene.random.Next(0, 7);
-                    runtime = 60 * 2;
+                    runtime = 60 * 10;
                     if ((int)test == 0)
                         soldier_death_list[0].Play();
                     else
                         soldier_death_list[scene.random.Next(1, 4)].Play();
                     spritemap.Play(test);
                     this.LifeSpan = this.Timer + runtime;
-                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                    new Enemy_Bazooka(scene.random.Next(-60, -40), scene.random.Next(490, 700));
+                }
+                if (isDead && runtime == 1)
+                {
+                    scene.enemyList.RemoveIfContains(this);
                 }
             }
             base.Update();
@@ -348,7 +354,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Run)
                 {
                     X++;
-                    if (X > stop_running || (CurrentHP < MaxHP && X > 50))
+                    if (X > stop_running)
                     {
                         spritemap.Play(Animation.Shoot);
                         sound.Play();
@@ -373,19 +379,21 @@ namespace IdleGame
                 {
                     scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     sound.Stop();
-                    scene.enemyList.RemoveIfContains(this);
-                    //Hitbox.Width = 0;
-                    //Hitbox.Height = 0;
+                    //scene.enemyList.RemoveIfContains(this);
                     isDead = true;
                     Animation test = (Animation)scene.random.Next(0, 7);
-                    runtime = 60 * 2;
+                    runtime = 60 * 10;
                     if ((int)test == 0)
                         soldier_death_list[0].Play();
                     else
                         soldier_death_list[scene.random.Next(1, 4)].Play();
                     spritemap.Play(test);
                     this.LifeSpan = this.Timer + runtime;
-                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                    new Enemy_Riflemon(scene.random.Next(-60, -40), scene.random.Next(490, 700));
+                }
+                if (isDead && runtime == 1)
+                {
+                    scene.enemyList.RemoveIfContains(this);
                 }
             }
             base.Update();
@@ -456,7 +464,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Run)
                 {
                     X++;
-                    if (runtime == 0)
+                    if (X > stop_running)
                     {
                         spritemap.Play(Animation.WeaponOut);
                         runtime = (int)spritemap.Anim(Animation.WeaponOut).TotalDuration * 1;
@@ -489,19 +497,21 @@ namespace IdleGame
                 if (!isDead)
                 {
                     scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
-                    scene.enemyList.RemoveIfContains(this);
-                    Hitbox.Width = 0;
-                    Hitbox.Height = 0;
+                    //scene.enemyList.RemoveIfContains(this);
                     isDead = true;
                     Animation test = (Animation)scene.random.Next(0, 7);
-                    runtime = 60 * 2;
+                    runtime = 60 * 10;
                     if ((int)test == 0)
                         soldier_death_list[0].Play();
                     else
                         soldier_death_list[scene.random.Next(1, 4)].Play();
                     spritemap.Play(test);
                     this.LifeSpan = this.Timer + runtime;
-                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                    new Enemy_Shield(scene.random.Next(-60, -40), scene.random.Next(490, 700));
+                }
+                if (isDead && runtime == 1)
+                {
+                    scene.enemyList.RemoveIfContains(this);
                 }
             }
             base.Update();
@@ -558,7 +568,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Run)
                 {
                     X++;
-                    if (runtime == 0)
+                    if (X > stop_running)
                     {
                         spritemap.Play(Animation.WeaponOut);
                         runtime = (int)spritemap.Anim(Animation.WeaponOut).TotalDuration * 1;
@@ -576,18 +586,20 @@ namespace IdleGame
                 if (!isDead)
                 {
                     scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
-                    scene.enemyList.RemoveIfContains(this);
-                    Hitbox.Width = 0;
-                    Hitbox.Height = 0;
+                    //scene.enemyList.RemoveIfContains(this);
                     scene.Add(new Explosions(X + 42, Y + 39, Explosions.ExplosionType.small, 0));
                     scene.Add(new Explosions(X + 60, Y + 32, Explosions.ExplosionType.small, 6));
                     scene.Add(new Explosions(X + 20, Y + 43, Explosions.ExplosionType.small, 12));
                     isDead = true;
-                    runtime = 60 * 2;
+                    runtime = 60 * 10;
                     spritemap.Play(Animation.Death);
                     this.LifeSpan = this.Timer + runtime;
                     scene.Add(new Explosions(X + 45, Y + 45, Explosions.ExplosionType.big, runtime - 6));
-                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                    new Enemy_Cokka(scene.random.Next(-60, -40), scene.random.Next(490, 700));
+                }
+                if (isDead && runtime == 1)
+                {
+                    scene.enemyList.RemoveIfContains(this);
                 }
             }
             base.Update();
@@ -641,7 +653,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Run)
                 {
                     X++;
-                    if (runtime == 0)
+                    if (X > stop_running)
                     {
                         spritemap.Play(Animation.Shoot);
                         runtime = (int)spritemap.Anim(Animation.Shoot).TotalDuration * 2;
@@ -659,14 +671,16 @@ namespace IdleGame
                 {
                     scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     DeathSound.Play();
-                    scene.enemyList.RemoveIfContains(this);
-                    Hitbox.Width = 0;
-                    Hitbox.Height = 0;
+                    //scene.enemyList.RemoveIfContains(this);
                     isDead = true;
-                    runtime = (int)spritemap.Anim(Animation.Death).TotalDuration * 2;
+                    runtime = (int)spritemap.Anim(Animation.Death).TotalDuration;
                     spritemap.Play(Animation.Death);
                     this.LifeSpan = this.Timer + runtime;
-                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                    new Enemy_Mummy(scene.random.Next(-60, -40), scene.random.Next(490, 700));
+                }
+                if (isDead && runtime == 1)
+                {
+                    scene.enemyList.RemoveIfContains(this);
                 }
             }
             base.Update();
@@ -726,7 +740,7 @@ namespace IdleGame
                 if (spritemap.CurrentAnim == Animation.Run)
                 {
                     X++;
-                    if (runtime == 0)
+                    if (X > stop_running)
                     {
                         spritemap.Play(Animation.Stop);
                         runtime = (int)spritemap.Anim(Animation.Stop).TotalDuration * 1;
@@ -750,20 +764,22 @@ namespace IdleGame
                 if (!isDead)
                 {
                     scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
-                    scene.enemyList.RemoveIfContains(this);
-                    Hitbox.Width = 0;
-                    Hitbox.Height = 0;
+                    //scene.enemyList.RemoveIfContains(this);
                     scene.Add(new Explosions(X + 54, Y + 83, Explosions.ExplosionType.medium, 0));
                     scene.Add(new Explosions(X + 89, Y + 36, Explosions.ExplosionType.medium, 3));
                     scene.Add(new Explosions(X + 87, Y + 83, Explosions.ExplosionType.medium, 12));
                     scene.Add(new Explosions(X + 73, Y + 60, Explosions.ExplosionType.medium, 9));
                     scene.Add(new Explosions(X + 65, Y + 29, Explosions.ExplosionType.medium, 6));
                     isDead = true;
-                    runtime = 60 * 2;
+                    runtime = 60 * 10;
                     spritemap.Play(Animation.Death);
                     this.LifeSpan = this.Timer + runtime;
                     scene.Add(new Explosions(X + 78, Y + 105, Explosions.ExplosionType.huge, runtime - 6));
-                    //new Enemy_Soldier(scene.random.Next(-50, -10), scene.random.Next(511, 754));
+                    new Enemy_high_tonk(scene.random.Next(-60, -40), scene.random.Next(490, 700));
+                }
+                if (isDead && runtime == 1)
+                {
+                    scene.enemyList.RemoveIfContains(this);
                 }
             }
             base.Update();
