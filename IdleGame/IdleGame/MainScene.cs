@@ -440,8 +440,8 @@ namespace IdleGame
         void CreateGear()
         {
             this.gearList.Add(new Gear("Medal of Honor", 0, BonusType.MonsterGold, 0.1f, 0.5f, 0.25f, "Assets/Img/Gear/icon_moh.png"));
-            //this.gearList.Add(new Gear("High Capacity Battery", 0, BonusType.BerserkerRageDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_battery.png"));
-            //this.gearList.Add(new Gear("Fusion Core", 10, BonusType.BerserkerRageCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_fusion_core.png"));
+            this.gearList.Add(new Gear("High Capacity Battery", 0, BonusType.BerserkerRageDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_battery.png"));
+            this.gearList.Add(new Gear("Fusion Core", 10, BonusType.BerserkerRageCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_fusion_core.png"));
             this.gearList.Add(new Gear("Dark Matter", 0, BonusType.AllDamage, 0.02f, 0.9f, 0.9f, "Assets/Img/Gear/icon_dark_matter.png"));
             this.gearList.Add(new Gear("Treasure Chest", 0, BonusType.ChestGold, 0.2f, 0.4f, 0.2f, "Assets/Img/Gear/icon_chest.png"));
             this.gearList.Add(new Gear("Philosopher's Stone", 0, BonusType.AllGold, 0.15f, 0.4f, 0.2f, "Assets/Img/Gear/icon_stone.png"));
@@ -450,18 +450,18 @@ namespace IdleGame
             this.gearList.Add(new Gear("Tyrant Treasure Box", 0, BonusType.ChanceFor10xGold, 0.005f, 0.3f, 0.15f, "Assets/Img/Gear/icon_tyrant.png"));
             this.gearList.Add(new Gear("Unit 2 Vulcan Cannon", 0, BonusType.PlayerDamage, 0.04f, 0.6f, 0.30f, "Assets/Img/Gear/icon_vulcan_cannon.png"));
             this.gearList.Add(new Gear("Poo Covered Ammo", 0, BonusType.CriticalDamage, 0.2f, 0.3f, 0.15f, "Assets/Img/Gear/icon_poo.png"));
-            //this.gearList.Add(new Gear("Canned Food", 10, BonusType.WarCryCooldown, 0.05f, 1.2f, 0.6f, "Assets/Img/Gear/icon_canned_food.png"));
-            //this.gearList.Add(new Gear("Martian Element X", 10, BonusType.HandOfMidasCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_martian_element_x.png"));
-            //this.gearList.Add(new Gear("Experimental Core", 0, BonusType.ShadowCloneDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_unit03_core.png"));
-            //this.gearList.Add(new Gear("Scrap", 10, BonusType.ShadowCloneCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_scrap.png"));
-            //this.gearList.Add(new Gear("Mysterious Liquid 2.0", 0, BonusType.CriticalStrikeDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_mysterious_liquid_special.png"));
-            //this.gearList.Add(new Gear("Martian Energy", 0, BonusType.HandOfMidasDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_martian_energy.png"));
+            this.gearList.Add(new Gear("Canned Food", 10, BonusType.WarCryCooldown, 0.05f, 1.2f, 0.6f, "Assets/Img/Gear/icon_canned_food.png"));
+            this.gearList.Add(new Gear("Martian Element X", 10, BonusType.HandOfMidasCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_martian_element_x.png"));
+            this.gearList.Add(new Gear("Experimental Core", 0, BonusType.ShadowCloneDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_unit03_core.png"));
+            this.gearList.Add(new Gear("Scrap", 10, BonusType.ShadowCloneCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_scrap.png"));
+            this.gearList.Add(new Gear("Mysterious Liquid 2.0", 0, BonusType.CriticalStrikeDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_mysterious_liquid_special.png"));
+            this.gearList.Add(new Gear("Martian Energy", 0, BonusType.HandOfMidasDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_martian_energy.png"));
             this.gearList.Add(new Gear("Spoils of War", 25, BonusType.UpgradeCost, 0.02f, 0.3f, 0.15f, "Assets/Img/Gear/icon_spoils.png"));
-            //this.gearList.Add(new Gear("Mysterious Liquid", 10, BonusType.CriticalStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_mysterious_liquid.png"));
+            this.gearList.Add(new Gear("Mysterious Liquid", 10, BonusType.CriticalStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_mysterious_liquid.png"));
             this.gearList.Add(new Gear("Mobile Artillery Cannons", 10, BonusType.HeavenlyStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_warhead.png"));
             //this.gearList.Add(new Gear("Tincture of the Maker", 0, BonusType.AllDamage, 0.05f, 0.1f, 0.05f, "Assets/Img/Gear/icon_chest.png"));
             this.gearList.Add(new Gear("Lucky Charm", 0, BonusType.BonusRelic, 0.05f, 0.3f, 0.15f, "Assets/Img/Gear/icon_charm.png"));
-            //this.gearList.Add(new Gear("Shrooms", 0, BonusType.WarCryDuration, 0.1f, 1.2f, 0.6f, "Assets/Img/Gear/icon_shroom.png"));
+            this.gearList.Add(new Gear("Shrooms", 0, BonusType.WarCryDuration, 0.1f, 1.2f, 0.6f, "Assets/Img/Gear/icon_shroom.png"));
         }
 
         void CreateUnits()
