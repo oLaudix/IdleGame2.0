@@ -229,43 +229,10 @@ namespace IdleGame
                 player.UpdatePlayerStats();
                 foreach (var unit in unitsList)
                     unit.UpdateUnitStats();
+                foreach (var skill in activeSkillList)
+                    skill.UpdateStats();
                 needUpdate = false;
             }
-            /*if (GetCount<Enemy_Soldier>() < 5)
-            {
-                new Enemy_Soldier(random.Next(-60, -40), random.Next(511, 700));
-                LayerEnemies();
-            }
-            if (GetCount<Enemy_Bazooka>() < 5)
-            {
-                new Enemy_Bazooka(random.Next(-60, -40), random.Next(511, 700));
-                LayerEnemies();
-            }
-            if (GetCount<Enemy_Riflemon>() < 5)
-            {
-                new Enemy_Riflemon(random.Next(-60, -40), random.Next(511, 700));
-                LayerEnemies();
-            }
-            if (GetCount<Enemy_Shield>() < 5)
-            {
-                new Enemy_Shield(random.Next(-60, -40), random.Next(511, 700));
-                LayerEnemies();
-            }
-            if (GetCount<Enemy_Cokka>() < 2)
-            {
-                new Enemy_Cokka(random.Next(-60, -40), random.Next(511, 700));
-                LayerEnemies();
-            }
-            if (GetCount<Enemy_Mummy>() < 0)
-            {
-                new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 700));
-                LayerEnemies();
-            }
-            if (GetCount<Enemy_high_tonk>() < 1)
-            {
-                new Enemy_high_tonk(random.Next(-60, -40), random.Next(511, 700));
-                LayerEnemies();
-            }*/
             isHit = false;
             HUD();
             base.Update();
@@ -308,9 +275,6 @@ namespace IdleGame
                 session.Data.ClearFile();
                 Game.Close();
             }
-
-            //player.spritemap.Angle = (float)((Math.Atan2(Input.MouseX - player.X, Input.MouseY - player.Y) - 1.5) * (180 / Math.PI));
-            //Console.WriteLine(isHit);
         }
 
         public void CreateTextEntity(ref Entity e, ref Text t, int x, int y, int size)

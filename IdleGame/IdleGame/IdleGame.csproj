@@ -380,6 +380,12 @@
     <Content Include="Assets\Img\Gui\icon_can_buy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Gui\icon_clone_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_clone_inactive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\Gui\icon_dicokka.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -393,6 +399,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Img\Gui\icon_heli.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_highmorale_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_highmorale_inactive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Img\Gui\icon_hover.png">
@@ -431,7 +443,19 @@
     <Content Include="Assets\Img\Gui\icon_motorized_infantry.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Gui\icon_overdrive_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_overdrive_inactive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\Gui\icon_paratroopers.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_perfectaim_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_perfectaim_inactive.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Img\Gui\icon_player.png">

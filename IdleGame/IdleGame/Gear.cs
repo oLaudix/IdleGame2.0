@@ -103,16 +103,16 @@ namespace IdleGame
                     text = Math.Round(GetBonusMagnitude() * 100) + "% more Dosh";
                     break;
                 case BonusType.BerserkerRageDuration:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% increased Berserker Rage duration";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% longer Overgear duration";
                     break;
                 case BonusType.BerserkerRageCooldown:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% decreased Berserker Rage cooldown";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Overgear cooldown";
                     break;
                 case BonusType.CriticalStrikeDuration:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% increased Critical Strike duration";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% longer Perfect Aim duration";
                     break;
                 case BonusType.CriticalStrikeCooldown:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% decreased Critical Strike cooldown";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Perfect Aim cooldown";
                     break;
                 case BonusType.HandOfMidasCooldown:
                     text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Money Shot cooldown";
@@ -121,19 +121,19 @@ namespace IdleGame
                     text = Math.Round(GetBonusMagnitude() * 100) + "% longer Money Shot duration";
                     break;
                 case BonusType.HeavenlyStrikeCooldown:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% decreased Artillery Strike cooldown";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Barrage cooldown";
                     break;
                 case BonusType.ShadowCloneCooldown:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% decreased Reinforcements cooldown";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Unit 02 cooldown";
                     break;
                 case BonusType.ShadowCloneDuration:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% increased Reinforcements duration";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% longer Unit 02 duration";
                     break;
                 case BonusType.WarCryCooldown:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% decreased High Morale cooldown";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Motivational Speech cooldown";
                     break;
                 case BonusType.WarCryDuration:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% increased High Morale duration";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% longer Motivational Speech duration";
                     break;
                 case BonusType.BonusRelic:
                     text = Math.Round(GetBonusMagnitude() * 100) + "% increased Honor gained during Prestige";

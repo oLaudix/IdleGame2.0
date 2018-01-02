@@ -46,6 +46,14 @@ namespace IdleGame
             return (num * (1.0 - scene.Bonuses[BonusType.UpgradeCost]));
         }
 
+        public void UpdateStats()
+        {
+            this.magnitude = GetMagnitude();
+            this.cost = GetNextUpgradeCost(lvlreq, spacing);
+            this.TotalCooldown = GetTotalCooldown();
+            this.duration = GetDuration();
+        }
+
         public override void Update()
         {
             if (this.Timer % 20 == 0)
@@ -96,7 +104,17 @@ namespace IdleGame
             base.Update();
         }
 
+        public virtual int GetTotalCooldown()
+        {
+            return 0;
+        }
+
         public virtual int GetMagnitude()
+        {
+            return 0;
+        }
+
+        public virtual int GetDuration()
         {
             return 0;
         }
@@ -104,8 +122,8 @@ namespace IdleGame
         public void UpgradeSkill()
         {
             this.level++;
-            this.magnitude = GetMagnitude();
-            this.cost = GetNextUpgradeCost(lvlreq, spacing);
+            UpdateStats();
+            scene.needUpdate = true;
         }
 
         public bool MouseHover()
@@ -189,6 +207,16 @@ namespace IdleGame
             CreateText(ref durationText, "", 20, new Vector2(0, 0));
         }
 
+        public override int GetTotalCooldown()
+        {
+            return (int)(this.TotalCooldown * (1 - scene.Bonuses[BonusType.HeavenlyStrikeCooldown]));
+        }
+
+        public override int GetDuration()
+        {
+            return 0;
+        }
+
         public override int GetMagnitude()
         {
             return 70 * (1 + this.level);
@@ -199,8 +227,10 @@ namespace IdleGame
             {
                 InfoText.String = "Cost: " + FormatNumber(this.cost) +
                     "\nDeals Player damage x " + this.magnitude +
-                    "\nLevel: " + (level > 0 ? "" + level : "locked") +  
-                    "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") + 
+                    "\nLevel: " + (level > 0 ? "" + level : "locked") +
+                    "\nDuration: " + this.duration / 60 +
+                    "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
+                    "\nTotal Cooldown: " + (TotalCooldown / 60 / 60 + "m") + (TotalCooldown / 60 % 60) +
                     "\n\nTo use press 1.";
                 //Console.WriteLine("CD: " + this.cooldown);
             }
@@ -284,8 +314,8 @@ namespace IdleGame
             AddGraphic(spritemap);
             //spritemap.SetPosition(spritemap.X + 920, spritemap.Y + 660);
             spritemap.SetPosition(0, -100);
-            this.active_image = new Image("Assets/Img/Gui/icon_barrage_active.png");
-            this.inactive_image = new Image("Assets/Img/Gui/icon_barrage_inactive.png");
+            this.active_image = new Image("Assets/Img/Gui/icon_clone_active.png");
+            this.inactive_image = new Image("Assets/Img/Gui/icon_clone_inactive.png");
             AddGraphic(can_buy);
             infoBackground.SetPosition(infoBackground.X - 51, infoBackground.Y);
             InfoText.SetPosition(InfoText.X - 51, InfoText.Y);
@@ -308,9 +338,19 @@ namespace IdleGame
             durationText.SetPosition(25, 25);
         }
 
+        public override int GetTotalCooldown()
+        {
+            return (int)(this.TotalCooldown * (1 - scene.Bonuses[BonusType.ShadowCloneCooldown]));
+        }
+
         public override int GetMagnitude()
         {
             return (3 * this.level) + 4;
+        }
+
+        public override int GetDuration()
+        {
+            return (int)(this.duration * (1 + scene.Bonuses[BonusType.ShadowCloneDuration]));
         }
 
         public override void Update()
@@ -320,7 +360,9 @@ namespace IdleGame
                 InfoText.String = "Cost: " + FormatNumber(this.cost) +
                     "\nDeals Player damage " + this.magnitude + " times per second" +
                     "\nLevel: " + (level > 0 ? "" + level : "locked") +
+                    "\nDuration: " + this.duration / 60 +
                     "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
+                    "\nTotal Cooldown: " + (TotalCooldown / 60 / 60 + "m") + (TotalCooldown / 60 % 60) +
                     "\n\nTo use press 2.";
                 //Console.WriteLine("CD: " + this.cooldown);
             }
@@ -383,8 +425,8 @@ namespace IdleGame
         {
             this.lvlreq = 200;
             this.spacing = 140;
-            this.active_image = new Image("Assets/Img/Gui/icon_barrage_active.png");
-            this.inactive_image = new Image("Assets/Img/Gui/icon_barrage_inactive.png");
+            this.active_image = new Image("Assets/Img/Gui/icon_perfectaim_active.png");
+            this.inactive_image = new Image("Assets/Img/Gui/icon_perfectaim_inactive.png");
             AddGraphic(can_buy);
             can_buy.SetPosition(X - 1, Y - 1);
             AddGraphic(active_image);
@@ -393,7 +435,7 @@ namespace IdleGame
             infoBackground.SetPosition(infoBackground.X - 51 * 2, infoBackground.Y);
             InfoText.SetPosition(InfoText.X - 51 * 2, InfoText.Y);
             skillName.SetPosition(skillName.X - 51 * 2, skillName.Y);
-            this.name = "Precise Aim";
+            this.name = "Perfect Aim";
             this.magnitude = (3 * this.level) + 14;
             this.cost = GetNextUpgradeCost(this.lvlreq, this.spacing);
             this.cooldown = 0;
@@ -407,6 +449,16 @@ namespace IdleGame
             durationText.SetPosition(25, 25);
         }
 
+        public override int GetTotalCooldown()
+        {
+            return (int)(this.TotalCooldown * (1 - scene.Bonuses[BonusType.CriticalStrikeCooldown]));
+        }
+
+        public override int GetDuration()
+        {
+            return (int)(this.duration * (1 + scene.Bonuses[BonusType.CriticalStrikeDuration]));
+        }
+
         public override int GetMagnitude()
         {
             return (3 * this.level) + 14;
@@ -418,7 +470,9 @@ namespace IdleGame
                 InfoText.String = "Cost: " + FormatNumber(this.cost) +
                     "\nIncrease Critical Strike Chance by " + this.magnitude + "%" +
                     "\nLevel: " + (level > 0 ? "" + level : "locked") +
+                    "\nDuration: " + this.duration / 60 +
                     "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
+                    "\nTotal Cooldown: " + (TotalCooldown / 60 / 60 + "m") + (TotalCooldown / 60 % 60) + 
                     "\n\nTo use press 3.";
                 //Console.WriteLine("CD: " + this.cooldown);
             }
@@ -464,8 +518,8 @@ namespace IdleGame
         {
             this.lvlreq = 300;
             this.spacing = 110;
-            this.active_image = new Image("Assets/Img/Gui/icon_barrage_active.png");
-            this.inactive_image = new Image("Assets/Img/Gui/icon_barrage_inactive.png");
+            this.active_image = new Image("Assets/Img/Gui/icon_highmorale_active.png");
+            this.inactive_image = new Image("Assets/Img/Gui/icon_highmorale_inactive.png");
             AddGraphic(can_buy);
             can_buy.SetPosition(X - 1, Y - 1);
             AddGraphic(active_image);
@@ -474,7 +528,7 @@ namespace IdleGame
             infoBackground.SetPosition(infoBackground.X - 51 * 3, infoBackground.Y);
             InfoText.SetPosition(InfoText.X - 51 * 3, InfoText.Y);
             skillName.SetPosition(skillName.X - 51 * 3, skillName.Y);
-            this.name = "Motivational Speech";
+            this.name = "Increase Morale";
             this.magnitude = (50 * this.level) + 100;
             this.cost = GetNextUpgradeCost(this.lvlreq, this.spacing);
             this.cooldown = 0;
@@ -488,6 +542,16 @@ namespace IdleGame
             durationText.SetPosition(25, 25);
         }
 
+        public override int GetTotalCooldown()
+        {
+            return (int)(this.TotalCooldown * (1 - scene.Bonuses[BonusType.WarCryCooldown]));
+        }
+
+        public override int GetDuration()
+        {
+            return (int)(this.duration * (1 + scene.Bonuses[BonusType.WarCryDuration]));
+        }
+
         public override int GetMagnitude()
         {
             return (50 * this.level) + 100;
@@ -499,7 +563,9 @@ namespace IdleGame
                 InfoText.String = "Cost: " + FormatNumber(this.cost) +
                     "\nIncrease Damage by " + this.magnitude + "%" +
                     "\nLevel: " + (level > 0 ? "" + level : "locked") +
+                    "\nDuration: " + this.duration / 60 +
                     "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
+                    "\nTotal Cooldown: " + (TotalCooldown / 60 / 60 + "m") + (TotalCooldown / 60 % 60) +
                     "\n\nTo use press 4.";
                 //Console.WriteLine("CD: " + this.cooldown);
             }
@@ -541,8 +607,8 @@ namespace IdleGame
         {
             this.lvlreq = 400;
             this.spacing = 130;
-            this.active_image = new Image("Assets/Img/Gui/icon_barrage_active.png");
-            this.inactive_image = new Image("Assets/Img/Gui/icon_barrage_inactive.png");
+            this.active_image = new Image("Assets/Img/Gui/icon_overdrive_active.png");
+            this.inactive_image = new Image("Assets/Img/Gui/icon_overdrive_inactive.png");
             AddGraphic(can_buy);
             can_buy.SetPosition(X - 1, Y - 1);
             AddGraphic(active_image);
@@ -565,6 +631,16 @@ namespace IdleGame
             durationText.SetPosition(25, 25);
         }
 
+        public override int GetTotalCooldown()
+        {
+            return (int)(this.TotalCooldown * (1 - scene.Bonuses[BonusType.BerserkerRageCooldown]));
+        }
+
+        public override int GetDuration()
+        {
+            return (int)(this.duration * (1 + scene.Bonuses[BonusType.BerserkerRageDuration]));
+        }
+
         public override int GetMagnitude()
         {
             return (30 * this.level) + 40;
@@ -576,7 +652,9 @@ namespace IdleGame
                 InfoText.String = "Cost: " + FormatNumber(this.cost) +
                     "\nIncrease Player Damage by " + this.magnitude + "%" +
                     "\nLevel: " + (level > 0 ? "" + level : "locked") +
+                    "\nDuration: " + this.duration / 60 +
                     "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
+                    "\nTotal Cooldown: " + (TotalCooldown / 60 / 60 + "m") + (TotalCooldown / 60 % 60) +
                     "\n\nTo use press 5.";
                 //Console.WriteLine("CD: " + this.cooldown);
             }
@@ -637,10 +715,21 @@ namespace IdleGame
             durationText.SetPosition(25, 25);
         }
 
+        public override int GetTotalCooldown()
+        {
+            return (int)(this.TotalCooldown * (1 - scene.Bonuses[BonusType.HandOfMidasCooldown]));
+        }
+
         public override int GetMagnitude()
         {
             return (5 * this.level) + 10;
         }
+
+        public override int GetDuration()
+        {
+            return (int)(this.duration * (1 + scene.Bonuses[BonusType.HandOfMidasDuration]));
+        }
+
         public override void Update()
         {
             if (this.Timer % 20 == 0)
@@ -648,7 +737,9 @@ namespace IdleGame
                 InfoText.String = "Cost: " + FormatNumber(this.cost) +
                     "\nGet " + this.magnitude + "% of money for each succesful hit" +
                     "\nLevel: " + (level > 0 ? "" + level : "locked") +
+                    "\nDuration: " + this.duration / 60 + 
                     "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
+                    "\nTotal Cooldown: " + (TotalCooldown / 60 / 60 + "m") + (TotalCooldown / 60 % 60) +
                     "\n\nTo use press 6.";
                 //Console.WriteLine("CD: " + this.cooldown);
             }

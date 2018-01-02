@@ -251,7 +251,7 @@ namespace IdleGame
                     Pos.Y += 51;
                     Pos.X = 850;
                     if (Pos.Y > 150)
-                        Pos.X = 850 - 25;
+                        Pos.X = 850 - 50;
                 }
             }
             new PlayerInfo(1920 / 2, 1080 - 261 - 261, icon, this);

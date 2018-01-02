@@ -277,3 +277,11 @@ C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_barrage_inactive.png
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Sprites\clone.png
 C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Sounds\clone_dying.ogg
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_clone_active.png
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_clone_inactive.png
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_perfectaim_active.png
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_perfectaim_inactive.png
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_highmorale_active.png
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_highmorale_inactive.png
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_overdrive_active.png
+c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_overdrive_inactive.png
