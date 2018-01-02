@@ -57,9 +57,11 @@ namespace IdleGame
 
         public void UpdatePlayerStats()
         {
+            critChance = -100;
             this.currentDamage = GetPlayerAttackDamageByLevel(this.level);
             this.upgradeCost = GetUpgradeCostByLevel(this.level);
             this.nextLevelDamageDiff = GetPlayerAttackDamageByLevel(this.level + 1) - GetPlayerAttackDamageByLevel(this.level);
+            critChance = 0.01;
         }
 
         public void UpgradePlayer()

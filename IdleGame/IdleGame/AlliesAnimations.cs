@@ -355,10 +355,10 @@ namespace IdleGame
                 soundDelay = 148;
                 spritemap.Play(Animation.Shoot);
                 cooldown = scene.random.Next(60 * 7, 60 * 8);
-                new Bradley_rocket(X + 66 - 124 / 2, Y + 46 - 110 / 2, 160);
-                new Bradley_rocket(X + 66 - 124 / 2, Y + 45 - 110 / 2, 184);
-                new Bradley_rocket(X + 63 - 124 / 2, Y + 45 - 110 / 2, 208);
-                new Bradley_rocket(X + 63 - 124 / 2, Y + 46 - 110 / 2, 232);
+                new Bradley_rocket(X + 66 - 124 / 2, Y + 46 - 110 / 2, 160, true);
+                new Bradley_rocket(X + 66 - 124 / 2, Y + 45 - 110 / 2, 184, true);
+                new Bradley_rocket(X + 63 - 124 / 2, Y + 45 - 110 / 2, 208, true);
+                new Bradley_rocket(X + 63 - 124 / 2, Y + 46 - 110 / 2, 232, true);
             }
             if (soundDelay == 0)
                 sound.Play();

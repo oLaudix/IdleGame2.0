@@ -28,7 +28,6 @@ namespace IdleGame
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_2.ogg"){ Loop = false });
             soldier_death_list.Add(new Sound("Assets/Sounds/soldier_death_3.ogg"){ Loop = false });
             stop_running = scene.random.Next(50, 660);
-            Console.WriteLine(stop_running);
         }
 
         public void Reset()

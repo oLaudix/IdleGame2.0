@@ -13,11 +13,11 @@ namespace IdleGame
         public Dictionary<BonusType, double> Bonuses = new Dictionary<BonusType, double>();
         public Image background = new Image("Assets/Img/background_road2.png");
         public MyPlayer player;
-        public MyPlayer player2;
         public List<UnitSkill> skillList = new List<UnitSkill>();
         public List<Unit> unitsList = new List<Unit>();
         public List<Gear> gearList = new List<Gear>();
         public List<Enemy_Units> enemyList;
+        public List<ActiveSkill> activeSkillList;
         public Random random = new Random();
         public Stage stage;
         public int currentStage = 0;
@@ -34,7 +34,6 @@ namespace IdleGame
         public bool needUpdate;
         public Crosshair crosshair;
         public double soundVolume;
-        public double musicVolume;
         Entity debuge;
         Text debugt;
         Session session;
@@ -56,6 +55,7 @@ namespace IdleGame
         }
         public override void Begin()
         {
+            activeSkillList = new List<ActiveSkill>();
             enemyList = new List<Enemy_Units>();
             base.Begin();
             crosshair = new Crosshair();
@@ -92,8 +92,8 @@ namespace IdleGame
             {
                 Layer = 1000
             };
-            player.gold = 2.0e100;
-            new Sniper(1112, 610);
+            player.gold = 2.0e30;
+            /*new Sniper(1112, 610);
             new Soldier(1280, 510);
             new Mortar(1730, 722);
             new Turret(930, 500);
@@ -104,20 +104,16 @@ namespace IdleGame
             new BiggestTonk(1770, 660);
             new Heli(1080, 280);
             new Hover(1450, 320);
-            new Rocket(1700, 550);
-            if (session.Data.FileExists())
-                LoadGame();
-            else
-                Console.WriteLine("Ni ma pliku");
-            StartStage();
-            this.soundVolume = Sound.GlobalVolume;
-            Sound.GlobalVolume = 0;
-            Music.Play();
+            new Rocket(1700, 550);*/
+            
+            //this.soundVolume = Sound.GlobalVolume;
+            //Sound.GlobalVolume = 0;
+            //Music.Play();
 
             new Garbage(754, 462, "Assets/Img/Decals/des09.png", false);
             new Garbage(831, 533, "Assets/Img/Decals/des16.png", true);
             new Garbage(832, 689, "Assets/Img/Decals/des17.png", true);
-            new Garbage(925, 670, "Assets/Img/Decals/des10.png", false);
+            new Garbage(925, 670, "Assets/Img/Decals/des10.png", false) { Layer = -999 };
             new Garbage(936, 531, "Assets/Img/Decals/des01.png", false);
             new Garbage(1004, 575, "Assets/Img/Decals/des19.png", false);
             new Garbage(1322, 497, "Assets/Img/Decals/des19.png", false);
@@ -133,6 +129,16 @@ namespace IdleGame
             new Garbage(1372, 659, "Assets/Img/Decals/des20.png", false);
             new Garbage(1476, 648, "Assets/Img/Decals/des12.png", false);
             new Garbage(1381, 709, "Assets/Img/Decals/des22.png", false);
+
+            activeSkillList.Add(new Barrage());
+            activeSkillList.Add(new Clone());
+            activeSkillList.Add(new CriticalStrike());
+
+            if (session.Data.FileExists())
+                LoadGame();
+            else
+                Console.WriteLine("Ni ma pliku");
+            StartStage();
         }
 
         public void LoadGame()
@@ -149,6 +155,12 @@ namespace IdleGame
                 gear.unlocked = session.Data.GetBool(gear.name + "Unlocked");
                 if (gear.unlocked)
                     gearOwned++;
+            }
+            foreach (var skill in activeSkillList)
+            {
+                while (skill.level != session.Data.GetInt(skill.name + "Level"))
+                    skill.UpgradeSkill();
+                skill.cooldown = session.Data.GetInt(skill.name + "cooldown");
             }
             player.honor = session.Data.GetFloat("playerHonor");
             player.gold = session.Data.GetFloat("playerGold");
@@ -169,6 +181,12 @@ namespace IdleGame
                 session.Data.SetData(gear.name + "Level", gear.level);
                 session.Data.SetData(gear.name + "Unlocked", gear.unlocked);
             }
+            foreach (var skill in activeSkillList)
+            {
+                session.Data.SetData(skill.name + "Level", skill.level);
+                session.Data.SetData(skill.name + "cooldown", skill.cooldown);
+            }
+            
             session.Data.Export();
         }
 
@@ -185,7 +203,8 @@ namespace IdleGame
 
         public override void Update()
         {
-            SaveGame();
+            if (this.Timer % 60 == 0)
+                SaveGame();
             if (needUpdate)
             {
                 UpdateBonuses();
@@ -224,7 +243,7 @@ namespace IdleGame
                 new Enemy_Mummy(random.Next(-60, -40), random.Next(511, 700));
                 LayerEnemies();
             }*/
-            /*if (GetCount<Enemy_Riflemon>() < 20)
+            if (GetCount<Enemy_Riflemon>() < 20)
             {
                 new Enemy_Riflemon(random.Next(-100, -50), random.Next(490, 720));
                 LayerEnemies();
@@ -233,7 +252,7 @@ namespace IdleGame
             {
                 new Enemy_Soldier(random.Next(-100, -50), random.Next(490, 720));
                 LayerEnemies();
-            }*/
+            }
             isHit = false;
             HUD();
             base.Update();
@@ -439,7 +458,7 @@ namespace IdleGame
             //this.gearList.Add(new Gear("Martian Energy", 0, BonusType.HandOfMidasDuration, 0.1f, 0.7f, 0.35f, "Assets/Img/Gear/icon_martian_energy.png"));
             this.gearList.Add(new Gear("Spoils of War", 25, BonusType.UpgradeCost, 0.02f, 0.3f, 0.15f, "Assets/Img/Gear/icon_spoils.png"));
             //this.gearList.Add(new Gear("Mysterious Liquid", 10, BonusType.CriticalStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_mysterious_liquid.png"));
-            //this.gearList.Add(new Gear("Mobile Artillery Cannons", 10, BonusType.HeavenlyStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_warhead.png"));
+            this.gearList.Add(new Gear("Mobile Artillery Cannons", 10, BonusType.HeavenlyStrikeCooldown, 0.05f, 0.7f, 0.35f, "Assets/Img/Gear/icon_warhead.png"));
             //this.gearList.Add(new Gear("Tincture of the Maker", 0, BonusType.AllDamage, 0.05f, 0.1f, 0.05f, "Assets/Img/Gear/icon_chest.png"));
             this.gearList.Add(new Gear("Lucky Charm", 0, BonusType.BonusRelic, 0.05f, 0.3f, 0.15f, "Assets/Img/Gear/icon_charm.png"));
             //this.gearList.Add(new Gear("Shrooms", 0, BonusType.WarCryDuration, 0.1f, 1.2f, 0.6f, "Assets/Img/Gear/icon_shroom.png"));

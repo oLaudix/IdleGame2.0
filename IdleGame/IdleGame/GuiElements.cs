@@ -206,7 +206,6 @@ namespace IdleGame
         Text unitInfo;
         List<Image> gearList;
         List<Text> skillsInfo;
-        bool permanent = true;
         Image image;
         Image icon;
         public Image can_buy;

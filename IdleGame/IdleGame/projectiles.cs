@@ -240,7 +240,6 @@ namespace IdleGame
             up,
             down
         }
-        float height;
         Sound Throw = new Sound("Assets/Sounds/rocket_launch.ogg") { Loop = false };
         MainScene scene = (MainScene)MainScene.Instance;
         public Spritemap<Animation> spritemap = new Spritemap<Animation>("Assets/Img/Sprites/bradley_rocket_start.png", 69, 69);
@@ -249,7 +248,8 @@ namespace IdleGame
         int delay = 0;
         int stage = 1;
         float hitY;
-        public Bradley_rocket(float x, float y, int delay) : base(x, y)
+        bool sound = true;
+        public Bradley_rocket(float x, float y, int delay, bool sound) : base(x, y)
         {
             spritemap.Add(Animation.up, "0-2", 1);
             spritemap2.Add(Animation.down, "0-2", 1);
@@ -258,6 +258,7 @@ namespace IdleGame
             Layer = +600;
             this.delay = delay;
             scene.Add(this);
+            this.sound = sound;
         }
 
         public override void Update()
@@ -271,7 +272,8 @@ namespace IdleGame
                         spritemap.Play(Animation.up);
                         AddGraphic(spritemap);
                         //Throw.Volume = Sound.GlobalVolume * 0.2f;
-                        Throw.Play();
+                        if (sound)
+                            Throw.Play();
                     }
                     if (this.Timer > 30)
                     {
@@ -299,7 +301,6 @@ namespace IdleGame
                 }
                 else if (stage == 3)
                 {
-                    Console.WriteLine(Math.Pow(this.Timer - this.delay, 2));
                     Y += ((100f) / 10000) * (float)Math.Pow(this.Timer - counter, 2);
                     if (Y + 92/2 > hitY)
                     {
