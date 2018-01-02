@@ -82,6 +82,8 @@ namespace IdleGame
                 num3 = num3 * ((1 + scene.Bonuses[BonusType.CriticalDamage]) * this.critMagnitude);
                 Console.WriteLine((this.critChance + scene.Bonuses[BonusType.CriticalChance]) + " " + (isCrit));
             }
+            if (scene.activeSkillList[4].activated)
+                num3 = num3 * (1 + (scene.activeSkillList[4].magnitude / 100));
             //Console.WriteLine((this.critChance + critChance) + " " + (isCrit) + " " + num3);
             return num3;
         }

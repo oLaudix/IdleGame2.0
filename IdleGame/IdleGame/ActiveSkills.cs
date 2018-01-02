@@ -48,7 +48,7 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (this.Timer % 60 == 0)
+            if (this.Timer % 20 == 0)
             {
                 if (activated)
                 {
@@ -195,7 +195,7 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (this.Timer % 60 == 0)
+            if (this.Timer % 20 == 0)
             {
                 InfoText.String = "Cost: " + FormatNumber(this.cost) +
                     "\nDeals Player damage x " + this.magnitude +
@@ -315,10 +315,10 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (this.Timer % 30 == 0)
+            if (this.Timer % 20 == 0)
             {
                 InfoText.String = "Cost: " + FormatNumber(this.cost) +
-                    "\nDeals Player damage " + this.magnitude + " per second" +
+                    "\nDeals Player damage " + this.magnitude + " times per second" +
                     "\nLevel: " + (level > 0 ? "" + level : "locked") +
                     "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
                     "\n\nTo use press 2.";
@@ -413,7 +413,7 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (this.Timer % 60 == 0)
+            if (this.Timer % 20 == 0)
             {
                 InfoText.String = "Cost: " + FormatNumber(this.cost) +
                     "\nIncrease Critical Strike Chance by " + this.magnitude + "%" +
@@ -452,6 +452,225 @@ namespace IdleGame
                     else
                         scene.player.Shooting.Pitch += 2;
 
+                }
+            }
+            base.Update();
+        }
+    }
+
+    class Speach : ActiveSkill
+    {
+        public Speach()
+        {
+            this.lvlreq = 300;
+            this.spacing = 110;
+            this.active_image = new Image("Assets/Img/Gui/icon_barrage_active.png");
+            this.inactive_image = new Image("Assets/Img/Gui/icon_barrage_inactive.png");
+            AddGraphic(can_buy);
+            can_buy.SetPosition(X - 1, Y - 1);
+            AddGraphic(active_image);
+            AddGraphic(inactive_image);
+            SetPosition(1920 / 2 + 51*3, 1080 - 261 - 50);
+            infoBackground.SetPosition(infoBackground.X - 51 * 3, infoBackground.Y);
+            InfoText.SetPosition(InfoText.X - 51 * 3, InfoText.Y);
+            skillName.SetPosition(skillName.X - 51 * 3, skillName.Y);
+            this.name = "Motivational Speech";
+            this.magnitude = (50 * this.level) + 100;
+            this.cost = GetNextUpgradeCost(this.lvlreq, this.spacing);
+            this.cooldown = 0;
+            this.TotalCooldown = 30 * 60 * 60;
+            this.duration = 30 * 60;
+            scene.Add(this);
+            skillName.String = this.name;
+            CreateText(ref durationText, "test", 20, new Vector2(0, 0));
+            durationText.Visible = true;
+            durationText.CenterTextOrigin();
+            durationText.SetPosition(25, 25);
+        }
+
+        public override int GetMagnitude()
+        {
+            return (50 * this.level) + 100;
+        }
+        public override void Update()
+        {
+            if (this.Timer % 20 == 0)
+            {
+                InfoText.String = "Cost: " + FormatNumber(this.cost) +
+                    "\nIncrease Damage by " + this.magnitude + "%" +
+                    "\nLevel: " + (level > 0 ? "" + level : "locked") +
+                    "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
+                    "\n\nTo use press 4.";
+                //Console.WriteLine("CD: " + this.cooldown);
+            }
+            if (cooldown > 0)
+            {
+                cooldown--;
+            }
+            if (activated)
+            {
+                duration--;
+                foreach (var Unit in scene.unitsList)
+                {
+                    if (scene.enemyList.Count != 0)
+                    {
+                        scene.enemyList[scene.random.Next(0, scene.enemyList.Count)].GetDamage((Unit.GetDPSByLevel(Unit.level) / 60) * ((float)magnitude/100));
+                    }
+                }
+            }
+            if (duration <= 0)
+            {
+                activated = false;
+                this.duration = 30 * 60;
+            }
+            if (Input.KeyPressed(Key.Num4))
+            {
+                if (cooldown == 0 && level > 0)
+                {
+                    cooldown = TotalCooldown;
+                    activated = true;
+                }
+            }
+            base.Update();
+        }
+    }
+
+    class Overdrive : ActiveSkill
+    {
+        public Overdrive()
+        {
+            this.lvlreq = 400;
+            this.spacing = 130;
+            this.active_image = new Image("Assets/Img/Gui/icon_barrage_active.png");
+            this.inactive_image = new Image("Assets/Img/Gui/icon_barrage_inactive.png");
+            AddGraphic(can_buy);
+            can_buy.SetPosition(X - 1, Y - 1);
+            AddGraphic(active_image);
+            AddGraphic(inactive_image);
+            SetPosition(1920 / 2 + 51 * 4, 1080 - 261 - 50);
+            infoBackground.SetPosition(infoBackground.X - 51 * 4, infoBackground.Y);
+            InfoText.SetPosition(InfoText.X - 51 * 4, InfoText.Y);
+            skillName.SetPosition(skillName.X - 51 * 4, skillName.Y);
+            this.name = "Overdrive";
+            this.magnitude = (30 * this.level) + 40;
+            this.cost = GetNextUpgradeCost(this.lvlreq, this.spacing);
+            this.cooldown = 0;
+            this.TotalCooldown = 60 * 60 * 60;
+            this.duration = 30 * 60;
+            scene.Add(this);
+            skillName.String = this.name;
+            CreateText(ref durationText, "test", 20, new Vector2(0, 0));
+            durationText.Visible = true;
+            durationText.CenterTextOrigin();
+            durationText.SetPosition(25, 25);
+        }
+
+        public override int GetMagnitude()
+        {
+            return (30 * this.level) + 40;
+        }
+        public override void Update()
+        {
+            if (this.Timer % 20 == 0)
+            {
+                InfoText.String = "Cost: " + FormatNumber(this.cost) +
+                    "\nIncrease Player Damage by " + this.magnitude + "%" +
+                    "\nLevel: " + (level > 0 ? "" + level : "locked") +
+                    "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
+                    "\n\nTo use press 5.";
+                //Console.WriteLine("CD: " + this.cooldown);
+            }
+            if (cooldown > 0)
+            {
+                cooldown--;
+            }
+            if (activated)
+            {
+                duration--;
+            }
+            if (duration <= 0)
+            {
+                activated = false;
+                scene.player.UpdatePlayerStats();
+                this.duration = 30 * 60;
+            }
+            if (Input.KeyPressed(Key.Num5))
+            {
+                if (cooldown == 0 && level > 0)
+                {
+                    activated = true;
+                    scene.player.UpdatePlayerStats();
+                    cooldown = TotalCooldown;
+                }
+            }
+            base.Update();
+        }
+    }
+
+    class MoneyShot : ActiveSkill
+    {
+        public MoneyShot()
+        {
+            this.lvlreq = 500;
+            this.spacing = 130;
+            this.active_image = new Image("Assets/Img/Gui/icon_barrage_active.png");
+            this.inactive_image = new Image("Assets/Img/Gui/icon_barrage_inactive.png");
+            AddGraphic(can_buy);
+            can_buy.SetPosition(X - 1, Y - 1);
+            AddGraphic(active_image);
+            AddGraphic(inactive_image);
+            SetPosition(1920 / 2 + 51 * 5, 1080 - 261 - 50);
+            infoBackground.SetPosition(infoBackground.X - 51 * 5, infoBackground.Y);
+            InfoText.SetPosition(InfoText.X - 51 * 5, InfoText.Y);
+            skillName.SetPosition(skillName.X - 51 * 5, skillName.Y);
+            this.name = "Money Shot";
+            this.magnitude = (5 * this.level) + 10;
+            this.cost = GetNextUpgradeCost(this.lvlreq, this.spacing);
+            this.cooldown = 0;
+            this.TotalCooldown = 60 * 60 * 60;
+            this.duration = 30 * 60;
+            scene.Add(this);
+            skillName.String = this.name;
+            CreateText(ref durationText, "test", 20, new Vector2(0, 0));
+            durationText.Visible = true;
+            durationText.CenterTextOrigin();
+            durationText.SetPosition(25, 25);
+        }
+
+        public override int GetMagnitude()
+        {
+            return (5 * this.level) + 10;
+        }
+        public override void Update()
+        {
+            if (this.Timer % 20 == 0)
+            {
+                InfoText.String = "Cost: " + FormatNumber(this.cost) +
+                    "\nGet " + this.magnitude + "% of money for each succesful hit" +
+                    "\nLevel: " + (level > 0 ? "" + level : "locked") +
+                    "\nCooldown: " + ((cooldown > 0) ? (cooldown / 60 / 60 + "m") + (cooldown / 60 % 60) + "s" : "0") +
+                    "\n\nTo use press 6.";
+                //Console.WriteLine("CD: " + this.cooldown);
+            }
+            if (cooldown > 0)
+            {
+                cooldown--;
+            }
+            if (activated)
+            {
+                duration--;
+            }
+            if (duration <= 0)
+            {
+                activated = false;
+                this.duration = 30 * 60;
+            }
+            if (Input.KeyPressed(Key.Num6))
+            {
+                if (cooldown == 0 && level > 0)
+                {
+                    activated = true;
+                    cooldown = TotalCooldown;
                 }
             }
             base.Update();

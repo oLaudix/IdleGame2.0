@@ -160,10 +160,5 @@ namespace IdleGame
             double a = baseUpgradeCostByLevel * (1.0 - scene.Bonuses[BonusType.UpgradeCost]);
             return (double)Math.Ceiling(a);
         }
-        public override void Update()
-        {
-            Console.WriteLine("test");
-            base.Update();
-        }
     }
 }

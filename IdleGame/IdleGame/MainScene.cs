@@ -87,12 +87,19 @@ namespace IdleGame
                 }
                 counter++;
             }
+            activeSkillList.Add(new Barrage());
+            activeSkillList.Add(new Clone());
+            activeSkillList.Add(new CriticalStrike());
+            activeSkillList.Add(new Speach());
+            activeSkillList.Add(new Overdrive());
+            activeSkillList.Add(new MoneyShot());
             player.UpgradePlayer();
             menu = new PlayerGui(955, 1080 - 261, "Assets/Img/bottom_menu.png", player)
             {
                 Layer = 1000
             };
-            player.gold = 2.0e30;
+            player.gold = 1E100;
+            Console.WriteLine(Convert.ToSingle(1E100));
             /*new Sniper(1112, 610);
             new Soldier(1280, 510);
             new Mortar(1730, 722);
@@ -105,7 +112,7 @@ namespace IdleGame
             new Heli(1080, 280);
             new Hover(1450, 320);
             new Rocket(1700, 550);*/
-            
+
             //this.soundVolume = Sound.GlobalVolume;
             //Sound.GlobalVolume = 0;
             //Music.Play();
@@ -113,7 +120,7 @@ namespace IdleGame
             new Garbage(754, 462, "Assets/Img/Decals/des09.png", false);
             new Garbage(831, 533, "Assets/Img/Decals/des16.png", true);
             new Garbage(832, 689, "Assets/Img/Decals/des17.png", true);
-            new Garbage(925, 670, "Assets/Img/Decals/des10.png", false) { Layer = -999 };
+            new Garbage(925, 670, "Assets/Img/Decals/des10.png", false) { Layer = -100 };
             new Garbage(936, 531, "Assets/Img/Decals/des01.png", false);
             new Garbage(1004, 575, "Assets/Img/Decals/des19.png", false);
             new Garbage(1322, 497, "Assets/Img/Decals/des19.png", false);
@@ -130,9 +137,6 @@ namespace IdleGame
             new Garbage(1476, 648, "Assets/Img/Decals/des12.png", false);
             new Garbage(1381, 709, "Assets/Img/Decals/des22.png", false);
 
-            activeSkillList.Add(new Barrage());
-            activeSkillList.Add(new Clone());
-            activeSkillList.Add(new CriticalStrike());
 
             if (session.Data.FileExists())
                 LoadGame();
@@ -163,7 +167,7 @@ namespace IdleGame
                 skill.cooldown = session.Data.GetInt(skill.name + "cooldown");
             }
             player.honor = session.Data.GetFloat("playerHonor");
-            player.gold = session.Data.GetFloat("playerGold");
+            player.gold = session.Data.GetDouble("playerGold");
             player.level = session.Data.GetInt("playerLevel");
             this.currentStage = session.Data.GetInt("stageUnlocked") - 1;
         }
@@ -171,6 +175,8 @@ namespace IdleGame
         public void SaveGame()
         {
             session.Data.SetData("playerHonor", player.honor);
+            float temp_gold_1 = (float)(player.gold / 1E30f);
+            float temp_gold_2 = (float)player.gold % 1E30f;
             session.Data.SetData("playerGold", player.gold);
             session.Data.SetData("playerLevel", player.level);
             session.Data.SetData("stageUnlocked", currentStage);

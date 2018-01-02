@@ -251,6 +251,15 @@ namespace Otter {
             return GetFloat(Util.EnumValueToString(key));
         }
 
+        public double GetDouble(Enum key)
+        {
+            return GetDouble(Util.EnumValueToString(key));
+        }
+
+        public double GetDouble(string key)
+        {
+            return double.Parse(data[key]);
+        }
         /// <summary>
         /// Gets a float or a default float value.
         /// </summary>

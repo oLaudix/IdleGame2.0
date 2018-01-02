@@ -122,8 +122,9 @@ namespace IdleGame
 
         public override void Update()
         {
-            unitInfo.String = 
-                "Level: " + element.unit.level + ((element.unit.NumLevelsToUnlock > 0) ? " +" + element.unit.NumLevelsToUnlock.ToString() : "") + "\n" +
+            if (this.Timer % 60 == 0)
+                unitInfo.String = 
+                "Level: " + element.unit.level + ((element.unit.GetNumLevelsToUnlockByGivenGoldAmount() > 0) ? " +" + element.unit.GetNumLevelsToUnlockByGivenGoldAmount().ToString() : "") + "\n" +
                 "Cost: " + FormatNumber(element.unit.nextUpgradeCost) + "\n" +
                 "Power: " + FormatNumber(element.unit.currentDPS) + "\n" +
                 "+Power: " + FormatNumber(element.unit.nextLevelDPSDiff);

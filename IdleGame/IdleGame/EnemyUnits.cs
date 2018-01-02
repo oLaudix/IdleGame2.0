@@ -53,7 +53,11 @@ namespace IdleGame
             {
                 double hit = scene.player.GetPlayerAttackDamageByLevel(scene.player.level) * 15 / 60;
                 if (!scene.isHit)
+                {
                     this.scene.stage.CurrentHP -= hit;
+                    if (this.scene.activeSkillList[5].activated)
+                        scene.player.gold += scene.stage.Prize * ((double)this.scene.activeSkillList[5].magnitude / 100) * 15 / 60;
+                }
                 CurrentHP -= hit;
                 scene.isHit = true;
             }
