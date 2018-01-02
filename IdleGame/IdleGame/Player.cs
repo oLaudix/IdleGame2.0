@@ -77,9 +77,11 @@ namespace IdleGame
             double num3 = (num + (scene.Bonuses[BonusType.PlayerDamageDPS] * scene.totalDPS)) * (1.0 + scene.Bonuses[BonusType.PlayerDamage]) * (1.0 + scene.GetBonusArtifactDamage()) * (1.0 + scene.Bonuses[BonusType.AllDamage]);
             double isCrit = scene.random.NextDouble();
             //Console.WriteLine(scene.GetBonusArtifactDamage());
-            //Console.WriteLine((this.critChance + critChance) + " " + (isCrit));
             if (this.critChance + scene.Bonuses[BonusType.CriticalChance] > isCrit)
+            {
                 num3 = num3 * ((1 + scene.Bonuses[BonusType.CriticalDamage]) * this.critMagnitude);
+                Console.WriteLine((this.critChance + scene.Bonuses[BonusType.CriticalChance]) + " " + (isCrit));
+            }
             //Console.WriteLine((this.critChance + critChance) + " " + (isCrit) + " " + num3);
             return num3;
         }

@@ -9,6 +9,7 @@ namespace IdleGame
 {
     class ActiveSkill : Entity
     {
+        public bool activated = false;
         public int lvlreq;
         public int spacing;
         public string font = "Assets/Fonts/trench100free.ttf";
@@ -18,6 +19,7 @@ namespace IdleGame
         public Image infoBackground;
         public Text InfoText;
         public Text skillName;
+        public Text durationText;
         public string name;
         public int level;
         public int magnitude;
@@ -48,6 +50,13 @@ namespace IdleGame
         {
             if (this.Timer % 60 == 0)
             {
+                if (activated)
+                {
+                    durationText.String = "" + duration / 60;
+                    durationText.CenterTextOrigin();
+                }
+                else
+                    durationText.String = "";
                 if (scene.player.gold < this.cost)
                     can_buy.Visible = false;
                 else
@@ -177,8 +186,7 @@ namespace IdleGame
             this.spacing = 160;
             scene.Add(this);
             skillName.String = this.name;
-            Console.WriteLine(this.magnitude);
-            Console.WriteLine(this.cost);
+            CreateText(ref durationText, "", 20, new Vector2(0, 0));
         }
 
         public override int GetMagnitude()
@@ -246,7 +254,6 @@ namespace IdleGame
 
     class Clone : ActiveSkill
     {
-        bool activated = false;
         public Sound Shooting = new Sound("Assets/Sounds/minigun2.ogg") { Loop = true };
         public Sound dying = new Sound("Assets/Sounds/clone_dying.ogg") { Loop = false };
         public int runtime = 0;
@@ -295,8 +302,10 @@ namespace IdleGame
             this.duration = 30 * 60;
             scene.Add(this);
             skillName.String = this.name;
-            Console.WriteLine(this.magnitude);
-            Console.WriteLine(this.cost);
+            CreateText(ref durationText, "test", 20, new Vector2(0, 0));
+            durationText.Visible = true;
+            durationText.CenterTextOrigin();
+            durationText.SetPosition(25, 25);
         }
 
         public override int GetMagnitude()
@@ -370,7 +379,6 @@ namespace IdleGame
 
     class CriticalStrike : ActiveSkill
     {
-        bool activated = false;
         public CriticalStrike()
         {
             this.lvlreq = 200;
@@ -393,8 +401,10 @@ namespace IdleGame
             this.duration = 30 * 60;
             scene.Add(this);
             skillName.String = this.name;
-            Console.WriteLine(this.magnitude);
-            Console.WriteLine(this.cost);
+            CreateText(ref durationText, "test", 20, new Vector2(0, 0));
+            durationText.Visible = true;
+            durationText.CenterTextOrigin();
+            durationText.SetPosition(25, 25);
         }
 
         public override int GetMagnitude()
@@ -416,26 +426,32 @@ namespace IdleGame
             {
                 cooldown--;
             }
-            else
+            if (activated)
             {
-                if (activated)
-                {
-                    duration--;
-                    scene.player.critChance = 0.01 + (magnitude / 100);
-                }
-                if (duration <= 0)
-                {
-                    scene.player.critChance = 0.01
-                    activated = false;
-                    this.duration = 30 * 60;
-                }
+                duration--;
+                scene.player.critChance = 0.01 + ((float)magnitude / 100);
             }
-            if (Input.KeyPressed(Key.Num1))
+            if (duration <= 0)
+            {
+                scene.player.critChance = 0.01;
+                activated = false;
+                this.duration = 30 * 60;
+            }
+            if (Input.KeyPressed(Key.Num3))
             {
                 if (cooldown == 0 && level > 0)
                 {
                     cooldown = TotalCooldown;
                     activated = true;
+                    if (scene.player.Shooting.IsPlaying)
+                    {
+                        scene.player.Shooting.Stop();
+                        scene.player.Shooting.Pitch += 2;
+                        scene.player.Shooting.Play();
+                    }
+                    else
+                        scene.player.Shooting.Pitch += 2;
+
                 }
             }
             base.Update();
