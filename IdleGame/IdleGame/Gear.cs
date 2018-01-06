@@ -115,10 +115,10 @@ namespace IdleGame
                     text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Perfect Aim cooldown";
                     break;
                 case BonusType.HandOfMidasCooldown:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Money Shot cooldown";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Transmute cooldown";
                     break;
                 case BonusType.HandOfMidasDuration:
-                    text = Math.Round(GetBonusMagnitude() * 100) + "% longer Money Shot duration";
+                    text = Math.Round(GetBonusMagnitude() * 100) + "% longer Transmute duration";
                     break;
                 case BonusType.HeavenlyStrikeCooldown:
                     text = Math.Round(GetBonusMagnitude() * 100) + "% shorter Barrage cooldown";

@@ -691,8 +691,8 @@ namespace IdleGame
         {
             this.lvlreq = 500;
             this.spacing = 130;
-            this.active_image = new Image("Assets/Img/Gui/icon_barrage_active.png");
-            this.inactive_image = new Image("Assets/Img/Gui/icon_barrage_inactive.png");
+            this.active_image = new Image("Assets/Img/Gui/icon_transmute_active.png");
+            this.inactive_image = new Image("Assets/Img/Gui/icon_transmute_inactive.png");
             AddGraphic(can_buy);
             can_buy.SetPosition(X - 1, Y - 1);
             AddGraphic(active_image);
@@ -701,7 +701,7 @@ namespace IdleGame
             infoBackground.SetPosition(infoBackground.X - 51 * 5, infoBackground.Y);
             InfoText.SetPosition(InfoText.X - 51 * 5, InfoText.Y);
             skillName.SetPosition(skillName.X - 51 * 5, skillName.Y);
-            this.name = "Money Shot";
+            this.name = "Transmute";
             this.magnitude = (5 * this.level) + 10;
             this.cost = GetNextUpgradeCost(this.lvlreq, this.spacing);
             this.cooldown = 0;

@@ -491,6 +491,12 @@
     <Content Include="Assets\Img\Gui\icon_tank_armament.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Img\Gui\icon_transmute_active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Img\Gui\icon_transmute_inactive.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Img\Gui\icon_turret.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -285,3 +285,5 @@ c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets
 c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_highmorale_inactive.png
 c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_overdrive_active.png
 c:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_overdrive_inactive.png
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_transmute_active.png
+C:\Users\oLaudix\Documents\GitHub\IdleGame2.0\IdleGame\IdleGame\bin\Debug\Assets\Img\Gui\icon_transmute_inactive.png
