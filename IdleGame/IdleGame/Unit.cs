@@ -72,6 +72,51 @@ namespace IdleGame
             {
                 //this.EvolveHero(false);
             }
+
+            if (this.level == 0)
+            {
+                switch(this.heroID)
+                {
+                    case 1:
+                        new Soldier(1280, 510);
+                        break;
+                    case 2:
+                        new Sniper(1112, 610);
+                        break;
+                    case 3:
+                        new Mortar(1730, 722);
+                        break;
+                    case 4:
+                        new Turret(930, 500);
+                        break;
+                    case 5:
+                        new Dicokka(1550, 500);
+                        break;
+                    case 6:
+                        new FatTonk(1500, 550);
+                        break;
+                    case 7:
+                        new Minigun(1320, 700);
+                        break;
+                    case 8:
+                        new BigTonk(1460, 480);
+                        break;
+                    case 9:
+                        new BiggestTonk(1770, 660);
+                        break;
+                    case 10:
+                        new Heli(1080, 280);
+                        break;
+                    case 11:
+                        new Hover(1450, 320);
+                        break;
+                    case 12:
+                        new Rocket(1700, 550);
+                        break;
+                    default:
+                        break;
+                }
+            }
             this.level += iLevels;
             //this.UpdateNextToBeBoughtSkill();
             this.UpdateUnitStats();

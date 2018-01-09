@@ -112,12 +112,8 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (this.Timer % 60 == 0)
+            if (this.Timer % 20 == 0)
                 this.NumLevelsToUnlock = this.GetNumLevelsToUnlockByGivenGoldAmount();
-
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom > Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer - 1;
             if (Input.MouseButtonPressed(MouseButton.Left) || Input.MouseButtonReleased(MouseButton.Left))
             {
                 //Console.WriteLine(Math.Atan2(Input.MouseX, Input.MouseY));

@@ -26,9 +26,10 @@ namespace IdleGame
         int delay;
         MainScene scene = (MainScene)MainScene.Instance;
         public List<Sound> explosion_sound_library = new List<Sound>();
-        public Sound sound;// = new Sound("Assets/Sounds/sniper.ogg") { Loop = false };
-        public Spritemap<Animation> spritemap;// = new Spritemap<Animation>("Assets/Img/Sprites/fat_tonk.png", 130, 62);
-        public Explosions(float x, float y, ExplosionType type, int delay) : base(x, y)
+        public Sound sound;
+        public Spritemap<Animation> spritemap;
+        public bool isVehicleDestruction;
+        public Explosions(float x, float y, ExplosionType type, int delay, bool isVehicleDestruction) : base(x, y)
         {
             explosion_sound_library.Add(new Sound("Assets/Sounds/explosion_big.ogg") { Loop = false });
             explosion_sound_library.Add(new Sound("Assets/Sounds/explosion_09.ogg") { Loop = false });
@@ -36,6 +37,7 @@ namespace IdleGame
             explosion_sound_library.Add(new Sound("Assets/Sounds/explosion_11.ogg") { Loop = false });
             explosion_sound_library.Add(new Sound("Assets/Sounds/explosion_12.ogg") { Loop = false });
             this.type = type;
+            this.isVehicleDestruction = isVehicleDestruction;
             sound = explosion_sound_library[scene.random.Next(1, 5)];
             if (this.type == ExplosionType.small)
             {
@@ -81,17 +83,23 @@ namespace IdleGame
                 Hitbox.SetPosition(0, -170 / 2);
                 spritemap.SetPosition(0, -170 / 2);
             }
+            if (isVehicleDestruction)
+            {
+                Hitbox.Width *= 2;
+                Hitbox.Height *= 2;
+            }
             spritemap.CenterOrigin();
             Hitbox.CenterOrigin();
             this.delay = delay;
             Layer = -600;
         }
-
+        public override void Added()
+        {
+            //scene.LayerEnemies();
+            base.Added();
+        }
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage) || Overlap(X, Y, ColliderTags.EnemyUnit))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             if (this.Timer == delay)
             {
                 this.LifeSpan = this.Timer + (int)spritemap.Anim(Animation.explosion).TotalDuration;

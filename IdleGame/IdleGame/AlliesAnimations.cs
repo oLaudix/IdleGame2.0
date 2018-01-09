@@ -32,9 +32,6 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             cooldown--;
             if (cooldown == 0)
             {
@@ -43,7 +40,7 @@ namespace IdleGame
                     spritemap.Play(Animation.Shoot);
                     sound.Play();
                     cooldown = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
-                    scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
+                    scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60, false));
                 }
                 else if (spritemap.CurrentAnim == Animation.Shoot)
                 {
@@ -80,16 +77,13 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             cooldown--;
             if (cooldown == 0)
             {
                 spritemap.Play(Animation.Shoot);
                 sound.Play();
                 cooldown = scene.random.Next(60 * 3, 60 * 4);
-                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_big, 60));
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_big, 60, false));
             }
             base.Update();
         }
@@ -123,15 +117,12 @@ namespace IdleGame
             cooldown--;
             if (cooldown == 0)
             {
-                if (Overlap(X, Y, ColliderTags.Garbage))
-                    if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                        Layer = Overlapped.Layer + 1;
                 if (spritemap.CurrentAnim == Animation.Idle)
                 {
                     spritemap.Play(Animation.Shoot);
                     sound.Play();
                     cooldown = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
-                    scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
+                    scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60, false));
                 }
                 else if (spritemap.CurrentAnim == Animation.Shoot)
                 {
@@ -166,9 +157,6 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             cooldown--;
             fire--;
             if (cooldown < 0 && cooldown % 10 == 0)
@@ -219,16 +207,13 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             cooldown--;
             if (cooldown == 0)
             {
                 spritemap.Play(Animation.Shoot);
                 sound.Play();
                 cooldown = scene.random.Next(60 * 2, 60 * 3);
-                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60, false));
             }
             base.Update();
         }
@@ -260,16 +245,13 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             cooldown--;
             if (cooldown == 0 && spritemap.CurrentAnim == Animation.Idle)
             {
                 spritemap.Play(Animation.Shoot);
                 sound.Play();
                 cooldown = (int)spritemap.Anim(Animation.Shoot).TotalDuration;
-                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60));
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.shell_normal, 60, false));
             }
             else if (cooldown == 0 && spritemap.CurrentAnim == Animation.Shoot)
             {
@@ -304,16 +286,13 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             cooldown--;
             if (cooldown == 0)
             {
                 scene.Add(new projectile_mortar(X + 11 - 20, Y + 27 - 21, scene.random.Next(50, 801), scene.random.Next(520, 750), 12*4));
                 spritemap.Play(Animation.Shoot);
                 cooldown = scene.random.Next(60 * 2, 60 * 3);
-                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.small, 60));
+                scene.Add(new Explosions(scene.random.Next(50, 801), scene.random.Next(520, 750), Explosions.ExplosionType.small, 60, false));
             }
             base.Update();
         }
@@ -345,9 +324,6 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             cooldown--;
             soundDelay--;
             if (cooldown == 0)
@@ -424,9 +400,6 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             cooldown--;
             if (cooldown == 0)
             {
@@ -463,9 +436,6 @@ namespace IdleGame
         }
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             cooldown--;
             if (cooldown == 0)
             {
@@ -510,9 +480,6 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
             if (spritemap.CurrentAnim == Animation.Idle)
             {
                 runtime--;

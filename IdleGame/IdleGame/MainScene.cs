@@ -98,10 +98,10 @@ namespace IdleGame
             {
                 Layer = 1000
             };
-            //player.gold = 1E100;
+            player.gold = 1E100;
             //Console.WriteLine(Convert.ToSingle(1E100));
-            /*new Sniper(1112, 610);
-            new Soldier(1280, 510);
+            /*new Soldier(1280, 510);
+            new Sniper(1112, 610);
             new Mortar(1730, 722);
             new Turret(930, 500);
             new Dicokka(1550, 500);
@@ -143,17 +143,6 @@ namespace IdleGame
             else
                 Console.WriteLine("Ni ma pliku");
             StartStage();
-            for (var a = 0; a < 5; a++)
-            {
-                new Enemy_Soldier(random.Next(-500, -40), random.Next(511, 700));
-                new Enemy_Bazooka(random.Next(-500, -40), random.Next(511, 700));
-                new Enemy_Shield(random.Next(-500, -40), random.Next(511, 700));
-                new Enemy_Riflemon(random.Next(-500, -40), random.Next(511, 700));
-                if (a > 2)
-                    new Enemy_Cokka(random.Next(-500, -40), random.Next(511, 700));
-                if (a > 3)
-                    new Enemy_high_tonk(random.Next(-500, -40), random.Next(511, 700));
-            }
         }
 
         public void LoadGame()
@@ -207,12 +196,52 @@ namespace IdleGame
 
         public void LayerEnemies()
         {
+            //Console.Write(this.Timer + " - ");
             int order = -500;
-            List<Enemy_Units> SortedList = enemyList.OrderBy(o => (o.Hitbox.Bottom)).ToList();
+            List<Entity> fullList = new List<Entity>();
+            foreach (var entity in GetEntitiesAll().ToList())
+                if (entity.Hitbox != null)
+                    fullList.Add(entity);
+            List<Entity> SortedList = fullList.OrderBy(o => (o.Hitbox.Bottom)).ToList();
             foreach (var unit in SortedList)
             {
                 order--;
                 unit.Layer = order;
+            }
+            Console.WriteLine(SortedList.Count);
+        }
+
+        public void EnemySpawner()
+        {
+            if (GetEntities<Enemy_Soldier>().Count < 5)
+            {
+                new Enemy_Soldier(random.Next(-40, -40), random.Next(511, 700));
+                return;
+            }
+            if (GetEntities<Enemy_Bazooka>().Count < 5)
+            {
+                new Enemy_Bazooka(random.Next(-40, -40), random.Next(511, 700));
+                return;
+            }
+            if (GetEntities<Enemy_Shield>().Count < 5)
+            {
+                new Enemy_Shield(random.Next(-40, -40), random.Next(511, 700));
+                return;
+            }
+            if (GetEntities<Enemy_Riflemon>().Count < 5)
+            {
+                new Enemy_Riflemon(random.Next(-40, -40), random.Next(511, 700));
+                return;
+            }
+            if (GetEntities<Enemy_Cokka>().Count < 2)
+            {
+                new Enemy_Cokka(random.Next(-40, -40), random.Next(511, 700));
+                return;
+            }
+            if (GetEntities<Enemy_high_tonk>().Count < 1)
+            {
+                new Enemy_high_tonk(random.Next(-40, -40), random.Next(511, 700));
+                return;
             }
         }
 
@@ -220,7 +249,12 @@ namespace IdleGame
         {
             if (this.Timer % 60 == 0)
             {
+                EnemySpawner();
                 SaveGame();
+                //LayerEnemies();
+            }
+            if (this.Timer % 3 == 0)
+            {
                 LayerEnemies();
             }
             if (needUpdate)

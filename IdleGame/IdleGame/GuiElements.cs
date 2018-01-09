@@ -123,7 +123,7 @@ namespace IdleGame
 
         public override void Update()
         {
-            if (this.Timer % 60 == 0)
+            if (this.Timer % 20 == 0)
                 tempLevels = element.unit.GetNumLevelsToUnlockByGivenGoldAmount();
             unitInfo.String = 
                 "Level: " + element.unit.level + ((tempLevels > 0) ? " +" + tempLevels.ToString() : "") + "\n" +

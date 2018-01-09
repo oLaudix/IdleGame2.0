@@ -62,7 +62,7 @@ namespace IdleGame
             }
             if ((X >= destination.X && !ally) || (X <= destination.X && ally))
             {
-                scene.Add(new Explosions(X, Y, Explosions.ExplosionType.small, 0));
+                scene.Add(new Explosions(X, Y, Explosions.ExplosionType.small, 0, false));
                 RemoveSelf();
             }
             base.Update();
@@ -102,7 +102,7 @@ namespace IdleGame
             {
                 sound.Stop();
                 RemoveSelf();
-                scene.Add(new Explosions(X, Y, Explosions.ExplosionType.small, 0));
+                scene.Add(new Explosions(X, Y, Explosions.ExplosionType.small, 0, false));
             }
             base.Update();
             /*if (Input.MouseButtonDown(MouseButton.Right))
@@ -166,7 +166,7 @@ namespace IdleGame
             {
                 RemoveSelf();
                 sound.Stop();
-                scene.Add(new Explosions(X, Y, Explosions.ExplosionType.medium, 0));
+                scene.Add(new Explosions(X, Y, Explosions.ExplosionType.medium, 0, false));
             }
             base.Update();
         }
@@ -226,7 +226,7 @@ namespace IdleGame
             }
             if (X <= destination.X)
             {
-                scene.Add(new Explosions(X, Y, Explosions.ExplosionType.small, 0));
+                scene.Add(new Explosions(X, Y, Explosions.ExplosionType.small, 0, false));
                 RemoveSelf();
             }
             base.Update();
@@ -304,7 +304,7 @@ namespace IdleGame
                     Y += ((100f) / 10000) * (float)Math.Pow(this.Timer - counter, 2);
                     if (Y + 92/2 > hitY)
                     {
-                        scene.Add(new Explosions(X, Y + 92 / 2, Explosions.ExplosionType.huge, 0));
+                        scene.Add(new Explosions(X, Y + 92 / 2, Explosions.ExplosionType.huge, 0, false));
                         RemoveSelf();
                     }
                 }

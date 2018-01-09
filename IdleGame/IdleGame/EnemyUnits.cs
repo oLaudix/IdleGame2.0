@@ -31,7 +31,11 @@ namespace IdleGame
             //SetPosition(scene.random.Next(-500, -40), scene.random.Next(490, 700));
             //Console.WriteLine(X + " " + Y);
         }
-
+        public override void Added()
+        {
+            //scene.LayerEnemies();
+            base.Added();
+        }
         public void Reset()
         {
             scene.enemyList.RemoveIfContains(this);
@@ -78,13 +82,11 @@ namespace IdleGame
             image.FlippedX = flipped;
             SetHitbox(image.TextureRegion.Width, image.TextureRegion.Height, ColliderTags.Garbage);
         }
-        public override void Update()
-        {
-            if (Overlap(X, Y, ColliderTags.Garbage))
-                if (Hitbox.Bottom < Overlapped.Hitbox.Bottom)
-                    Layer = Overlapped.Layer + 1;
 
-            base.Update();
+        public override void Added()
+        {
+            //scene.LayerEnemies();
+            base.Added();
         }
     }
 
@@ -130,12 +132,6 @@ namespace IdleGame
             scene.Add(this);
             scene.enemyList.Add(this);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
-        }
-
-        public override void Render()
-        {
-            base.Render();
-            Hitbox.Render();
         }
 
         public override void Update()
@@ -238,13 +234,6 @@ namespace IdleGame
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
 
         }
-
-        public override void Render()
-        {
-            base.Render();
-            Hitbox.Render();
-        }
-
         public override void Update()
         {
             if (CurrentHP > 0)
@@ -339,13 +328,6 @@ namespace IdleGame
             scene.enemyList.Add(this);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * 3;
         }
-
-        public override void Render()
-        {
-            base.Render();
-            Hitbox.Render();
-        }
-
         public override void Update()
         {
             if (CurrentHP > 0)
@@ -449,13 +431,6 @@ namespace IdleGame
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
 
         }
-
-        public override void Render()
-        {
-            base.Render();
-            Hitbox.Render();
-        }
-
         public override void Update()
         {
             if (CurrentHP > 0)
@@ -553,13 +528,6 @@ namespace IdleGame
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
 
         }
-
-        public override void Render()
-        {
-            base.Render();
-            Hitbox.Render();
-        }
-
         public override void Update()
         {
             if (CurrentHP > 0)
@@ -587,14 +555,14 @@ namespace IdleGame
                 {
                     scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     //scene.enemyList.RemoveIfContains(this);
-                    scene.Add(new Explosions(X + 42, Y + 39, Explosions.ExplosionType.small, 0));
-                    scene.Add(new Explosions(X + 60, Y + 32, Explosions.ExplosionType.small, 6));
-                    scene.Add(new Explosions(X + 20, Y + 43, Explosions.ExplosionType.small, 12));
+                    scene.Add(new Explosions(X + 42, Y + 39, Explosions.ExplosionType.small, 0, true));
+                    scene.Add(new Explosions(X + 60, Y + 32, Explosions.ExplosionType.small, 6, true));
+                    scene.Add(new Explosions(X + 20, Y + 43, Explosions.ExplosionType.small, 12, true));
                     isDead = true;
                     runtime = 60 * 10;
                     spritemap.Play(Animation.Death);
                     this.LifeSpan = this.Timer + runtime;
-                    scene.Add(new Explosions(X + 45, Y + 45, Explosions.ExplosionType.big, runtime - 6));
+                    scene.Add(new Explosions(X + 45, Y + 45, Explosions.ExplosionType.big, runtime - 6, true));
                     new Enemy_Cokka(scene.random.Next(-60, -40), scene.random.Next(490, 700));
                 }
                 if (isDead && runtime == 1)
@@ -638,13 +606,6 @@ namespace IdleGame
             scene.enemyList.Add(this);
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
         }
-
-        public override void Render()
-        {
-            base.Render();
-            Hitbox.Render();
-        }
-
         public override void Update()
         {
             if (CurrentHP > 0)
@@ -725,13 +686,6 @@ namespace IdleGame
             runtime = (int)spritemap.Anim(Animation.Run).TotalDuration * scene.random.Next(3, 12);
 
         }
-
-        public override void Render()
-        {
-            base.Render();
-            Hitbox.Render();
-        }
-
         public override void Update()
         {
             if (CurrentHP > 0)
@@ -765,16 +719,16 @@ namespace IdleGame
                 {
                     scene.player.gold += prize * (1 + scene.Bonuses[BonusType.MonsterGold]);
                     //scene.enemyList.RemoveIfContains(this);
-                    scene.Add(new Explosions(X + 54, Y + 83, Explosions.ExplosionType.medium, 0));
-                    scene.Add(new Explosions(X + 89, Y + 36, Explosions.ExplosionType.medium, 3));
-                    scene.Add(new Explosions(X + 87, Y + 83, Explosions.ExplosionType.medium, 12));
-                    scene.Add(new Explosions(X + 73, Y + 60, Explosions.ExplosionType.medium, 9));
-                    scene.Add(new Explosions(X + 65, Y + 29, Explosions.ExplosionType.medium, 6));
+                    scene.Add(new Explosions(X + 54, Y + 83, Explosions.ExplosionType.medium, 0, true));
+                    scene.Add(new Explosions(X + 89, Y + 36, Explosions.ExplosionType.medium, 3, true));
+                    scene.Add(new Explosions(X + 87, Y + 83, Explosions.ExplosionType.medium, 12, true));
+                    scene.Add(new Explosions(X + 73, Y + 60, Explosions.ExplosionType.medium, 9, true));
+                    scene.Add(new Explosions(X + 65, Y + 29, Explosions.ExplosionType.medium, 6, true));
                     isDead = true;
                     runtime = 60 * 10;
                     spritemap.Play(Animation.Death);
                     this.LifeSpan = this.Timer + runtime;
-                    scene.Add(new Explosions(X + 78, Y + 105, Explosions.ExplosionType.huge, runtime - 6));
+                    scene.Add(new Explosions(X + 78, Y + 105, Explosions.ExplosionType.huge, runtime - 6, true));
                     new Enemy_high_tonk(scene.random.Next(-60, -40), scene.random.Next(490, 700));
                 }
                 if (isDead && runtime == 1)

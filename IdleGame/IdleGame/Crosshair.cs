@@ -21,11 +21,6 @@ namespace IdleGame
             AddGraphic(image);
             MainScene.Instance.Add(this);
         }
-
-        public override void Render()
-        {
-            base.Render();
-        }
         public override void Update()
         {
             SetPosition(Input.MouseX, Input.MouseY);

@@ -180,8 +180,8 @@ namespace IdleGame
     class Barrage : ActiveSkill
     {
         int waiting_for_rockets = 207;
-        int number_of_rockets = 50;
-        int interval_between_rockets = 5;
+        int number_of_rockets = 100;
+        int interval_between_rockets = 2;
         int stage = 0;
         int counter = 0;
         int hits = 0;
