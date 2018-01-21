@@ -98,7 +98,7 @@ namespace IdleGame
             {
                 Layer = 1000
             };
-            player.gold = 1E100;
+            //player.gold = 1E150;
             //Console.WriteLine(Convert.ToSingle(1E100));
             /*new Soldier(1280, 510);
             new Sniper(1112, 610);
